@@ -1,0 +1,55 @@
+<div
+  class="w-full bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+>
+  <!-- Header Section -->
+  @if(data()) {
+    
+  <div
+    class="flex flex-row text-white px-6 py-8 text-center items-center min-h-[165px]"
+    [style.background-color]="data()?.bgColor"
+  >
+    <!-- Icon -->
+    <div class="mb-4">
+      <svg
+        class="w-12 h-12 mx-auto text-white"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path [attr.d]="data()?.iconPath"></path>
+      </svg>
+    </div>
+
+    <div class="flex flex-col items-center justify-center flex-1">
+      <!-- Main Number -->
+      <div class="text-4xl font-bold mb-2">
+        {{ data()?.number }}
+      </div>
+
+      <!-- Label -->
+      <div class="text-lg font-medium">
+        {{ data()?.title }}
+      </div>
+
+      <!-- Sublabel -->
+      @if (hasSubtitle()) {
+      <div class="text-sm opacity-90 mt-1">
+        {{ data()?.subtitle }}
+      </div>
+      }
+    </div>
+</div>
+}
+
+ <!-- ApexCharts Section -->
+  @if (showChart()) {
+  <div class="p-4 border-b border-gray-200">
+    <div class="">
+      <div >
+       <app-bar-component [dataOptions]="data()?.chartDataOptions"/>
+      </div>
+    </div>
+   
+  </div>
+  }
+  
+</div>

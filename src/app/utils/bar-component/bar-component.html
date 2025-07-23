@@ -1,0 +1,20 @@
+
+@if(dataOptions()) {
+<div id="chart">
+  <apx-chart
+    [series]="dataOptions().series"
+    [chart]="dataOptions().chart"
+    [dataLabels]="dataOptions().dataLabels"
+    [plotOptions]="dataOptions().plotOptions"
+    [xaxis]="dataOptions().xaxis"
+     [yaxis]="dataOptions().yaxis"
+    [stroke]="dataOptions().stroke "
+    [fill]="dataOptions().fill"
+    [title]="dataOptions().title"
+    [tooltip]="dataOptions().tooltip "
+    [legend]="dataOptions().legend"
+  ></apx-chart>
+</div> 
+}
+
+

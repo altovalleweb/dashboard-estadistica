@@ -1,0 +1,19 @@
+.bg-gradient-blue {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+        }
+        
+        .bg-gradient-emerald {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+        
+        .bg-gradient-purple {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        }
+        
+        .bg-gradient-indigo {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+        
+        .bg-gradient-teal {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+        }

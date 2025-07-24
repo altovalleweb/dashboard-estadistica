@@ -1,44 +1,45 @@
    <!-- Ejemplo de uso como header de tarjeta completa -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+
+   @if(data()){
+ <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <!-- Header -->
-            <div class="bg-gradient-emerald px-8 py-3 text-white">
+            <div [class]=" data()?.bgColor + ' px-8 py-3 text-white'">
                 <div class="flex items-center justify-center mb-2">
                     <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                        <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+                        <path [attr.d]="data()?.iconPath"></path>
                     </svg>
-                    <span class="text-lg font-medium">Distribución de Escuelas por Sector</span>
+                    <span class="text-lg font-medium">{{ data()?.title }}</span>
                 </div>
                 
                 <div class="flex items-center justify-center">
-                    <div class="text-center flex-1">
-                        <div class="text-2xl font-bold">785</div>
-                        <div class="text-base opacity-90">Estatales (77.3%)</div>
-                    </div>
-                    
-                    <div class="w-px h-15 bg-white bg-opacity-20 mx-8"></div>
-                    
-                    <div class="text-center flex-1">
-                        <div class="text-2xl font-bold">230</div>
-                        <div class="text-base opacity-90">Privadas (22.7%)</div>
-                    </div>
+
+                    @for( info of data()?.dataHeader; track info.description; let last = $last) {
+                        <div class="text-center flex-1">
+                            <div class="text-2xl font-bold">{{ info.value }}</div>
+                            <div class="text-base opacity-90">{{ info.description }}</div>
+                        </div>
+                        @if(!last) {
+                            <div class="w-px h-15 bg-white bg-opacity-20 mx-8"></div>
+                        }
+                    }
+                   
                 </div>
             </div>
             
             <!-- Body donde irían los datos desagregados -->
             <div class="p-8 flex-col items-center">                
                 
-                <!-- Aquí se puede incluir el componente de gráfico de barras -->
                  
-              <app-bar-component  [dataOptions]="options"/>
-      <!--   <app-bar-component  [dataOptions]="chartDataOptionsComun"/>
-         <app-bar-component style="margin-top: -2.5rem;" [dataOptions]="chartDataOptionsEspecial"/>
-       <app-bar-component style="margin-top: -2.5rem;"   [dataOptions]="chartDataOptionsAdultos"/>-->
+             <app-bar-component  [dataOptions]="data()?.chartDataOptions"/> 
+
+      
 
             </div> 
          
         
              </div>
+   }
+       
   
   
        

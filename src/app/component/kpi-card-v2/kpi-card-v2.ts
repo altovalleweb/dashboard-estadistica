@@ -9,7 +9,8 @@ export interface KPIDataV2 {
   iconPath: string;
   showChart?: boolean;
   chartType?: 'donut' | 'pie' | 'radialBar';
-  chartDataOptions?: any;
+  chartDataOptionsHeader?: any;
+  chartDataOptionsBody?: any;
 
 }
 
@@ -22,7 +23,9 @@ export interface KPIDataV2 {
 })
 export class KpiCardV2 {
 
+dataOptionsHeader= input<any | null>(null);
  data = input<KPIDataV2 | null>(null);
+
 
 hasSubtitle = computed(() => {
   return this.data() && !!this.data()?.subtitle;

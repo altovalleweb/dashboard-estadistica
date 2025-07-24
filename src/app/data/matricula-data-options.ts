@@ -1,91 +1,37 @@
-export const matriculaPorSectorTotalProvinciaDataOptions = {
-  series: [
-    {
-      name: "Estatal",
-      data: [196871],
-      color: "#334155"
-    },
-    {
-      name: "Privado",
-      data: [40080],
-      color: "#2dd4bf"
-    }
-  ],
-  chart: {
-    type: "bar",
-    height: 120,
-    stacked: true,
-    stackType: "100%",
-    toolbar: {
-      show: false
-    },
-    animations: {
-      enabled: true
-    },
-    background: 'transparent',
-    foreColor: '#000'
-  },
-  plotOptions: {
-    bar: {
-      horizontal: true
-    }
-  },
 
-  xaxis: {
-    categories: ['Sector'],
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    },
-    labels: {
-      show: false
-    },
-    lines: {
-      show: false
-    }
-  },
-  yaxis: {
-    labels: {
-      show: false,
-    },
-    axisBorder: {
-      show: false
-    },
-    axisTicks: {
-      show: false
-    },
-    title: {
-      text: 'Sector'
-    }
-  },
+export const MatriculaEvolucionDataOptions = {
+series: [{
+          data: [233.530,	231.727,	231.412,	234.794,	234.625,	236.951]
+        }],
+          chart: {
+          type: 'line',
+          width: 100,
+          height: 50,
+          sparkline: {
+            enabled: true
+          }
+        },
+         xaxis: {
+          categories: [2019, 2020, 2021, 2022, 2023, 2024],},
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: true
+          },
+          y: {
+          
+            title: {
+              formatter: function (seriesName:string) {
+                return ''
+              }
+            }
+          }   
+        }
+}
 
-  tooltip: {
-    y: {
-      formatter: function (val: string) {
-        return val;
-      }
-    }
-  },
-  fill: {
-    opacity: 1
-  },
-  legend: {
-    position: "top",
-    horizontalAlign: "left",
-    offsetX: 1,
-    onItemClick: {
-      toggleDataSeries: false
-    },
 
-  },
-  dataLabels: {
-    style: {
-      fontSize: '16px',
-    }
-  }
-};
 
 export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
   
@@ -107,7 +53,7 @@ export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
         }],
           chart: {
           type: 'bar',
-          height: 150,
+          height: 160,
           stacked: true,
           stackType: '100%',
            toolbar: {
@@ -154,12 +100,79 @@ export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
         legend: {
           position: 'top',
           horizontalAlign: 'left',
-          offsetX: 40
+          offsetX: 1
         },
          dataLabels: {
     style: {
-      fontSize: '14px',
+      fontSize: '13px',
     }
   }
         
 };
+
+
+
+export const MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions ={
+           series: [{
+          name: 'Estatal',
+          data: [18653, 69896, 52383, 10165, 240, 760, 2573, 11341, 19684]
+        }, {
+          name: 'Privada',
+          data: [4606, 13333, 8914, 10834, 11, 28, 83, 624, 1204]
+        }],
+          chart: {
+          type: 'bar',
+          height: 300,
+           stacked: true,
+           stackType: '100%',
+            toolbar: {
+      show: false
+    },
+        },
+         plotOptions: {
+          bar: {            
+            dataLabels: {            
+              total: {
+                enabled: true,
+                formatter: (val:any) => {
+                  return val
+                },
+                offsetX: 0,
+                style: {
+                  fontSize: '12px',
+                  fontWeight: 700
+                }
+              },          
+            }
+          },
+        },
+        xaxis: {
+          type: 'category',
+          categories: ['Inicial', 'Primaria', 'Secundaria', 'SNU', 'Inicial', 'Primaria', 'Primaria', 'Secundaria', 'Formación Profesional'],
+          group: {
+            style: {
+              fontSize: '12px',
+              fontWeight: 900
+            },
+            groups: [
+              { title: 'COMUN', cols: 4 },
+              { title: 'ESPECIAL', cols: 2 },
+              { title: 'ADULTOS', cols: 3 }
+            ]
+          }
+        },   
+        yaxis: {
+           labels: {
+      show: false
+    },
+        },    
+        tooltip: {
+          shared: true,
+          intersect: false,
+          x: {
+            formatter: function(val:string) {
+              return val
+            }  
+          }
+        },
+        };

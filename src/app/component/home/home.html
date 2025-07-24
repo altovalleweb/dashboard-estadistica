@@ -3,30 +3,28 @@
 
 
  <!-- Container Principal -->
-      <div class="max-w-6xl mx-auto px-4 py-8">
+      <div class="mx-auto px-4 py-8">
         <!-- Título Principal -->
         <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
           Datos generales | Escuelas, alumnos/as
         </h1>
         
-        <!-- Grid de KPIs -->
-       <!--  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          @for (kpi of kpiData; track kpi.title) {
-            <app-kpi-card [data]="kpi"></app-kpi-card>
-          } -->
-
-           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+     
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           @for (kpi of kpiDataV2; track kpi.title) {
             <app-kpi-card-v2 [data]="kpi"/>
           }
+
+       
+
+           
+       
 
 
            @for (kpi of kpiDataV3; track kpi.title) {
             <app-kpi-card-v3 [data]="kpi"/>
           }
 
-          <!-- <app-bar-component [dataOptions]="dataOptions()"></app-bar-component>
-           <app-bar-component [dataOptions]="matriculaPorModalidadNivelTotalProvinciaDataOptions()"></app-bar-component> -->
         </div>
         
       </div>

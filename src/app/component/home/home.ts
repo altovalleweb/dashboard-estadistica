@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { KpiCard, KPIData } from '../kpi-card/kpi-card';
-import { BarComponent } from '../../utils/bar-component/bar-component';
+import {  KPIData } from '../kpi-card/kpi-card';
 import { matriculaPorModalidadNivelTotalProvinciaDataOptions, matriculaPorSectorTotalProvinciaDataOptions } from '../../data/matricula-data-options';
 import { KpiCardV2, KPIDataV2 } from '../kpi-card-v2/kpi-card-v2';
 import { UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions } from '../../data/unidadesDeServicio-data-options';
@@ -9,7 +8,7 @@ import { KpiCardV3, KPIDataV3 } from "../kpi-card-v3/kpi-card-v3";
 
 @Component({
   selector: 'app-home',
-  imports: [KpiCard, BarComponent, KpiCardV2, KpiCardV3],
+  imports: [ KpiCardV2, KpiCardV3],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

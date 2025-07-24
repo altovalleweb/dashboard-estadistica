@@ -107,7 +107,7 @@ export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
         }],
           chart: {
           type: 'bar',
-          height: 250,
+          height: 150,
           stacked: true,
           stackType: '100%',
            toolbar: {

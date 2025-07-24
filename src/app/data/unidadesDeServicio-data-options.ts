@@ -18,7 +18,7 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
         }],
           chart: {
           type: 'bar',
-          height: 250,
+          height: 150,          
           stacked: true,
           stackType: '100%',
            toolbar: {
@@ -28,6 +28,20 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
         plotOptions: {
           bar: {
             horizontal: true,
+            dataLabels: {            
+              total: {
+                enabled: true,
+                formatter: (val:any) => {
+                  return val
+                },
+                offsetX: 0,
+                style: {
+                  fontSize: '12px',
+                  fontWeight: 900
+                }
+              },          
+            }
+
           },
         },
         stroke: {
@@ -65,11 +79,11 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
         legend: {
           position: 'top',
           horizontalAlign: 'left',
-          offsetX: 40
+          offsetX: 1
         },
          dataLabels: {
     style: {
-      fontSize: '14px',
+      fontSize: '13px',
     }
   }
         

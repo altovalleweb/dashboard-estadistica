@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { BarComponent } from '../../utils/bar-component/bar-component';
 
 
+
 export interface KPIDataV3 {
   number: string;
   title: string;
@@ -33,99 +34,287 @@ showChart = computed(() => {
 })
 
 
- chartDataOptions = {
-          series: [
-          {
-            name: 'Inicial - Estatal',
-            group: 'Inicial',
-            data: [237, 18, 0]
-          },
-          {
-            name: 'Primaria - Estatal',
-            group: 'Primaria',
-            data: [325, 27, 67]
-          },
-          {
-            name: 'Secundaría - Estatal',
-            group: 'Secundaría',
-            data: [121, 0, 72]
-          },
-          {
-            name: 'SNU - Estatal',
-            group: 'SNU',
-            data: [32, 0, 0]
-          },
-          {
-            name: 'Formación Profesional - Estatal',
-            group: 'Formación Profesional',
-            data: [0, 0, 81]
-          },
-          {
-            name: 'Inicial - Privado',
-            group: 'Inicial',
-            data: [66, 1, 0]
-          },
-          {
-            name: 'Primaria - Privado',
-            group: 'Primaria',
-            data: [52, 1, 5]
-          },
-          {
-            name: 'Secundaría - Privado',
-            group: 'Secundaría',
-            data: [45, 0, 6]
-          },
-          {
-            name: 'SNU - Privado',
-            group: 'SNU',
-            data: [25, 0, 0]
-          },
-          {
-            name: 'Formación Profesional - Privado',
-            group: 'Formación Profesional',
-            data: [0, 0, 9]
-          }
-        ],
+options = {
+           series: [{
+          name: 'Estatal',
+          data: [237,  325, 121, 32,18,  27,67,  72, 81 ]
+        }, {
+          name: 'Privada',
+          data: [66,  52, 45, 25, 1, 1, 5,  6, 9]
+        }],
           chart: {
           type: 'bar',
-          height: 350,
-          stacked: true,
-        
+          height: 300,
+           stacked: true,
+           stackType: '100%',
+            toolbar: {
+      show: false
+    },
         },
-        stroke: {
-          width: 1,
-          colors: ['#fff']
-        },
-        dataLabels: {
-          formatter: (val:string) => {
-            return val 
-          }
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true
-          }
+         plotOptions: {
+          bar: {            
+            dataLabels: {            
+              total: {
+                enabled: true,
+                formatter: (val:any) => {
+                  return val
+                },
+                offsetX: 0,
+                style: {
+                  fontSize: '12px',
+                  fontWeight: 900
+                }
+              },          
+            }
+          },
         },
         xaxis: {
-          categories: [
-            'Común',
-            'Especial',
-            'Adultos'
-          ],
-          labels: {
-            formatter: (val:string) => {
+          type: 'category',
+          categories: ['Inicial', 'Primaria', 'Secundaria', 'SNU', 'Inicial', 'Primaria', 'Primaria', 'Secundaria', 'Formación Profesional'],
+          group: {
+            style: {
+              fontSize: '10px',
+              fontWeight: 700
+            },
+            groups: [
+              { title: 'COMUN', cols: 4 },
+              { title: 'ESPECIAL', cols: 2 },
+              { title: 'ADULTOS', cols: 3 }
+            ]
+          }
+        },   
+        yaxis: {
+           labels: {
+      show: false
+    },
+        },    
+        tooltip: {
+          shared: true,
+          intersect: false,
+          x: {
+            formatter: function(val:string) {
+              return val
+            }  
+          }
+        },
+        };
+
+
+ chartDataOptionsComun =  {
+          series: [{
+          name: 'Estatal',
+          data: [ 237,  325, 121, 32 ]
+        }, {
+          name: 'Privada',
+          data: [66,  52, 45, 25]
+        }],
+          chart: {
+         type: "bar",
+    height: 140,
+    stacked: true,
+    stackType: "100%",
+    toolbar: {
+      show: false
+    },
+    animations: {
+      enabled: true
+    },
+    background: 'transparent',
+    foreColor: '#000'
+        },
+  plotOptions: {
+    bar: {
+      horizontal: true
+    }
+  },              
+        xaxis: {
+          categories: ['Inicial', 'Primaria', 'Secundaria', 'SNU'],
+           axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: false
+    },
+    lines: {
+      show: false
+    }
+        },
+        yaxis: {
+          title: {
+            text: "COMÚN",
+            style: {
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#263238'
+            }
+
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val:string) {
               return val 
             }
           }
         },
         fill: {
-          opacity: 1,
+          opacity: 1
         },
-        colors: ['#80c7fd', '#008FFB', '#80f1cb', '#00E396'],
         legend: {
           position: 'top',
-          horizontalAlign: 'left'
+          horizontalAlign: 'right',
+          offsetX: 1
         }
-        };
+        }
+
+
+
+
+ chartDataOptionsEspecial =  {
+          series: [{
+          name: 'Estatal',
+          data: [ 18,  27]
+        }, {
+          name: 'Privada',
+          data: [  1, 1]
+        }],
+          chart: {
+         type: "bar",
+    height: 80,
+    stacked: true,
+    stackType: "100%",
+    toolbar: {
+      show: false
+    },
+    animations: {
+      enabled: true
+    },
+    background: 'transparent',
+    foreColor: '#000'
+        },
+  plotOptions: {
+    bar: {
+      horizontal: true
+    }
+  },              
+        xaxis: {
+          categories: ['Inicial', 'Primaria'],
+           axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: false
+    },
+    lines: {
+      show: false
+    }
+        },
+        yaxis: {
+          title: {
+            text: "ESPECIAL",
+            style: {
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#263238'
+            }
+
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val:string) {
+              return val 
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          show:false
+          
+        }
+        }
+
+
+
+
+ chartDataOptionsAdultos =  {
+          series: [{
+          name: 'Estatal',
+          data: [ 67,  72, 81]
+        }, {
+          name: 'Privada',
+          data: [ 5,  6, 9]
+        }],
+          chart: {
+         type: "bar",
+    height: 90,
+    stacked: true,
+    stackType: "100%",
+    toolbar: {
+      show: false
+    },
+    animations: {
+      enabled: true
+    },
+    background: 'transparent',
+    foreColor: '#000'
+        },
+  plotOptions: {
+    bar: {
+      horizontal: true
+    }
+  },              
+        xaxis: {
+          categories: ['Primaria', 'Secundaria', 'FP'],
+           axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    },
+    labels: {
+      show: false
+    },
+    lines: {
+      show: false
+    }
+        },
+        yaxis: {
+          title: {
+            text: "ADULTOS",
+            style: {
+              fontSize: '12px',
+              fontWeight: 'bold',
+              color: '#263238'
+            }
+
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val:string) {
+              return val 
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+      legend: {
+          show:false
+          
+        }
+        }
+
+  
+
 
 }

@@ -26,10 +26,18 @@
             </div>
             
             <!-- Body donde irían los datos desagregados -->
-            <div class="p-8">
-         <app-bar-component [dataOptions]="chartDataOptions"/>
-            </div>
+            <div class="p-8 flex-col items-center">                
+                
+                <!-- Aquí se puede incluir el componente de gráfico de barras -->
+                 
+              <app-bar-component  [dataOptions]="options"/>
+      <!--   <app-bar-component  [dataOptions]="chartDataOptionsComun"/>
+         <app-bar-component style="margin-top: -2.5rem;" [dataOptions]="chartDataOptionsEspecial"/>
+       <app-bar-component style="margin-top: -2.5rem;"   [dataOptions]="chartDataOptionsAdultos"/>-->
 
+            </div> 
+         
+        
              </div>
   
   

@@ -1,6 +1,11 @@
+
+import { getDataToChartByField } from '../utils/function';
+import { total_escuelas_por_anio } from './escuelas';
+
+
 export const UnidadesDeServicioEvolucionDataOptions = {
 series: [{
-          data: [1.264,	1.248,	1.238,	1.267,	1.268,	1.266]
+          data:getDataToChartByField(total_escuelas_por_anio, 'total')
         }],
           chart: {
           type: 'line',
@@ -11,7 +16,8 @@ series: [{
           }
         },
          xaxis: {
-          categories: [2019, 2020, 2021, 2022, 2023, 2024],},
+          categories: getDataToChartByField(total_escuelas_por_anio, 'anio')
+        },
         tooltip: {
           fixed: {
             enabled: false

@@ -1,7 +1,9 @@
+import { getDataToChartByField } from "../utils/function";
+import { total_matricula_por_anio } from "./matricula";
 
 export const MatriculaEvolucionDataOptions = {
 series: [{
-          data: [233.530,	231.727,	231.412,	234.794,	234.625,	236.951]
+          data: getDataToChartByField(total_matricula_por_anio, 'total')
         }],
           chart: {
           type: 'line',
@@ -12,7 +14,8 @@ series: [{
           }
         },
          xaxis: {
-          categories: [2019, 2020, 2021, 2022, 2023, 2024],},
+          categories: getDataToChartByField(total_matricula_por_anio, 'anio'),
+        },
         tooltip: {
           fixed: {
             enabled: false

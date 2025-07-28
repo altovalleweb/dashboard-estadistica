@@ -1,5 +1,5 @@
 import { getDataToChartByField } from "../utils/function";
-import { total_matricula_por_anio } from "./matricula";
+import { total_matricula_por_anio } from "../data/matricula";
 
 export const MatriculaEvolucionDataOptions = {
 series: [{

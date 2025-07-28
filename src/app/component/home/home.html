@@ -9,11 +9,20 @@
           Datos generales | Escuelas, alumnos/as
         </h1>
         
-     
-           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          @for (kpi of kpiDataV2; track kpi.title) {
-            <app-kpi-card-v2 [data]="kpi"/>
-          }
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+           <app-kpi-card-v2 [data]="escuelasPoModalidaNivelKPI()"/>
+         
+            
+      
+
+         
+           <app-kpi-card-v2 [data]="matriculaPoModalidaNivelKPI"/>
+         
+           <app-kpi-card-v2 [data]="cargosPoModalidaNivelKPI"/>
+         
+        
+          
 
        
 

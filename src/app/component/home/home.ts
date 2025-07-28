@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 
-import { MatriculaEvolucionDataOptions, MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions, matriculaPorModalidadNivelTotalProvinciaDataOptions } from '../../data/matricula-data-options';
+import { MatriculaEvolucionDataOptions, MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions, matriculaPorModalidadNivelTotalProvinciaDataOptions } from '../../class/matricula-data-options';
 import { KpiCardV2, KPIDataV2 } from '../kpi-card-v2/kpi-card-v2';
-import { UnidadesDeServicioEvolucionDataOptions, UnidadesDeServicioPorModalidadNivelAmbitoTotalProvinciaDataOptions, UnidadesDeServicioPorModalidadNivelSectorTotalProvinciaDataOptions, UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions } from '../../data/unidadesDeServicio-data-options';
 import { KpiCardV3, KPIDataV3 } from "../kpi-card-v3/kpi-card-v3";
+import { EscuelaState } from '../../state/escuela.state';
+import { EscuelasDataOption } from '../../class/escuelas-data-options';
 
 
 @Component({
@@ -14,24 +15,28 @@ import { KpiCardV3, KPIDataV3 } from "../kpi-card-v3/kpi-card-v3";
 })
 export class Home {
 
+  private _ess = inject(EscuelaState)
 
+  totalEscuelaUltimoAnio = this._ess.totalEscuelaUltimoAnio
+  escuelaPorAnio = this._ess.escuelaPorAnio
+  escuelaPorModalidadNivel = this._ess.escuelaPorModalidadNivel
 
+  escuelasDataOption = new EscuelasDataOption(); 
 
-
-kpiDataV2: KPIDataV2[] = [
-   {
-      number: "1.266",
+  escuelasPoModalidaNivelKPI = signal< KPIDataV2 | null>({
+      number: "-",
       title: "Escuelas",
       subtitle: "(Unidades de Servicio)",
       bgColor: "#334155",
        iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
       showChart: true,
       chartType: 'donut',
-      chartDataOptionsHeader: UnidadesDeServicioEvolucionDataOptions,
-      chartDataOptionsBody:     UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions
-     
-   },
-    {
+      chartDataOptionsHeader:  [],
+      chartDataOptionsBody: []   }) ; 
+  
+  
+  
+  matriculaPoModalidaNivelKPI: KPIDataV2 | null = {
       number: "236.951",
       title: "Alumnos/as",
       bgColor: "#475569",
@@ -40,9 +45,10 @@ kpiDataV2: KPIDataV2[] = [
       chartType: 'pie',
       chartDataOptionsHeader: MatriculaEvolucionDataOptions,
       chartDataOptionsBody: matriculaPorModalidadNivelTotalProvinciaDataOptions
-    }
-    ,
-    {
+    }; 
+
+
+    cargosPoModalidaNivelKPI: KPIDataV2 | null = {
       number: "20.369",
       title: "Cargos Docentes",
       bgColor: "#475569",
@@ -53,7 +59,26 @@ kpiDataV2: KPIDataV2[] = [
       chartDataOptionsBody: null
     }
 
-]
+
+
+ totalEscuelaPorAnioChanged = effect(() => {
+  const  total = this._ess.totalEscuelaUltimoAnio();
+  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, number: `${total}` } : value);
+});
+
+ escuelaPorAnioChanged = effect(() => {  
+  const dataOptions =  this.escuelasDataOption.getUnidadesDeServicioEvolucion(this.escuelaPorAnio()?.data || [], this.escuelaPorAnio()?.labels || [])
+  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
+});
+
+escuelaPorModalidadNivelChanged = effect(() => {  
+  const dataOptions = this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelTotalProvincia(this.escuelaPorModalidadNivel()?.serie || [], this.escuelaPorModalidadNivel()?.labels || []);
+  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsBody: dataOptions } : value);
+});
+
+
+
+
 
 kpiDataV3: KPIDataV3[] = [
    {
@@ -64,9 +89,9 @@ kpiDataV3: KPIDataV3[] = [
       title: "Distribución de Escuelas por Sector",
       
       bgColor: "bg-gradient-emerald",
-       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",      
-      chartDataOptions:     UnidadesDeServicioPorModalidadNivelSectorTotalProvinciaDataOptions
-     
+       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
+      chartDataOptions: this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia()
+
    },
     {
      dataHeader: [
@@ -88,13 +113,31 @@ kpiDataV3: KPIDataV3[] = [
       title: "Distribución de Escuelas por Ámbito",
       
       bgColor: "bg-gradient-teal",
-       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",      
-      chartDataOptions:     UnidadesDeServicioPorModalidadNivelAmbitoTotalProvinciaDataOptions
-     
+       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
+      chartDataOptions:   this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelAmbitoTotalProvincia()
+
    },
 ]
 
 
 
+ngOnInit() {
+  this.initData();
+}
+
+
+initData() {  
+  this.initEscuelas()
+  this.initMatricula()
+}
+
+initEscuelas() {  
+ this._ess.initEscuelaPorAnio();
+ this._ess.initEscuelaPorModalidadNivel();
+}
+
+initMatricula() {  
+  console.log('Initializing matricula data...'); 
+}
 
 }

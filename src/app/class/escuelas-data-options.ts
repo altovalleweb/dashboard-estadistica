@@ -1,11 +1,13 @@
 
-import { getDataToChartByField } from '../utils/function';
-import { total_escuelas_por_anio } from './escuelas';
+
+export class EscuelasDataOption {
 
 
-export const UnidadesDeServicioEvolucionDataOptions = {
+  getUnidadesDeServicioEvolucion(data:number[], categories:string[]){
+
+    return {
 series: [{
-          data:getDataToChartByField(total_escuelas_por_anio, 'total')
+          data: data
         }],
           chart: {
           type: 'line',
@@ -16,7 +18,7 @@ series: [{
           }
         },
          xaxis: {
-          categories: getDataToChartByField(total_escuelas_por_anio, 'anio')
+          categories: categories
         },
         tooltip: {
           fixed: {
@@ -36,26 +38,16 @@ series: [{
         }
 }
 
-export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
-  series: [{
-          name: 'Inicial',
-          data: [303,19,0]
-        }, {
-          name: 'Primaria',
-          data: [377, 28, 72]
-        }, {
-          name: 'Secundaria',
-          data: [ 166, 0,  78]
-        }, {
-          name: 'SNU',
-          data: [ 57, 0, 0]
-        }, {
-          name: 'Formación Profesional',
-          data: [0, 0,  90]
-        }],
+  }
+
+  getUnidadesDeServicioPorModalidadNivelTotalProvincia(series:any[], categories:string[]){
+
+    return {
+  
+          series: series,
           chart: {
           type: 'bar',
-          height: 160,          
+          height: 160,
           stacked: true,
           stackType: '100%',
            toolbar: {
@@ -64,8 +56,7 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
         },
         plotOptions: {
           bar: {
-            horizontal: true,   
-
+            horizontal: true,
           },
         },
         stroke: {
@@ -73,7 +64,7 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
           colors: ['#fff']
         },       
         xaxis: {
-          categories: ["Común", "Especial", "Adultos"],
+          categories: categories,
           
     axisBorder: {
       show: false
@@ -109,12 +100,13 @@ export const UnidadesDeServicioPorModalidadNivelTotalProvinciaDataOptions = {
     style: {
       fontSize: '13px',
     }
-  } 
+  }
         
-};
+}
+  }
 
-
-export const UnidadesDeServicioPorModalidadNivelSectorTotalProvinciaDataOptions ={
+  getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia(){
+    return {
            series: [{
           name: 'Estatal',
           data: [237,  325, 121, 32,18,  27,67,  72, 81 ]
@@ -177,10 +169,12 @@ export const UnidadesDeServicioPorModalidadNivelSectorTotalProvinciaDataOptions 
             }  
           }
         },
-        };
+        }
+  }
 
 
-        export const UnidadesDeServicioPorModalidadNivelAmbitoTotalProvinciaDataOptions ={
+  getUnidadesDeServicioPorModalidadNivelAmbitoTotalProvincia(){
+return {
            series: [{
           name: 'Urbano',
           data: [204,  237, 136, 54,19,  25,47,  64, 81 ]
@@ -243,4 +237,12 @@ export const UnidadesDeServicioPorModalidadNivelSectorTotalProvinciaDataOptions 
             }  
           }
         },
-        };
+        }
+  }
+
+
+}
+
+
+
+        

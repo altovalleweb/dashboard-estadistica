@@ -11,4 +11,7 @@ import { FooterComponent } from './component/footer/footer';
 })
 export class App {
   protected readonly title = signal('estadistica-dashboard');
+
+
+  
 }

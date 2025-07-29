@@ -5,7 +5,9 @@ import { KpiCardV2, KPIDataV2 } from '../kpi-card-v2/kpi-card-v2';
 import { KpiCardV3, KPIDataV3 } from "../kpi-card-v3/kpi-card-v3";
 import { EscuelaState } from '../../state/escuela.state';
 import { EscuelasDataOption } from '../../class/escuelas-data-options';
-import { KpiCard } from '../kpi-card/kpi-card';
+import {EscuelasMatriculaDataOption} from '../../class/escuelas-matricula-data-options';
+import { KpiCard, KPIData } from '../kpi-card/kpi-card';
+
 
 
 @Component({
@@ -18,11 +20,15 @@ export class Home {
 
   private _ess = inject(EscuelaState)
 
-  totalEscuelaUltimoAnio = this._ess.totalEscuelaUltimoAnio
+  totalEscuelas = this._ess.totalEscuelas
   escuelaPorAnio = this._ess.escuelaPorAnio
   escuelaPorModalidadNivel = this._ess.escuelaPorModalidadNivel
+  escuelaPorMolidadNivelComun = this._ess.escuelaPorModalidadNivelComun
+  escuelaPorMolidadNivelEspecial = this._ess.escuelaPorModalidadNivelEspecial
+  escuelaPorMolidadNivelAdultos = this._ess.escuelaPorModalidadNivelAdultos
 
   escuelasDataOption = new EscuelasDataOption(); 
+  escuelasMatriculaDataOption = new EscuelasMatriculaDataOption();
 
   escuelasPoModalidaNivelKPI = signal< KPIDataV2 | null>({
       number: "-",
@@ -60,11 +66,23 @@ export class Home {
       chartDataOptionsBody: null
     }
 
+    escuelasMatriculaPorModalidadNivelKPI=signal< KPIData | null>({
+     dataHeader: [
+       { value: 968, description: 'Escuelas (70.3%)' },
+       { value: 199759, description: 'Alumnos (80.7%)' }
+     ],
+      title: "Escuelas y Matricula - Común ",
+      
+      bgColor: "bg-gradient-teal",
+       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
+      chartDataOptions: null 
+   })
 
 
- totalEscuelaPorAnioChanged = effect(() => {
-  const  total = this._ess.totalEscuelaUltimoAnio();
-  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, number: `${total}` } : value);
+
+ totalEscuelasChanged = effect(() => {
+  const  total = this._ess.totalEscuelas();
+  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, number: `${total?.total }` } : value);
 });
 
  escuelaPorAnioChanged = effect(() => {  
@@ -72,9 +90,12 @@ export class Home {
   this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
 });
 
-escuelaPorModalidadNivelChanged = effect(() => {  
-  const dataOptions = this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelTotalProvincia(this.escuelaPorModalidadNivel()?.serie || [], this.escuelaPorModalidadNivel()?.labels || []);
-  this.escuelasPoModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsBody: dataOptions } : value);
+
+escuelaPorModalidadNivelComunChanged = effect(() => {  
+  console.log(this.escuelaPorMolidadNivelComun()?.serie);
+  const dataOptions = this.escuelasMatriculaDataOption.getEscuelasMatriculaModalidadComun(this.escuelaPorMolidadNivelComun()?.serie || [], 
+  [23259, 83229, 39028,22269, 20999], ['Inicial','Primaria','Secundaria 5 años','Secundaria 6 años','SNU']);
+  this.escuelasMatriculaPorModalidadNivelKPI.update((value) => value ? { ...value, chartDataOptions: dataOptions } : value);
 });
 
 
@@ -82,6 +103,7 @@ escuelaPorModalidadNivelChanged = effect(() => {
 
 
 kpiDataV3: KPIDataV3[] = [
+  
    {
      dataHeader: [
        { value: 1.051, description: 'Estatales (77.3%)' },
@@ -119,58 +141,7 @@ kpiDataV3: KPIDataV3[] = [
 
    },
    
-   {
-     dataHeader: [
-       { value: 968, description: 'Escuelas (70.3%)' },
-       { value: 199759, description: 'Alumnos (80.7%)' }
-     ],
-      title: "Escuelas y Matricula - Común ",
-      
-      bgColor: "bg-gradient-teal",
-       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
-      chartDataOptions:   {
-      series: [
-        {
-          name: "Escuelas",
-          data: [44, 55, 41, 64, 22]
-        },
-        {
-          name: "Matricula",
-
-          data: [53, 32, 33, 52, 13]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 430
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-          dataLabels: {
-            position: "top"
-          }
-        }
-      },
-      dataLabels: {
-        enabled: true,
-        offsetX: -6,
-        style: {
-          fontSize: "12px",
-          colors: ["#fff"]
-        }
-      },
-      stroke: {
-        show: true,
-        width: 1,
-        colors: ["#fff"]
-      },
-      xaxis: {
-        categories: ['Inicial','Primaria','Secundaria 5 años','Secundaria 6 años','SNU'],
-      }
-    }
-
-   },
+   
 ]
 
 
@@ -185,9 +156,13 @@ initData() {
   this.initMatricula()
 }
 
-initEscuelas() {  
- this._ess.initEscuelaPorAnio();
- this._ess.initEscuelaPorModalidadNivel();
+initEscuelas() {   
+  this._ess.initTotalesEscuelas();
+  this._ess.initEscuelaPorModalidadNivel();
+  this._ess.initEscuelaPorModalidadNivelComun(['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU']);
+  this._ess.initEscuelaPorModalidadNivelEspecial(['Inicial', 'Primario']);
+  this._ess.initEscuelaPorModalidadNivelAdultos([ 'Primario', 'Secundaria 3 años', 'Secundaria 4 años', 'Formación Profesional']);
+  this._ess.initEscuelaPorAnio();
 }
 
 initMatricula() {  

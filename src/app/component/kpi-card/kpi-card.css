@@ -14,7 +14,20 @@
             background: linear-gradient(135deg, #4f46e5, #6366f1);
         }
         
-        .bg-gradient-teal {
+       .bg-gradient-teal {
             background: linear-gradient(135deg, #0d9488, #14b8a6);
         }
-   
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }

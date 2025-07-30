@@ -46,11 +46,12 @@ export class EscuelaState {
 
 
   get escuelaPorModalidadNivel(): WritableSignal<EscuelaTotalPorModalidadNivelCategorizados | null> {
+    
     return this._escuelaPorModalidadNivel;
   }
 
   initTotalesEscuelas() {
-    const totalEscuelas = this._escuela.getTotalEscuelasPorModalidad();
+    const totalEscuelas = this._escuela.getTotalEscuelasPorModalidad();   
     this._totalEscuelas.set(totalEscuelas);
   }
 

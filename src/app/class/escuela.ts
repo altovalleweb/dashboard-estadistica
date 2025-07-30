@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
 import { EscuelaService } from "../service/escuela.service";
-import { getAccumulatedValueByField, getDataToChartByField, getSerializedValues } from "../utils/function";
+import { getAccumulatedValueByField, getDataToChartByField, getSerializedValues, getTotalesGeneralyPorModalidad } from "../utils/function";
 
 
 export interface EscuelaTotalPorAnioCategorizados {
@@ -11,7 +11,7 @@ export interface EscuelaTotalPorAnioCategorizados {
 export interface TotalesEscuelasPorModalidad{
   total: number;
   comun: number | null;
-  porcetajeComun: number | null;
+  porcentajeComun: number | null;
   especial: number | null;
   porcentajeEspecial: number | null;
   adultos: number | null;
@@ -48,27 +48,8 @@ export class Escuela {
     getTotalEscuelasPorModalidad(): TotalesEscuelasPorModalidad | null {
 
         const escuelas =   this._es.getEscuelasPorModalidadNivel();
-        if (!escuelas || escuelas.length === 0) {
-            return null;
-        }
-
-        const comun = getAccumulatedValueByField(escuelas,'modalidad', 'Común', 'total');
-        const especial = getAccumulatedValueByField(escuelas, 'modalidad', 'Especial', 'total');
-        const adultos = getAccumulatedValueByField(escuelas, 'modalidad', 'Adultos', 'total');
-
-        const total = comun + especial + adultos;
-
-        console.log('Total Escuelas:', total);
-
-        return {
-            total,
-            comun,
-            porcetajeComun: total ? (comun / total) * 100 : null,
-            especial,
-            porcentajeEspecial: total ? (especial / total) * 100 : null,
-            adultos,
-            porcentajeAdultos: total ? (adultos / total) * 100 : null
-        };
+ 
+        return getTotalesGeneralyPorModalidad(escuelas);
       
     }
 
@@ -105,7 +86,7 @@ export class Escuela {
     }
 
     getTotalEscuelasPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesEscuelasPorModalidadNivelSerializado{
-      const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), 'modalidad', [modalidad], 'nivel_oferta', niveles);
+      const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), 'modalidad', [modalidad], 'nivel_oferta', niveles);    
     
       return {
         modalidad,

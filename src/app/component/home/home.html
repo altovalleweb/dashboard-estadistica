@@ -11,19 +11,19 @@
         
      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
-           <app-kpi-card-v2 [data]="escuelasPoModalidaNivelKPI()"/>
-         
-            
-      
-
-         
-           <app-kpi-card-v2 [data]="matriculaPoModalidaNivelKPI"/>
+           <app-kpi-card-v2 [data]="escuelasPorModalidaNivelKPI()"/>
+                    
+           <app-kpi-card-v2 [data]="matriculaPorModalidaNivelKPI()"/>
          
            <app-kpi-card-v2 [data]="cargosPoModalidaNivelKPI"/>
          
 
 
-           <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelKPI()"/>
+           <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelComunKPI()"/>
+
+            <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelEspecialKPI()"/>
+
+            <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelAdultosKPI()"/>
 
 
            

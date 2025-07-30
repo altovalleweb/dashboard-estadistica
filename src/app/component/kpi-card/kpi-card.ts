@@ -1,7 +1,5 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { BarComponent } from '../../utils/bar-component/bar-component';
-
-
 
 
 export interface InformationDataHeader {
@@ -10,20 +8,25 @@ export interface InformationDataHeader {
 
 }
 
-export interface KPIData {
-  dataHeader: InformationDataHeader[];
+export interface KPIData { 
+  dataHeaderValue1?: InformationDataHeader | null;
+  dataHeaderValue2?: InformationDataHeader | null;
   title: string;  
+  modalidad: string;
   bgColor: string;
   iconPath: string;
-   chartDataOptions?: any;
 
+  infoNiveles:string[];
+  iconNiveles: string[];
+  infoEscuelas: number[];
+  infoMatricula: number[];
 }
 
 
 
 @Component({
   selector: 'app-kpi-card',
-  imports: [BarComponent],
+  imports: [DecimalPipe],
   templateUrl: './kpi-card.html',
   styleUrl: './kpi-card.css'
 })

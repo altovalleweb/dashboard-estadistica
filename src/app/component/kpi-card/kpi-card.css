@@ -17,6 +17,9 @@
        .bg-gradient-teal {
             background: linear-gradient(135deg, #0d9488, #14b8a6);
         }
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+        }
         
         .glass-effect {
             backdrop-filter: blur(16px);

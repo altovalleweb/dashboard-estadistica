@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { BarComponent } from '../../utils/bar-component/bar-component';
+import { DecimalPipe } from '@angular/common';
 
 export interface KPIDataV2 {
   number: string;
@@ -7,8 +8,7 @@ export interface KPIDataV2 {
   subtitle?: string;
   bgColor: string;
   iconPath: string;
-  showChart?: boolean;
-  chartType?: 'donut' | 'pie' | 'radialBar';
+  showChart?: boolean;  
   chartDataOptionsHeader?: any;
   chartDataOptionsBody?: any;
 
@@ -17,7 +17,7 @@ export interface KPIDataV2 {
 
 @Component({
   selector: 'app-kpi-card-v2',
-  imports: [BarComponent],
+  imports: [BarComponent, DecimalPipe],
   templateUrl: './kpi-card-v2.html',
   styleUrl: './kpi-card-v2.css'
 })

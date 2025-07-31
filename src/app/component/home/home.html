@@ -29,12 +29,11 @@
            <app-kpi-card-v3 [data]="escuelasPorSectorKPI()"/>
 
             <app-kpi-card-v3 [data]="matriculaPorSectorKPI()"/>
-       
 
+            <app-kpi-card-v3 [data]="escuelasPorAmbitoKPI()"/>
 
-           @for (kpi of kpiDataV3; track kpi.title) {
-            <app-kpi-card-v3 [data]="kpi"/>
-          }
+             <app-kpi-card-v3 [data]="matriculaPorAmbitoKPI()"/>
+
 
         </div>
         

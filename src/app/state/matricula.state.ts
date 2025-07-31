@@ -20,7 +20,8 @@ export class MatriculaState {
   private  _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
 
   private  _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmbito | null>(null);
-   private  _matriculaPorSector = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
+  private  _matriculaPorSector = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
+  private  _matriculaPorAmbito  = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
 
 
   get totalMatricula(): WritableSignal<TotalesMatriculaPorModalidad | null> {
@@ -60,6 +61,10 @@ export class MatriculaState {
     return this._matriculaPorSector;
   }
 
+  get matriculaPorAmbito(): WritableSignal<TotalesMatriculaPorSectorAmbitoSerializado[] | null> {
+    return this._matriculaPorAmbito;
+  }
+
 
   initTotalesMatricula() {
     const totalMatricula = this._matricula.getTotalMatriculaPorModalidad();
@@ -96,6 +101,11 @@ export class MatriculaState {
   initMatriculaPorSector() {
     const matriculaPorSector = this._matricula.getTotalMatriculaPorSectorSerializado();    
     this._matriculaPorSector.set(matriculaPorSector);
+  }
+
+  initMatriculaPorAmbito() {
+    const matriculaPorAmbito = this._matricula.getTotalMatriculaPorAmbitoSerializado();    
+    this._matriculaPorAmbito.set(matriculaPorAmbito);
   }
   
 }

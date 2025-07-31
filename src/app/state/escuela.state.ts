@@ -23,6 +23,7 @@ export class EscuelaState {
 
  private  _escuelasPorSectorAmbito = signal<TotalesEscuelasPorSectorAmbito | null>(null);
  private  _escuelaPorSector = signal<TotalesEscuelasPorSectorAmbitoSerializado[] | null>(null);
+ private  _escuelaPorAmbito = signal<TotalesEscuelasPorSectorAmbitoSerializado[] | null>(null);
 
 
 
@@ -58,7 +59,9 @@ export class EscuelaState {
   }
 
   
-
+ get escuelaPorAmbito(): WritableSignal<TotalesEscuelasPorSectorAmbitoSerializado[] | null> {
+    return this._escuelaPorAmbito;
+  }
 
   get escuelaPorModalidadNivel(): WritableSignal<EscuelaTotalPorModalidadNivelCategorizados | null> {
     
@@ -99,6 +102,11 @@ export class EscuelaState {
   initEscuelaPorSector() {
     const escuelaPorSector = this._escuela.getTotalEscuelasPorSectorSerializado();           
     this._escuelaPorSector.set(escuelaPorSector);
+  }
+
+  initEscuelaPorAmbito() {
+    const escuelaPorAmbito = this._escuela.getTotalEscuelasPorAmbitoSerializado();           
+    this._escuelaPorAmbito.set(escuelaPorAmbito);
   }
 
   initEscuelasPorSectorAmbito() {

@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { EscuelaService } from "../service/escuela.service";
 import {  getDataToChartByField, getSerializedValues,  getTotalesGeneralPorModalidad, getTotalesGeneralPorSectorAmbito } from "../utils/function";
-import { CAMPO_ANIO, CAMPO_ESTATAL, CAMPO_MODALIDAD, CAMPO_NIVEL_OFERTA, CAMPO_PRIVADO, CAMPO_TOTAL, MODALIDAD_COMUN, MODALIDADES,  NIVELESPORMODALIDADESCUELAS } from "../const/const";
+import { CAMPO_ANIO, CAMPO_ESTATAL, CAMPO_MODALIDAD, CAMPO_NIVEL_OFERTA, CAMPO_PRIVADO, CAMPO_RURAL, CAMPO_TOTAL, CAMPO_URBANO, MODALIDAD_COMUN, MODALIDADES,  NIVELESPORMODALIDADESCUELAS } from "../const/const";
 
 
 export interface EscuelaTotalPorAnioCategorizados {
@@ -154,6 +154,45 @@ export class Escuela {
         {
           name: CAMPO_PRIVADO,
           data: valuesPrivada
+        }
+      ];
+    }
+
+
+    /**
+     * Obtiene los totales de escuelas por ambito (Urbano y Rural) serializado.
+     * Segun el orden de las modalidades y niveles definidos en MODALIDADES y NIVELESPORMODALIDADESCUELAS.
+     * @returns Un array de objetos con el nombre del ambito y los datos correspondientes.
+     */
+
+    getTotalEscuelasPorAmbitoSerializado(   ):TotalesEscuelasPorSectorAmbitoSerializado[]{
+
+      let valuesUrbano: number[] = [];
+      let valuesRural: number[] = [];
+      
+          MODALIDADES.forEach(modalidad => {
+      
+            valuesUrbano = valuesUrbano.concat(
+              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+               [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_URBANO)
+            );
+
+            valuesRural = valuesRural.concat(
+              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+                [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_RURAL)
+            );
+          });
+
+
+       
+      return [
+        {
+          name: CAMPO_URBANO,
+          data: valuesUrbano
+        },
+        {
+          name: CAMPO_RURAL,
+          data: valuesRural
         }
       ];
     }

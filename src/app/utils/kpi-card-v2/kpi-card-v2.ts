@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { BarComponent } from '../../utils/bar-component/bar-component';
+import { BarComponent } from '../bar-component/bar-component';
 import { DecimalPipe } from '@angular/common';
 
 export interface KPIDataV2 {

@@ -17,5 +17,14 @@
         .bg-gradient-teal {
             background: linear-gradient(135deg, #0d9488, #14b8a6);
         }
-   
+
+        
+   .bg-gradient-sector {
+            background: linear-gradient(135deg,#FF5733, #e2a182 );
+        }
+
+         .bg-gradient-ambito {
+            background: linear-gradient(135deg,#008080 ,#3a928b );
+        }
+
         

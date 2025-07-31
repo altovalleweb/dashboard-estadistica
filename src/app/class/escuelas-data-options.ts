@@ -70,15 +70,9 @@ export class EscuelasDataOption {
 }
   }
 
-  getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia(){
+  getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia(series:any[], categories:string[]){
     return {
-           series: [{
-          name: 'Estatal',
-          data: [237,  325, 121, 32,18,  27,67,  72, 81 ]
-        }, {
-          name: 'Privada',
-          data: [66,  52, 45, 25, 1, 1, 5,  6, 9]
-        }],
+           series: series,
           chart: {
           type: 'bar',
           height: 300,
@@ -107,14 +101,14 @@ export class EscuelasDataOption {
         },
         xaxis: {
           type: 'category',
-          categories: ['Inicial', 'Primaria', 'Secundaria', 'SNU', 'Inicial', 'Primaria', 'Primaria', 'Secundaria', 'Formación Profesional'],
+          categories: categories,
           group: {
             style: {
               fontSize: '10px',
               fontWeight: 700
             },
             groups: [
-              { title: 'COMUN', cols: 4 },
+              { title: 'COMUN', cols: 5 },
               { title: 'ESPECIAL', cols: 2 },
               { title: 'ADULTOS', cols: 3 }
             ]

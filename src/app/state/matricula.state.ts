@@ -1,5 +1,6 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado } from '../class/matricula';
+import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbito, TotalesMatriculaPorSectorAmbitoSerializado } from '../class/matricula';
+import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL } from '../const/const';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,9 @@ export class MatriculaState {
   private  _matriculaPorModalidadNivelComun = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
   private  _matriculaPorModalidadNivelEspecial = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
   private  _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
+
+  private  _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmbito | null>(null);
+   private  _matriculaPorSector = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
 
 
   get totalMatricula(): WritableSignal<TotalesMatriculaPorModalidad | null> {
@@ -48,6 +52,14 @@ export class MatriculaState {
       return this._matriculaPorModalidadNivelAdultos;
     }
 
+  get matriculaPorSectorAmbito(): WritableSignal<TotalesMatriculaPorSectorAmbito | null> {
+    return this._matriculaPorSectorAmbito;
+  }
+
+  get matriculaPorSector(): WritableSignal<TotalesMatriculaPorSectorAmbitoSerializado[] | null> {
+    return this._matriculaPorSector;
+  }
+
 
   initTotalesMatricula() {
     const totalMatricula = this._matricula.getTotalMatriculaPorModalidad();
@@ -62,19 +74,28 @@ export class MatriculaState {
 
 
   initMatriculaPorModalidadNivelComun(niveles: string[] ) {
-    const matriculaPorModalidadNivelComun = this._matricula.getTotalMatriculaPorModalidadSerializado('Común', niveles);         
+    const matriculaPorModalidadNivelComun = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_COMUN, niveles);         
     this._matriculaPorModalidadNivelComun.set(matriculaPorModalidadNivelComun);
   }
 
   initMatriculaPorModalidadNivelEspecial(niveles: string[] ) {
-    const matriculaPorModalidadNivelEspecial = this._matricula.getTotalMatriculaPorModalidadSerializado('Especial', niveles);
+    const matriculaPorModalidadNivelEspecial = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ESPECIAL, niveles);
     this._matriculaPorModalidadNivelEspecial.set(matriculaPorModalidadNivelEspecial);
   }
 
   initMatriculaPorModalidadNivelAdultos(niveles: string[] ) {
-    const matriculaPorModalidadNivelAdultos = this._matricula.getTotalMatriculaPorModalidadSerializado('Adultos', niveles);
+    const matriculaPorModalidadNivelAdultos = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ADULTOS, niveles);
     this._matriculaPorModalidadNivelAdultos.set(matriculaPorModalidadNivelAdultos);
   }
+
+  initMatriculaPorSectorAmbito() {
+    const matriculaPorSectorAmbito = this._matricula.getTotalMatriculaPorSectorAmbito();
+    this._matriculaPorSectorAmbito.set(matriculaPorSectorAmbito);
+  }
   
+  initMatriculaPorSector() {
+    const matriculaPorSector = this._matricula.getTotalMatriculaPorSectorSerializado();    
+    this._matriculaPorSector.set(matriculaPorSector);
+  }
   
 }

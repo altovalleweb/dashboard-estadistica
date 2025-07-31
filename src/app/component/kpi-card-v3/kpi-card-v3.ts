@@ -1,5 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { BarComponent } from '../../utils/bar-component/bar-component';
+import { DecimalPipe } from '@angular/common';
 
 
 export interface InformationDataHeader {
@@ -19,7 +20,7 @@ export interface KPIDataV3 {
 
 @Component({
   selector: 'app-kpi-card-v3',
-  imports: [BarComponent],
+  imports: [BarComponent, DecimalPipe],
   templateUrl: './kpi-card-v3.html',
   styleUrl: './kpi-card-v3.css'
 })
@@ -28,7 +29,6 @@ export class KpiCardV3 {
    data = input<KPIDataV3 | null>(null);
 
 
- 
 
 
 }

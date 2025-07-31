@@ -1,6 +1,6 @@
 import { Component, effect, inject, signal } from '@angular/core';
 
-import { MatriculaEvolucionDataOptions, MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions, matriculaPorModalidadNivelTotalProvinciaDataOptions } from '../../class/matricula-data-options';
+
 import { KpiCardV2, KPIDataV2 } from '../kpi-card-v2/kpi-card-v2';
 import { KpiCardV3, KPIDataV3 } from "../kpi-card-v3/kpi-card-v3";
 import { EscuelaState } from '../../state/escuela.state';
@@ -8,6 +8,8 @@ import { EscuelasDataOption } from '../../class/escuelas-data-options';
 import {EscuelasMatriculaDataOption} from '../../class/escuelas-matricula-data-options';
 import { KpiCard, KPIData } from '../kpi-card/kpi-card';
 import { MatriculaState } from '../../state/matricula.state';
+import { NIVELES_ADULTOS_ESCUELAS, NIVELES_ADULTOS_MATRICULA, NIVELES_COMUN, NIVELES_ESPECIAL } from '../../const/const';
+import { MatriculaDataOption } from '../../class/matricula-data-options';
 
 
 
@@ -22,21 +24,30 @@ export class Home {
   private _ess = inject(EscuelaState)
   private _esm = inject(MatriculaState)
 
+
+  // Escuelas
   totalEscuelas = this._ess.totalEscuelas
   escuelaPorAnio = this._ess.escuelaPorAnio
 
   escuelaPorModalidadNivelComun = this._ess.escuelaPorModalidadNivelComun
   escuelaPorModalidadNivelEspecial = this._ess.escuelaPorModalidadNivelEspecial
   escuelaPorModalidadNivelAdultos = this._ess.escuelaPorModalidadNivelAdultos
+  totalEscuelasPorSectorAmbito = this._ess.escuelasPorSectorAmbito
+  escuelaPorSector = this._ess.escuelaPorSector
+  
+
   escuelasDataOption = new EscuelasDataOption();  
 
   // Matricula
-   totalMatricula = this._esm.totalMatricula
+  totalMatricula = this._esm.totalMatricula
   matriculaPorAnio = this._esm.matriculaPorAnio
   matriculaPorModalidadNivelComun = this._esm.matriculaPorModalidadNivelComun
   matriculaPorModalidadNivelEspecial = this._esm.matriculaPorModalidadNivelEspecial
   matriculaPorModalidadNivelAdultos = this._esm.matriculaPorModalidadNivelAdultos
-  matriculaDataOption = new EscuelasDataOption();
+
+  totalMatriculaPorSectorAmbito = this._esm.matriculaPorSectorAmbito
+  matriculaPorSector = this._esm.matriculaPorSector
+  matriculaDataOption = new MatriculaDataOption();
 
  
   escuelasMatriculaDataOption = new EscuelasMatriculaDataOption();
@@ -124,6 +135,25 @@ export class Home {
      
    })
 
+   escuelasPorSectorKPI = signal<KPIDataV3 | null>({
+ dataHeader: [
+     
+     ],
+      title: "Distribución de Escuelas por Sector",
+      
+      bgColor: "bg-gradient-emerald",
+       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
+      chartDataOptions: this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia([], []  )
+   })
+
+     matriculaPorSectorKPI = signal<KPIDataV3 | null>({
+      dataHeader: [   ],
+      title: "Distribución de Matricula por Sector",      
+      bgColor: "bg-gradient-emerald",
+       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
+      chartDataOptions: this.matriculaDataOption.getMatriculaPorModalidadNivelSectorTotalProvinciaDataOptions([], []  )
+   })
+
 
 
 
@@ -192,35 +222,45 @@ matriculaPorModalidadNivelAdultosChanged = effect(() => {
   this.escuelasMatriculaPorModalidadNivelAdultosKPI.update((value) => value ? { ...value, infoMatricula: this.matriculaPorModalidadNivelAdultos()?.serie || [] } : value);
 });
 
+totalEscuelasPorSectorAmbitoChanged = effect(() => {  
+  const  total = this.totalEscuelasPorSectorAmbito();
+
+ const dataHeader = [
+       { value: total?.estatal || 0, description: `Estatales (${total?.porcentajeEstatal || 0}%)` },
+       { value: total?.privado || 0, description: `Privadas (${total?.porcentajePrivado || 0}%)` }
+     ]
+
+  this.escuelasPorSectorKPI.update((value) => value ? { ...value, dataHeader: dataHeader } : value);
+});
+
+
+escuelaPorSectorChanged = effect(() => {  
+
+  this.escuelasPorSectorKPI.update((value) => value ? { ...value, chartDataOptions: this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia(this.escuelaPorSector() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_ESCUELAS]  ) } : value);
+});
 
 
 
-kpiDataV3: KPIDataV3[] = [
+totalMatriculaPorSectorAmbitoChanged = effect(() => {  
+  const  total = this.totalMatriculaPorSectorAmbito();
+
+ const dataHeader = [
+       { value: total?.estatal || 0, description: `Estatales (${total?.porcentajeEstatal || 0}%)` },
+       { value: total?.privado || 0, description: `Privadas (${total?.porcentajePrivado || 0}%)` }
+     ]
+
+  this.matriculaPorSectorKPI.update((value) => value ? { ...value, dataHeader: dataHeader } : value);
+});
+
+
+matriculaPorSectorChanged = effect(() => {  
+
+  this.matriculaPorSectorKPI.update((value) => value ? { ...value, chartDataOptions: this.matriculaDataOption.getMatriculaPorModalidadNivelSectorTotalProvinciaDataOptions(this.matriculaPorSector() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_MATRICULA]  ) } : value);
+});
+
+kpiDataV3: KPIDataV3[] = [  
   
-   {
-     dataHeader: [
-       { value: 1.051, description: 'Estatales (77.3%)' },
-       { value: 215, description: 'Privadas (22.7%)' }
-     ],
-      title: "Distribución de Escuelas por Sector",
-      
-      bgColor: "bg-gradient-emerald",
-       iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
-      chartDataOptions: this.escuelasDataOption.getUnidadesDeServicioPorModalidadNivelSectorTotalProvincia()
-
-   },
-    {
-     dataHeader: [
-       { value: 196.871, description: 'Estatales (77.3%)' },
-       { value: 40080, description: 'Privadas (22.7%)' }
-     ],
-      title: "Distribución de Matricula por Sector",
-      
-      bgColor: "bg-gradient-indigo",
-       iconPath: "M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z",      
-      chartDataOptions:     MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions
-     
-   },
+    
    {
      dataHeader: [
        { value: 933, description: 'Urbano (70.3%)' },
@@ -255,7 +295,9 @@ initEscuelas() {
   this._ess.initEscuelaPorModalidadNivelComun(['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU']);
   this._ess.initEscuelaPorModalidadNivelEspecial(['Inicial', 'Primario']);
   this._ess.initEscuelaPorModalidadNivelAdultos([ 'Primario','Secundario', 'Secundario 3 años', 'Secundario 4 años', 'Formación Profesional']);
- 
+
+  this._ess.initEscuelasPorSectorAmbito();
+  this._ess.initEscuelaPorSector();
 }
 
 initMatricula() {  
@@ -264,6 +306,9 @@ initMatricula() {
   this._esm.initMatriculaPorModalidadNivelComun(['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU']);
   this._esm.initMatriculaPorModalidadNivelEspecial(['Inicial', 'Primario']);
   this._esm.initMatriculaPorModalidadNivelAdultos([ 'Primario','Secundario', 'Secundario 3 años', 'Secundario 4 años', 'Formación Profesional']);
+
+  this._esm.initMatriculaPorSectorAmbito();
+  this._esm.initMatriculaPorSector();
 
 }
 

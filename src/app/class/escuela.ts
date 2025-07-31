@@ -1,6 +1,7 @@
 import { inject } from "@angular/core";
 import { EscuelaService } from "../service/escuela.service";
-import { getAccumulatedValueByField, getDataToChartByField, getSerializedValues, getTotalesGeneralyPorModalidad } from "../utils/function";
+import {  getDataToChartByField, getSerializedValues,  getTotalesGeneralPorModalidad, getTotalesGeneralPorSectorAmbito } from "../utils/function";
+import { CAMPO_ANIO, CAMPO_ESTATAL, CAMPO_MODALIDAD, CAMPO_NIVEL_OFERTA, CAMPO_PRIVADO, CAMPO_TOTAL, MODALIDAD_COMUN, MODALIDADES,  NIVELESPORMODALIDADESCUELAS } from "../const/const";
 
 
 export interface EscuelaTotalPorAnioCategorizados {
@@ -25,13 +26,28 @@ export interface TotalesEscuelasPorModalidadNivelSerializado{
 }
 
 
-
-
-
 export interface EscuelaTotalPorModalidadNivelCategorizados {
     serie: any[];
     labels: string[];
 }
+
+
+export interface TotalesEscuelasPorSectorAmbitoSerializado {
+  name: string;
+  data: number[];
+}
+
+export interface TotalesEscuelasPorSectorAmbito{ 
+  estatal: number | null;
+  porcentajeEstatal: number | null;
+  privado: number | null;
+  porcentajePrivado: number | null;
+  rural: number | null;
+  porcentajeRural: number | null;
+  urbano: number | null;
+  porcentajeUrbano: number | null;
+}
+
 
 export class Escuela {
 
@@ -40,8 +56,8 @@ export class Escuela {
 
     getTotalEscuelasPorAnio():EscuelaTotalPorAnioCategorizados {
 
-        const data = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), 'total')
-        const labels = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), 'anio')
+        const data = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), CAMPO_TOTAL);
+        const labels = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), CAMPO_ANIO)
       return   { data, labels } 
     }
 
@@ -49,7 +65,17 @@ export class Escuela {
 
         const escuelas =   this._es.getEscuelasPorModalidadNivel();
  
-        return getTotalesGeneralyPorModalidad(escuelas);
+        return getTotalesGeneralPorModalidad(escuelas);
+      
+    }
+
+    getTotalEscuelasPorSectorAmbito(): TotalesEscuelasPorSectorAmbito | null {
+
+        const escuelas =   this._es.getEscuelasPorModalidadNivel();
+ 
+        
+        return getTotalesGeneralPorSectorAmbito(escuelas);
+        
       
     }
 
@@ -86,12 +112,50 @@ export class Escuela {
     }
 
     getTotalEscuelasPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesEscuelasPorModalidadNivelSerializado{
-      const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), 'modalidad', [modalidad], 'nivel_oferta', niveles);    
+      const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
     
       return {
         modalidad,
         serie: values
       };
+    }
+
+    /**
+     * Obtiene los totales de escuelas por sector (Estatal y Privada) serializado.
+     * Segun el orden de las modalidades y niveles definidos en MODALIDADES y NIVELESPORMODALIDADESCUELAS.
+     * @returns Un array de objetos con el nombre del sector y los datos correspondientes.
+     */
+
+    getTotalEscuelasPorSectorSerializado(   ):TotalesEscuelasPorSectorAmbitoSerializado[]{
+
+      let valuesEstatal: number[] = [];
+      let valuesPrivada: number[] = [];
+      
+          MODALIDADES.forEach(modalidad => {
+      
+            valuesEstatal = valuesEstatal.concat(
+              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+               [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_ESTATAL)
+            );
+
+            valuesPrivada = valuesPrivada.concat(
+              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+                [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_PRIVADO)
+            );
+          });
+
+
+       
+      return [
+        {
+          name: CAMPO_ESTATAL,
+          data: valuesEstatal
+        },
+        {
+          name: CAMPO_PRIVADO,
+          data: valuesPrivada
+        }
+      ];
     }
 
 

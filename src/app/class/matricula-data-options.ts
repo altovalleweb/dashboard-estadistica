@@ -1,44 +1,12 @@
 import { getDataToChartByField } from "../utils/function";
 import { total_matricula_por_anio } from "../data/matricula";
 
-export const MatriculaEvolucionDataOptions = {
-series: [{
-          data: getDataToChartByField(total_matricula_por_anio, 'total')
-        }],
-          chart: {
-          type: 'line',
-          width: 100,
-          height: 50,
-          sparkline: {
-            enabled: true
-          }
-        },
-         xaxis: {
-          categories: getDataToChartByField(total_matricula_por_anio, 'anio'),
-        },
-        tooltip: {
-          fixed: {
-            enabled: false
-          },
-          x: {
-            show: true
-          },
-          y: {
-          
-            title: {
-              formatter: function (seriesName:string) {
-                return ''
-              }
-            }
-          }   
-        }
-}
 
+export class MatriculaDataOption { 
 
-
-export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
+  getMatriculaPorModalidadNivelTotalProvinciaDataOptions() {
   
-          series: [{
+      return{    series: [{
           name: 'Inicial',
           data: [23259,251,0]
         }, {
@@ -109,20 +77,12 @@ export const matriculaPorModalidadNivelTotalProvinciaDataOptions = {
     style: {
       fontSize: '13px',
     }
-  }
-        
-};
+  } } 
+}
 
-
-
-export const MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions ={
-           series: [{
-          name: 'Estatal',
-          data: [18653, 69896, 52383, 10165, 240, 760, 2573, 11341, 19684]
-        }, {
-          name: 'Privada',
-          data: [4606, 13333, 8914, 10834, 11, 28, 83, 624, 1204]
-        }],
+ getMatriculaPorModalidadNivelSectorTotalProvinciaDataOptions(series:any[], categories:string[]) {
+           return {
+           series: series,
           chart: {
           type: 'bar',
           height: 300,
@@ -151,16 +111,16 @@ export const MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions ={
         },
         xaxis: {
           type: 'category',
-          categories: ['Inicial', 'Primaria', 'Secundaria', 'SNU', 'Inicial', 'Primaria', 'Primaria', 'Secundaria', 'Formación Profesional'],
+          categories: categories,
           group: {
             style: {
               fontSize: '12px',
               fontWeight: 900
             },
             groups: [
-              { title: 'COMUN', cols: 4 },
+              { title: 'COMUN', cols: 5 },
               { title: 'ESPECIAL', cols: 2 },
-              { title: 'ADULTOS', cols: 3 }
+              { title: 'ADULTOS', cols: 4 }
             ]
           }
         },   
@@ -179,3 +139,6 @@ export const MatriculaPorModalidadNivelSectorTotalProvinciaDataOptions ={
           }
         },
         };
+} }
+
+

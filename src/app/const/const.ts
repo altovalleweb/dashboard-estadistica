@@ -1,0 +1,48 @@
+export const MODALIDAD_ADULTOS = 'Adultos';
+export const MODALIDAD_COMUN = 'Común';
+export const MODALIDAD_ESPECIAL = 'Especial';
+export const MODALIDADES = [MODALIDAD_COMUN, MODALIDAD_ESPECIAL, MODALIDAD_ADULTOS];
+
+
+
+export const NIVEL_INICIAL = 'Inicial';
+export const NIVEL_PRIMARIO = 'Primario';
+export const NIVEL_SECUNDARIO = 'Secundario';
+export const NIVEL_SECUNDARIO_3_MATRICULA = 'Secundario 3 años';
+export const NIVEL_SECUNDARIO_4_MATRICULA = 'Secundario 4 años';
+export const NIVEL_SECUNDARIO_5 = 'Secundario 5 años';
+export const NIVEL_SECUNDARIO_6 = 'Secundario 6 años';
+export const NIVEL_SNU = 'SNU';
+export const NIVEL_FORMACION_PROFESIONAL = 'Formación Profesional';
+
+
+
+export const NIVELES_COMUN = [NIVEL_INICIAL, NIVEL_PRIMARIO, NIVEL_SECUNDARIO_5, NIVEL_SECUNDARIO_6, NIVEL_SNU];
+export const NIVELES_ESPECIAL = [NIVEL_INICIAL, NIVEL_PRIMARIO];
+export const NIVELES_ADULTOS_ESCUELAS = [NIVEL_PRIMARIO, NIVEL_SECUNDARIO, NIVEL_FORMACION_PROFESIONAL];
+export const NIVELES_ADULTOS_MATRICULA = [NIVEL_PRIMARIO, NIVEL_SECUNDARIO_3_MATRICULA,
+     NIVEL_SECUNDARIO_4_MATRICULA,NIVEL_FORMACION_PROFESIONAL];
+
+
+export const CAMPO_MODALIDAD = 'modalidad';
+export const CAMPO_NIVEL_OFERTA = 'nivel_oferta';
+export const CAMPO_TOTAL = 'total';
+export const CAMPO_RURAL = 'rural';
+export const CAMPO_URBANO = 'urbano';
+export const CAMPO_ESTATAL = 'estatal';
+export const CAMPO_PRIVADO = 'privado';
+export const CAMPO_ANIO = 'anio';
+
+
+
+export const NIVELESPORMODALIDADESCUELAS: { [key: string]: string[] } = {
+  [MODALIDAD_COMUN]: NIVELES_COMUN,
+  [MODALIDAD_ESPECIAL]: NIVELES_ESPECIAL,
+  [MODALIDAD_ADULTOS]: NIVELES_ADULTOS_ESCUELAS
+};
+
+export const NIVELESPORMODALIDADMATRICULA: { [key: string]: string[] } = {
+  [MODALIDAD_COMUN]: NIVELES_COMUN,
+  [MODALIDAD_ESPECIAL]: NIVELES_ESPECIAL,
+  [MODALIDAD_ADULTOS]: NIVELES_ADULTOS_MATRICULA
+};

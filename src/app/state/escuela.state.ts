@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Escuela, EscuelaTotalPorAnioCategorizados, EscuelaTotalPorModalidadNivelCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado } from '../class/escuela';
+import { Escuela, EscuelaTotalPorAnioCategorizados, EscuelaTotalPorModalidadNivelCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado, TotalesEscuelasPorSectorAmbito, TotalesEscuelasPorSectorAmbitoSerializado } from '../class/escuela';
 
 
 
@@ -19,6 +19,12 @@ export class EscuelaState {
  private  _escuelaPorModalidadNivelComun = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
  private  _escuelaPorModalidadNivelEspecial = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
  private  _escuelaPorModalidadNivelAdultos = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
+
+
+ private  _escuelasPorSectorAmbito = signal<TotalesEscuelasPorSectorAmbito | null>(null);
+ private  _escuelaPorSector = signal<TotalesEscuelasPorSectorAmbitoSerializado[] | null>(null);
+
+
 
  
 
@@ -40,6 +46,15 @@ export class EscuelaState {
 
   get escuelaPorModalidadNivelAdultos(): WritableSignal<TotalesEscuelasPorModalidadNivelSerializado | null> {
     return this._escuelaPorModalidadNivelAdultos;
+  }
+
+
+  get escuelasPorSectorAmbito(): WritableSignal<TotalesEscuelasPorSectorAmbito | null> {
+    return this._escuelasPorSectorAmbito;
+  }
+
+  get escuelaPorSector(): WritableSignal<TotalesEscuelasPorSectorAmbitoSerializado[] | null> {
+    return this._escuelaPorSector;
   }
 
   
@@ -81,6 +96,15 @@ export class EscuelaState {
     this._escuelaPorModalidadNivel.set(escuelaPorModalidadNivel);  
   }
 
+  initEscuelaPorSector() {
+    const escuelaPorSector = this._escuela.getTotalEscuelasPorSectorSerializado();           
+    this._escuelaPorSector.set(escuelaPorSector);
+  }
+
+  initEscuelasPorSectorAmbito() {
+    const escuelasPorSectorAmbito = this._escuela.getTotalEscuelasPorSectorAmbito();       
+    this._escuelasPorSectorAmbito.set(escuelasPorSectorAmbito);
+  }
 
   
   

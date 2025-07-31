@@ -28,7 +28,4 @@ export class KpiCardV3 {
 
    data = input<KPIDataV3 | null>(null);
 
-
-
-
 }

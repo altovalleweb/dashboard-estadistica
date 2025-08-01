@@ -113,7 +113,7 @@ export class Escuela {
 
     getTotalEscuelasPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesEscuelasPorModalidadNivelSerializado{
       const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
-    
+     console.log('getTotalEscuelasPorModalidadSerializado', modalidad, niveles,values);
       return {
         modalidad,
         serie: values

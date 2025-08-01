@@ -84,6 +84,7 @@ export class Matricula {
 
 
     getTotalMatriculaPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesMatriculaPorModalidadNivelSerializado{
+ 
         const values = getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
       
         return {

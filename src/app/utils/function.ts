@@ -59,6 +59,8 @@ export const getTotalesGeneralPorModalidad= (data: any[]
             return null;
         }
 
+        data = data.filter(item => item.subgrupo === 0);
+
         const comun = getAccumulatedValueByField(data, CAMPO_MODALIDAD, MODALIDAD_COMUN, CAMPO_TOTAL);
         const especial = getAccumulatedValueByField(data, CAMPO_MODALIDAD, MODALIDAD_ESPECIAL, CAMPO_TOTAL);
         const adultos = getAccumulatedValueByField(data, CAMPO_MODALIDAD, MODALIDAD_ADULTOS, CAMPO_TOTAL);
@@ -83,6 +85,8 @@ export const getTotalesGeneralPorSectorAmbito= (data: any[]
  if (!data || data.length === 0) {
             return null;
         }
+
+        data = data.filter(item => item.subgrupo === 0);
 
         const estatal = getAccumulatedValue(data, CAMPO_ESTATAL );
         const privado = getAccumulatedValue(data, CAMPO_PRIVADO);

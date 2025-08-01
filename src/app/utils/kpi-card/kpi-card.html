@@ -41,7 +41,11 @@
     <div class="space-y-4">
       @for (item of data()?.infoNiveles; track item; let i = $index) { @if( item
       !=='Secundario 3 años' && item !=='Secundario 4 años'){
-      <div
+    
+       <div
+        [class]="{
+          'ml-5': item=== 'Secundario 5 años' || item === 'Secundario 6 años' 
+        }"
         class="bg-gray-50 rounded-2xl py-1 px-4 border border-gray-200 hover-lift hover:bg-gray-100 transition-all duration-300"
       >
         <div

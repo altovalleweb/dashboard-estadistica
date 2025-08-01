@@ -7,7 +7,7 @@ import { EscuelaState } from '../../state/escuela.state';
 import {EscuelasMatriculaDataOption} from '../../class/escuelas-matricula-data-options';
 import { KpiCard, KPIData } from '../../utils/kpi-card/kpi-card';
 import { MatriculaState } from '../../state/matricula.state';
-import { NIVELES_ADULTOS_ESCUELAS, NIVELES_ADULTOS_MATRICULA, NIVELES_COMUN, NIVELES_ESPECIAL } from '../../const/const';
+import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS_ESCUELAS, NIVELES_ADULTOS_MATRICULA, NIVELES_COMUN, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../../const/const';
 
 
 
@@ -96,8 +96,8 @@ export class Home {
        modalidad: 'Común',
       bgColor: "bg-gradient-blue",
        iconPath: "M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zM4 18v-4h3v4h2v-7.5c0-1.1.9-2 2-2h2c1.1 0 2 .9 2 2V18h2v-4h3v4h1v2H3v-2h1zm12-6.5v3h2v-3h-2z",
-      infoNiveles: ['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU'],
-      iconNiveles: ['🖍️', '📖', '📚', '📚', '🎓'],
+      infoNiveles: ['Inicial', 'Primario', 'Secundario', 'Secundario 5 años', 'Secundario 6 años', 'SNU'],
+      iconNiveles: ['🖍️', '📖', '📚', '📚', '📚', '🎓'],
       infoEscuelas: [],
       infoMatricula: [],
      
@@ -262,18 +262,18 @@ totalEscuelasPorSectorAmbitoChanged = effect(() => {
 escuelaPorSectorChanged = effect(() => {  
 
   this.escuelasPorSectorKPI.update((value) => value ? { ...value, chartDataOptions: this.escuelasMatriculaDataOption.getModalidadNivelSectorAmbitoOption(this.escuelaPorSector() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_ESCUELAS],[
-              { title: 'COMUN', cols: 5 },
-              { title: 'ESPECIAL', cols: 2 },
-              { title: 'ADULTOS', cols: 3 }
+              { title: MODALIDAD_COMUN, cols: 5 },
+              { title: MODALIDAD_ESPECIAL, cols: 2 },
+              { title: MODALIDAD_ADULTOS, cols: 3 }
             ]  ) } : value);
 });
 
 escuelaPorAmbitoChanged = effect(() => {  
 
   this.escuelasPorAmbitoKPI.update((value) => value ? { ...value, chartDataOptions: this.escuelasMatriculaDataOption.getModalidadNivelSectorAmbitoOption(this.escuelaPorAmbito() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_ESCUELAS],[
-              { title: 'COMUN', cols: 5 },
-              { title: 'ESPECIAL', cols: 2 },
-              { title: 'ADULTOS', cols: 3 }
+              { title: MODALIDAD_COMUN, cols: 5 },
+              { title: MODALIDAD_ESPECIAL, cols: 2 },
+              { title: MODALIDAD_ADULTOS, cols: 3 }
             ],['#A52A2A' ,'#008080']   ) } : value);
 });
 
@@ -301,17 +301,17 @@ totalMatriculaPorSectorAmbitoChanged = effect(() => {
 
 matriculaPorSectorChanged = effect(() => {  
   this.matriculaPorSectorKPI.update((value) => value ? { ...value, chartDataOptions: this.escuelasMatriculaDataOption.getModalidadNivelSectorAmbitoOption(this.matriculaPorSector() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_MATRICULA],[
-              { title: 'COMUN', cols: 5 },
-              { title: 'ESPECIAL', cols: 2 },
-              { title: 'ADULTOS', cols: 4 }
+              { title: MODALIDAD_COMUN, cols: 5 },
+              { title: MODALIDAD_ESPECIAL, cols: 2 },
+              { title: MODALIDAD_ADULTOS, cols: 4 }
             ]  ) } : value);
 });
 
 matriculaPorAmbitoChanged = effect(() => {  
   this.matriculaPorAmbitoKPI.update((value) => value ? { ...value, chartDataOptions: this.escuelasMatriculaDataOption.getModalidadNivelSectorAmbitoOption(this.matriculaPorAmbito() || [], [...NIVELES_COMUN,...NIVELES_ESPECIAL,...NIVELES_ADULTOS_MATRICULA],[
-              { title: 'COMUN', cols: 5 },
-              { title: 'ESPECIAL', cols: 2 },
-              { title: 'ADULTOS', cols: 4 }
+              { title: MODALIDAD_COMUN, cols: 5 },
+              { title: MODALIDAD_ESPECIAL, cols: 2 },
+              { title: MODALIDAD_ADULTOS, cols: 4 }
             ] ,['#008080','#A52A2A'] ) } : value);
 });
 
@@ -332,9 +332,9 @@ initData() {
 initEscuelas() {   
   this._ess.initTotalesEscuelas();
    this._ess.initEscuelaPorAnio(); 
-  this._ess.initEscuelaPorModalidadNivelComun(['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU']);
-  this._ess.initEscuelaPorModalidadNivelEspecial(['Inicial', 'Primario']);
-  this._ess.initEscuelaPorModalidadNivelAdultos([ 'Primario','Secundario', 'Secundario 3 años', 'Secundario 4 años', 'Formación Profesional']);
+  this._ess.initEscuelaPorModalidadNivelComun(NIVELES_COMUN_CON_APERTURA);
+  this._ess.initEscuelaPorModalidadNivelEspecial(NIVELES_ESPECIAL);
+  this._ess.initEscuelaPorModalidadNivelAdultos(NIVELES_ADULTOS_ESCUELAS);
 
   this._ess.initEscuelasPorSectorAmbito();
   this._ess.initEscuelaPorSector();
@@ -344,9 +344,9 @@ initEscuelas() {
 initMatricula() {  
   this._esm.initTotalesMatricula();
   this._esm.initMatriculaPorAnio();
-  this._esm.initMatriculaPorModalidadNivelComun(['Inicial', 'Primario', 'Secundario 5 años', 'Secundario 6 años', 'SNU']);
-  this._esm.initMatriculaPorModalidadNivelEspecial(['Inicial', 'Primario']);
-  this._esm.initMatriculaPorModalidadNivelAdultos([ 'Primario','Secundario', 'Secundario 3 años', 'Secundario 4 años', 'Formación Profesional']);
+  this._esm.initMatriculaPorModalidadNivelComun(NIVELES_COMUN_CON_APERTURA);
+  this._esm.initMatriculaPorModalidadNivelEspecial(NIVELES_ESPECIAL);
+  this._esm.initMatriculaPorModalidadNivelAdultos(NIVELES_ADULTOS_MATRICULA);
 
   this._esm.initMatriculaPorSectorAmbito();
   this._esm.initMatriculaPorSector();

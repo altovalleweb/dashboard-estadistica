@@ -90,6 +90,7 @@ export class MatriculaState {
 
   initMatriculaPorModalidadNivelAdultos(niveles: string[] ) {
     const matriculaPorModalidadNivelAdultos = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ADULTOS, niveles);
+    console.log('matriculaPorModalidadNivelAdultos', matriculaPorModalidadNivelAdultos);
     this._matriculaPorModalidadNivelAdultos.set(matriculaPorModalidadNivelAdultos);
   }
 

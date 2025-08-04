@@ -20,11 +20,7 @@
         .bg-gradient-pink {
             background: linear-gradient(135deg, #ec4899, #f472b6);
         }
-        
-        .glass-effect {
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
+    
         
         .hover-lift {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

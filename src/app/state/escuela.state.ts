@@ -1,5 +1,6 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Escuela, EscuelaTotalPorAnioCategorizados, EscuelaTotalPorModalidadNivelCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado, TotalesEscuelasPorSectorAmbito, TotalesEscuelasPorSectorAmbitoSerializado } from '../class/escuela';
+import { Escuela, EscuelaTotalPorAnioCategorizados, EscuelaTotalPorModalidadNivelCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado, TotalesEscuelasPorSectorAmbito, TotalesEscuelasPorSectorAmbitoModalidad, TotalesEscuelasPorSectorAmbitoSerializado } from '../class/escuela';
+import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL } from '../const/const';
 
 
 
@@ -25,6 +26,10 @@ export class EscuelaState {
  private  _escuelaPorSector = signal<TotalesEscuelasPorSectorAmbitoSerializado[] | null>(null);
  private  _escuelaPorAmbito = signal<TotalesEscuelasPorSectorAmbitoSerializado[] | null>(null);
 
+
+ private  _escuelasPorSectorAmbitoComun = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
+  private  _escuelasPorSectorAmbitoEspecial = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
+  private  _escuelasPorSectorAmbitoAdultos = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
 
 
  
@@ -68,6 +73,18 @@ export class EscuelaState {
     return this._escuelaPorModalidadNivel;
   }
 
+  get escuelasPorSectorAmbitoComun(): WritableSignal<TotalesEscuelasPorSectorAmbitoModalidad | null> {
+    return this._escuelasPorSectorAmbitoComun;
+  }
+
+  get escuelasPorSectorAmbitoEspecial(): WritableSignal<TotalesEscuelasPorSectorAmbitoModalidad | null> {
+    return this._escuelasPorSectorAmbitoEspecial;
+  }
+
+  get escuelasPorSectorAmbitoAdultos(): WritableSignal<TotalesEscuelasPorSectorAmbitoModalidad | null> {
+    return this._escuelasPorSectorAmbitoAdultos;
+  }
+
   initTotalesEscuelas() {
     const totalEscuelas = this._escuela.getTotalEscuelasPorModalidad();   
     this._totalEscuelas.set(totalEscuelas);
@@ -80,17 +97,17 @@ export class EscuelaState {
   }
 
   initEscuelaPorModalidadNivelComun(niveles: string[] ) {
-    const escuelaPorModalidadNivelComun = this._escuela.getTotalEscuelasPorModalidadSerializado('Común', niveles);         
+    const escuelaPorModalidadNivelComun = this._escuela.getTotalEscuelasPorModalidadSerializado(MODALIDAD_COMUN, niveles);         
     this._escuelaPorModalidadNivelComun.set(escuelaPorModalidadNivelComun);
   }
 
   initEscuelaPorModalidadNivelEspecial(niveles: string[] ) {
-    const escuelaPorModalidadNivelEspecial = this._escuela.getTotalEscuelasPorModalidadSerializado('Especial', niveles);
+    const escuelaPorModalidadNivelEspecial = this._escuela.getTotalEscuelasPorModalidadSerializado(MODALIDAD_ESPECIAL, niveles);
     this._escuelaPorModalidadNivelEspecial.set(escuelaPorModalidadNivelEspecial);
   }
 
   initEscuelaPorModalidadNivelAdultos(niveles: string[] ) {
-    const escuelaPorModalidadNivelAdultos = this._escuela.getTotalEscuelasPorModalidadSerializado('Adultos', niveles);
+    const escuelaPorModalidadNivelAdultos = this._escuela.getTotalEscuelasPorModalidadSerializado(MODALIDAD_ADULTOS, niveles);
     this._escuelaPorModalidadNivelAdultos.set(escuelaPorModalidadNivelAdultos);
   }
 
@@ -114,7 +131,14 @@ export class EscuelaState {
     this._escuelasPorSectorAmbito.set(escuelasPorSectorAmbito);
   }
 
-  
-  
-  
+ initEscuelasPorSectorAmbitoModalidad() {
+    const escuelasPorSectorAmbitoModalidad = this._escuela.getTotalEscuelasPorSectorAmbitoModalidad();    
+
+    this._escuelasPorSectorAmbitoComun.set(escuelasPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_COMUN.toLocaleLowerCase()) || null);
+    this._escuelasPorSectorAmbitoEspecial.set(escuelasPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_ESPECIAL.toLocaleLowerCase()) || null);
+    this._escuelasPorSectorAmbitoAdultos.set(escuelasPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_ADULTOS.toLocaleLowerCase()) || null);
+    
+
+  }
+
 }

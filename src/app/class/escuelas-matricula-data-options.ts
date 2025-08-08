@@ -15,12 +15,13 @@ series: [{
           data: data
         }],
           chart: {
-          type: 'line',
-          width: 100,
-          height: 50,
+          type: 'area',
+          
+          height: 100,
           sparkline: {
             enabled: true
-          }
+          },
+          
         },
          xaxis: {
           categories: categories

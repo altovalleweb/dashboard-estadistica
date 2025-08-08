@@ -2,51 +2,66 @@
 
 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
   <!-- Header -->
-  <div class="bg-gradient-blue px-8 py-3 text-white">
+  <div [class]=" color() + ' px-8 py-3 text-white'">
     <div class="flex items-center justify-center mb-2"> 
-      <span class="text-lg font-medium">Educación Común - Distribución por Sector y Ámbito</span>
+      <span class="text-lg font-medium">{{title()}}</span>
     </div>
 
     <div class="flex items-center justify-around text-center">
-        <div class="grid grid-cols-4 gap-y-1 gap-x-6 text-xs opacity-90">
+        @if( totalesEscuelas() ){
+        <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base ">🏫 Escuelas</div>
             <div class="flex flex-col text-center">
-                <span>550 (80%)</span>
+                <span class="text-lg">{{totalesEscuelas()?.estatal | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesEscuelas()?.porcentajeEstatal}}%)</span>
                 <span class="">Estatal</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>150 (20%)</span>
-                <span>Privado</span>
+                <span class="text-lg">{{totalesEscuelas()?.privado | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesEscuelas()?.porcentajePrivado}}%)</span>
+                <span class="">Privado</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>400 (60%)</span>
+                <span class="text-lg">{{totalesEscuelas()?.urbano | number : "1.0-2"}}</span>
+                 <span class="text-xs">({{totalesEscuelas()?.porcentajeUrbano}}%)</span>
                 <span>Urbano</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>200 (40%)</span>
+                <span class="text-lg">{{totalesEscuelas()?.rural | number : "1.0-2"}}</span>
+                <span class="text-xs">({{totalesEscuelas()?.porcentajeRural}}%)</span>
                 <span>Rural</span>
             </div>
         </div>
-         <div class="w-px h-15 bg-white bg-opacity-20 mx-8"></div>
-         <div class="grid grid-cols-4 gap-y-1 gap-x-6 text-xs">
+        }
+  <div class="w-px h-15 bg-white bg-opacity-20 mx-8"></div>
+        @if( totalesMatricula() ){
+      
+         <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base">👥 Alumnos</div>
             <div class="flex flex-col text-center">
-                <span>550 (80%)</span>
+                <span class="text-lg">{{totalesMatricula()?.estatal | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesMatricula()?.porcentajeEstatal}}%)</span>
                 <span>Estatal</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>150 (20%)</span>
+                <span class="text-lg">{{totalesMatricula()?.privado | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesMatricula()?.porcentajePrivado}}%)</span>
                 <span>Privado</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>400 (60%)</span>
+                <span class="text-lg">{{totalesMatricula()?.urbano | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesMatricula()?.porcentajeUrbano}}%)</span>
                 <span>Urbano</span>
             </div>
             <div class="flex flex-col text-center">
-                <span>200 (40%)</span>
+                <span class="text-lg">{{totalesMatricula()?.rural | number : "1.0-2"}}  </span>
+                <span class="text-xs">({{totalesMatricula()?.porcentajeRural}}%)</span>
                 <span>Rural</span>
             </div>
         </div>
+        }
+        
+       
 
     </div>
 
@@ -58,7 +73,10 @@
 
         
     @for(item of data(); track item) {
-<div class="bg-gray-50 rounded-2xl py-1 px-4 border border-gray-200 hover-lift hover:bg-gray-100 transition-all duration-300">
+<div 
+  [class]="getLevelClasses(item.nivel, item.modalidad)"
+  (mouseenter)="onLevelHover(item.nivel, item.modalidad)"
+  (mouseleave)="onLevelLeave()">
             <div class="text-center mb-2">
                 <div >{{iconos[item.nivel]}} <span class="text-sm  text-gray-800">{{item.nivel}}</span></div>              
             </div>
@@ -70,11 +88,11 @@
                          <div class="space-y-0.5">
                         <div class="flex items-center justify-between text-gray-700">
                             <span>🏫</span>
-                            <span class="font-medium"> {{item.escuelas_estatal}} ({{item.escuelas_porcentajeEstatal}}%) </span>
+                            <span class="font-medium"> {{item.escuelas_estatal | number : "1.0-2"}} ({{item.escuelas_porcentajeEstatal}}%) </span>
                         </div>
                         <div class="flex items-center justify-between text-gray-700">
                             <span>👥</span>
-                            <span class="font-medium"> {{item.matricula_estatal}} ({{item.matricula_porcentajeEstatal}}%) </span>
+                            <span class="font-medium"> {{item.matricula_estatal | number : "1.0-2"}} ({{item.matricula_porcentajeEstatal}}%) </span>
                         </div>
                     </div>
                     </div>
@@ -82,12 +100,12 @@
                         <div class="font-bold text-orange-700  text-center" >Privado</div>
                         <div class="space-y-0.5">
                         <div class="flex items-center justify-center text-gray-700">
-                         
-                            <span class="font-medium"> {{item.escuelas_privado}} ({{item.escuelas_porcentajePrivado}}%) </span>
+
+                            <span class="font-medium"> {{item.escuelas_privado | number : "1.0-2"}} ({{item.escuelas_porcentajePrivado}}%) </span>
                         </div>
                         <div class="flex items-center justify-center text-gray-700">
-                         
-                            <span class="font-medium"> {{item.matricula_privado}} ({{item.matricula_porcentajePrivado}}%) </span>
+
+                            <span class="font-medium"> {{item.matricula_privado | number : "1.0-2"}} ({{item.matricula_porcentajePrivado}}%) </span>
                         </div>
                     </div>
                     </div>
@@ -96,15 +114,15 @@
                 <div class="border-t pt-2">                    
                     <div class="grid grid-cols-2 gap-1 text-xs">
                         <div class="p-1 rounded ">
-                            <div class="font-bold text-blue-700 text-center">Urbano</div>
+                            <div class="font-bold text-slate-700 text-center">Urbano</div>
                              <div class="space-y-0.5">
                         <div class="flex items-center justify-between text-gray-700">
                             <span>🏫</span>
-                            <span class="font-medium"> {{item.escuelas_urbano}} ({{item.escuelas_porcentajeUrbano}}%) </span>
+                            <span class="font-medium"> {{item.escuelas_urbano | number : "1.0-2"}} ({{item.escuelas_porcentajeUrbano}}%) </span>
                         </div>
                         <div class="flex items-center justify-between text-gray-700">
                             <span>👥</span>
-                            <span class="font-medium"> {{item.matricula_urbano}} ({{item.matricula_porcentajeUrbano}}%) </span>
+                            <span class="font-medium"> {{item.matricula_urbano | number : "1.0-2"}} ({{item.matricula_porcentajeUrbano}}%) </span>
                         </div>
                     </div>
                         </div>
@@ -112,12 +130,12 @@
                             <div class="font-bold text-green-700 text-center">Rural</div>
                              <div class="space-y-0.5">
                         <div class="flex items-center justify-center text-gray-700">
-                            
-                            <span class="font-medium"> {{item.escuelas_rural}} ({{item.escuelas_porcentajeRural}}%) </span>
+
+                            <span class="font-medium"> {{item.escuelas_rural | number : "1.0-2"}} ({{item.escuelas_porcentajeRural}}%) </span>
                         </div>
                         <div class="flex items-center justify-center text-gray-700">
-                            
-                            <span class="font-medium"> {{item.matricula_rural}} ({{item.matricula_porcentajeRural}}%) </span>
+
+                            <span class="font-medium"> {{item.matricula_rural | number : "1.0-2"}} ({{item.matricula_porcentajeRural}}%) </span>
                         </div>
                     </div>
                         </div>
@@ -129,5 +147,6 @@
          
         
   </div>
+
 
   

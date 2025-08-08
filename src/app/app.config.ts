@@ -7,6 +7,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEsAr from '@angular/common/locales/es-AR';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 // Registrar los datos de localización
 registerLocaleData(localeEsAr);
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
      { provide: LOCALE_ID, useValue: 'es-AR' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    provideHttpClient(withFetch()),
     provideRouter(routes), provideClientHydration(withEventReplay())
   ]
 };

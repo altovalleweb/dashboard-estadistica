@@ -48,6 +48,10 @@ export interface TotalesEscuelasPorSectorAmbito{
   porcentajeUrbano: number | null;
 }
 
+export interface TotalesEscuelasPorSectorAmbitoModalidad extends TotalesEscuelasPorSectorAmbito { 
+  modalidad: string;
+}
+
 
 export class Escuela {
 
@@ -78,6 +82,32 @@ export class Escuela {
         
       
     }
+
+     /**
+           * Obtiene los totales de escuelas por sector (Estatal y Privada) y ambito (Rural y Urbano) para cada una de las modalidades.
+           * @returns Un objeto TotalesEscuelasPorSectorAmbitoModalidad[].
+           */
+
+          getTotalEscuelasPorSectorAmbitoModalidad(): TotalesEscuelasPorSectorAmbitoModalidad[]   {
+
+              let result: TotalesEscuelasPorSectorAmbitoModalidad[] = [];
+              MODALIDADES.forEach(modalidad => { 
+                 let escuelas =   this._es.getEscuelasPorModalidadNivel().filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
+                  
+                 const totalesEscuelas = getTotalesGeneralPorSectorAmbito(escuelas);
+
+                 result.push({
+                    ...totalesEscuelas,
+                    modalidad
+                 });
+              })
+              
+    
+                 
+              return result;
+                 
+    
+              }
 
     getTotalEscuelasPorModalidadNivel(): EscuelaTotalPorModalidadNivelCategorizados {
      const escuelas =   this._es.getEscuelasPorModalidadNivel();

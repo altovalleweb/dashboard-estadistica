@@ -1,47 +1,133 @@
-<div class="container mx-auto px-6 py-12">
-  <!-- Título Principal -->
+<!-- Layout principal con sidebar -->
+<div class="flex bg-gray-50">
+  
+  <!-- Sidebar de filtros -->
+  @if(sidebarOpen()) {
+    <app-sidebar-filters 
+      (filtersChanged)="onFiltersChanged($event)"
+      class="hidden lg:block">
+    </app-sidebar-filters>
+  }
 
-
- <!-- Container Principal -->
-      <div class="mx-auto px-4 py-8">
-        <!-- Título Principal -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+  <!-- Contenido principal -->
+  <div class="flex-1 flex flex-col min-h-screen">
+    
+    <!-- Header con botón de toggle del sidebar -->
+    <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center">
+        <button 
+          (click)="toggleSidebar()"
+          class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            @if(sidebarOpen()) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            }
+          </svg>
+        </button>
+        <h1 class="ml-4 text-2xl font-bold text-gray-800">
           Datos generales | Escuelas, alumnos/as
         </h1>
-        
-     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      </div>
       
-           <app-kpi-card-v2 [data]="escuelasPorModalidaNivelKPI()"/>
-                    
-           <app-kpi-card-v2 [data]="matriculaPorModalidaNivelKPI()"/>
-         
-           <app-kpi-card-v2 [data]="cargosPoModalidaNivelKPI"/>
-         
+      <!-- Indicador de filtros activos -->
+      @if(activeFilters().geographic.type && activeFilters().geographic.value || activeFilters().educational.modalidad) {
+        <div class="flex items-center space-x-2">
+          @if(activeFilters().geographic.type && activeFilters().geographic.value) {
+            <div class="flex items-center bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"></path>
+              </svg>
+              {{ activeFilters().geographic.type === 'region' ? 'Región' : 
+                  activeFilters().geographic.type === 'departamento' ? 'Departamento' : 'Distrito' }}: 
+              {{ activeFilters().geographic.value }}
+            </div>
+          }
+          @if(activeFilters().educational.modalidad) {
+            <div class="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
+              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" clip-rule="evenodd"></path>
+              </svg>
+              {{ activeFilters().educational.modalidad }}
+              @if(activeFilters().educational.nivel) {
+                - {{ activeFilters().educational.nivel }}
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
 
+    <!-- Contenido scrolleable -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="container mx-auto px-6 py-12">
+        
+        <!-- Container Principal -->
+        <div class="mx-auto px-4 py-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <app-kpi-card-v2 [data]="escuelasPorModalidaNivelKPI()"/>
+                      
+            <app-kpi-card-v2 [data]="matriculaPorModalidaNivelKPI()"/>
+           
+            <app-kpi-card-v2 [data]="cargosPoModalidaNivelKPI"/>
+           
+            <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelComunKPI()" />
 
-           <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelComunKPI()" />
-
-           <app-kpi class="col-span-2"   [data]="escuelasMatriculasPorSectorAmbitoModalidadNivelComun()"></app-kpi>
+            <app-kpi class="col-span-2"  
+              [title]="'Educación Común - Distribución por Sector y Ámbito'"
+              [color]="'bg-gradient-blue'"
+              [data]="escuelasMatriculasPorSectorAmbitoModalidadNivelComun()"
+              [totalesEscuelas]="escuelasPorSectorAmbitoComun() || null"
+              [totalesMatricula]="matriculaPorSectorAmbitoModalidadComun() || null"
+              />
 
             <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelEspecialKPI()"/>
 
+            <app-kpi class="col-span-2"   
+              [title]="'Educación Especial - Distribución por Sector y Ámbito'"
+              [color]="'bg-gradient-pink'"
+              [data]="escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial()"
+              [totalesEscuelas]="escuelasPorSectorAmbitoEspecial() || null"
+              [totalesMatricula]="matriculaPorSectorAmbitoModalidadEspecial() || null"
+              />
+
             <app-kpi-card [data]="escuelasMatriculaPorModalidadNivelAdultosKPI()"/>
 
+            <app-kpi class="col-span-2"
+              [title]="'Educación Adultos - Distribución por Sector y Ámbito'"
+              [color]="'bg-gradient-purple'"
+              [data]="escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos()"
+              [totalesEscuelas]="escuelasPorSectorAmbitoAdultos() || null"
+              [totalesMatricula]="matriculaPorSectorAmbitoModalidadAdultos() || null"
+              />
 
-           <app-kpi-card-v3 [data]="escuelasPorSectorKPI()"/>
-
-            <app-kpi-card-v3 [data]="matriculaPorSectorKPI()"/>
-
-            <app-kpi-card-v3 [data]="escuelasPorAmbitoKPI()"/>
-
-             <app-kpi-card-v3 [data]="matriculaPorAmbitoKPI()"/>
-
-
+          </div>
+          
         </div>
 
-        
       </div>
+    </div>
 
-
+  </div>
 
 </div>
+
+<!-- Sidebar móvil (overlay) -->
+@if(sidebarOpen()) {
+  <div class="lg:hidden fixed inset-0 z-50 flex">
+    <!-- Overlay -->
+    <div 
+      (click)="toggleSidebar()"
+      class="fixed inset-0 bg-black bg-opacity-50">
+    </div>
+    
+    <!-- Sidebar -->
+    <app-sidebar-filters 
+      (filtersChanged)="onFiltersChanged($event)"
+      class="relative z-10 h-full">
+    </app-sidebar-filters>
+  </div>
+}

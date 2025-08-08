@@ -1,0 +1,249 @@
+<!-- Sidebar de Filtros -->
+<div class="w-80 sidebar-full-height bg-white shadow-lg border-r border-gray-200 flex flex-col">
+  <!-- SECCIÓN: OFERTA EDUCATIVA -->
+  <div class="p-4 border-b border-gray-200">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Oferta Educativa</h2>
+
+    <!-- Acordeón: Modalidad Común -->
+    <div class="mb-2">
+      <button 
+        (click)="toggleModalidadComun()"
+        class="w-full flex items-center justify-between p-3 bg-green-50 
+               rounded-lg transition-all duration-300 ease-in-out border border-green-200">
+        <span class="text-sm font-medium text-green-700">Común</span>
+        <svg class="w-4 h-4 text-green-500 transition-transform duration-300 ease-in-out"
+             [class.rotate-180]="modalidadComunOpen()"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      
+      <div class="accordion-content" [class.open]="modalidadComunOpen()">
+        <div class="accordion-inner max-h-60 overflow-y-auto">
+          @for (nivel of nivelesComun; track nivel) {
+            <label class="flex items-center p-2 rounded cursor-pointer 
+                         transition-colors duration-200">
+              <input 
+                type="radio" 
+                name="educational-filter"
+                [checked]="isNivelComunSelected(nivel)"
+                (change)="selectNivelComun(nivel)"
+                class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 
+                       focus:ring-2 rounded">
+              <span class="ml-2 text-sm text-gray-700 flex items-center">
+                <span class="mr-2">{{ iconosNiveles[nivel] || '📋' }}</span>
+                {{ nivel }}
+              </span>
+            </label>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Acordeón: Modalidad Especial -->
+    <div class="mb-2">
+      <button 
+        (click)="toggleModalidadEspecial()"
+        class="w-full flex items-center justify-between p-3 bg-purple-50 
+               rounded-lg transition-all duration-300 ease-in-out border border-purple-200">
+        <span class="text-sm font-medium text-purple-700">Especial</span>
+        <svg class="w-4 h-4 text-purple-500 transition-transform duration-300 ease-in-out"
+             [class.rotate-180]="modalidadEspecialOpen()"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      
+      <div class="accordion-content" [class.open]="modalidadEspecialOpen()">
+        <div class="accordion-inner max-h-60 overflow-y-auto">
+          @for (nivel of nivelesEspecial; track nivel) {
+            <label class="flex items-center p-2 rounded cursor-pointer 
+                         transition-colors duration-200">
+              <input 
+                type="radio" 
+                name="educational-filter"
+                [checked]="isNivelEspecialSelected(nivel)"
+                (change)="selectNivelEspecial(nivel)"
+                class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500 
+                       focus:ring-2 rounded">
+              <span class="ml-2 text-sm text-gray-700 flex items-center">
+                <span class="mr-2">{{ iconosNiveles[nivel] || '📋' }}</span>
+                {{ nivel }}
+              </span>
+            </label>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Acordeón: Modalidad Adultos -->
+    <div class="mb-2">
+      <button 
+        (click)="toggleModalidadAdultos()"
+        class="w-full flex items-center justify-between p-3 bg-orange-50 
+               rounded-lg transition-all duration-300 ease-in-out border border-orange-200">
+        <span class="text-sm font-medium text-orange-700">Adultos</span>
+        <svg class="w-4 h-4 text-orange-500 transition-transform duration-300 ease-in-out"
+             [class.rotate-180]="modalidadAdultosOpen()"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </button>
+      
+      <div class="accordion-content" [class.open]="modalidadAdultosOpen()">
+        <div class="accordion-inner max-h-60 overflow-y-auto">
+          @for (nivel of nivelesAdultos; track nivel) {
+            <label class="flex items-center p-2 rounded cursor-pointer 
+                         transition-colors duration-200">
+              <input 
+                type="radio" 
+                name="educational-filter"
+                [checked]="isNivelAdultosSelected(nivel)"
+                (change)="selectNivelAdultos(nivel)"
+                class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 focus:ring-orange-500 
+                       focus:ring-2 rounded">
+              <span class="ml-2 text-sm text-gray-700 flex items-center">
+                <span class="mr-2">{{ iconosNiveles[nivel] || '📋' }}</span>
+                {{ nivel }}
+              </span>
+            </label>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header de Filtros -->
+  <div class="p-4 border-b border-gray-200">
+    <h2 class="text-lg font-semibold text-gray-900">Filtros</h2>
+    @if (hasGeographicFilter()) {
+      <button 
+        (click)="clearGeographicFilter()"
+        class="mt-2 text-sm text-blue-600 transition-colors duration-200 underline">
+        Limpiar filtros geográficos
+      </button>
+    }
+  </div>
+
+  <!-- Contenido Scrolleable -->
+  <div class="flex-1 overflow-y-auto">
+    <!-- Filtros Activos Geográficos -->
+    @if (hasGeographicFilter()) {
+      <div class="p-4 bg-blue-50 border-b border-gray-200">
+        <h3 class="text-sm font-medium text-gray-900 mb-2">Filtros Activos:</h3>
+        <div class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded mb-1">
+          {{ getGeographicFilterText() }}
+          <button 
+            (click)="clearGeographicFilter()"
+            class="ml-1 text-blue-600">×</button>
+        </div>
+      </div>
+    }
+
+    <!-- SECCIÓN: DIVISIÓN GEOGRÁFICA -->
+    <div class="p-4">
+      <h3 class="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">
+        División Geográfica
+      </h3>
+
+      <!-- Acordeón: Regiones -->
+      <div class="mb-2">
+        <button 
+          (click)="toggleRegiones()"
+          class="w-full flex items-center justify-between p-3 bg-gray-50 
+                 rounded-lg transition-all duration-300 ease-in-out border border-gray-200">
+          <span class="text-sm font-medium text-gray-700">Regiones</span>
+          <svg class="w-4 h-4 text-gray-500 transition-transform duration-300 ease-in-out"
+               [class.rotate-180]="regionesOpen()"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div class="accordion-content" [class.open]="regionesOpen()">
+          <div class="accordion-inner max-h-60 overflow-y-auto">
+            @for (region of regiones; track region) {
+              <label class="flex items-center p-2 rounded cursor-pointer 
+                           transition-colors duration-200">
+                <input 
+                  type="radio" 
+                  name="geographic-filter"
+                  [checked]="isRegionSelected(region)"
+                  (change)="selectRegion(region)"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 
+                         focus:ring-2 rounded">
+                <span class="ml-2 text-sm text-gray-700">{{ region }}</span>
+              </label>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Acordeón: Departamentos -->
+      <div class="mb-2">
+        <button 
+          (click)="toggleDepartamentos()"
+          class="w-full flex items-center justify-between p-3 bg-gray-50 
+                 rounded-lg transition-all duration-300 ease-in-out border border-gray-200">
+          <span class="text-sm font-medium text-gray-700">Departamentos</span>
+          <svg class="w-4 h-4 text-gray-500 transition-transform duration-300 ease-in-out"
+               [class.rotate-180]="departamentosOpen()"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div class="accordion-content" [class.open]="departamentosOpen()">
+          <div class="accordion-inner max-h-60 overflow-y-auto">
+            @for (departamento of departamentos; track departamento) {
+              <label class="flex items-center p-2 rounded cursor-pointer 
+                           transition-colors duration-200">
+                <input 
+                  type="radio" 
+                  name="geographic-filter"
+                  [checked]="isDepartamentoSelected(departamento)"
+                  (change)="selectDepartamento(departamento)"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 
+                         focus:ring-2 rounded">
+                <span class="ml-2 text-sm text-gray-700">{{ departamento }}</span>
+              </label>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Acordeón: Distritos -->
+      <div class="mb-2">
+        <button 
+          (click)="toggleDistritos()"
+          class="w-full flex items-center justify-between p-3 bg-gray-50 
+                 rounded-lg transition-all duration-300 ease-in-out border border-gray-200">
+          <span class="text-sm font-medium text-gray-700">Distritos</span>
+          <svg class="w-4 h-4 text-gray-500 transition-transform duration-300 ease-in-out"
+               [class.rotate-180]="distritosOpen()"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div class="accordion-content" [class.open]="distritosOpen()">
+          <div class="accordion-inner max-h-60 overflow-y-auto">
+            @for (distrito of distritos; track distrito) {
+              <label class="flex items-center p-2 rounded cursor-pointer 
+                           transition-colors duration-200">
+                <input 
+                  type="radio" 
+                  name="geographic-filter"
+                  [checked]="isDistritoSelected(distrito)"
+                  (change)="selectDistrito(distrito)"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 
+                         focus:ring-2 rounded">
+                <span class="ml-2 text-sm text-gray-700">{{ distrito }}</span>
+              </label>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

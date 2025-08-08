@@ -43,11 +43,9 @@
       !=='Secundario 3 años' && item !=='Secundario 4 años'){
     
        <div
-        [class]="{
-          'ml-5': item=== 'Secundario 5 años' || item === 'Secundario 6 años' 
-        }"
-        class="bg-gray-50 rounded-2xl py-1 px-4 border border-gray-200 hover-lift hover:bg-gray-100 transition-all duration-300"
-      >
+        [class]="getLevelClasses(item, (item=== 'Secundario 5 años' || item === 'Secundario 6 años') ? 'ml-5' : '')"
+        (mouseenter)="onLevelHover(item)"
+        (mouseleave)="onLevelLeave()">
         <div
           class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
         >

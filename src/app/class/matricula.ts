@@ -45,6 +45,10 @@ export interface TotalesMatriculaPorSectorAmbito {
   porcentajeUrbano: number | null;
 }
 
+export interface TotalesMatriculaPorSectorAmbitoModalidad extends TotalesMatriculaPorSectorAmbito {
+  modalidad: string;
+}
+
 export class Matricula {
   private _es = inject(MatriculaService);
 
@@ -80,6 +84,32 @@ export class Matricula {
           return getTotalesGeneralPorSectorAmbito(matricula);          
         
       }
+
+      /**
+       * Obtiene los totales de matricula por sector (Estatal y Privada) y ambito (Rural y Urbano) para cada una de las modalidades.
+       * @returns Un objeto TotalesMatriculaPorSectorAmbitoModalidad[].
+       */
+
+      getTotalMatriculaPorSectorAmbitoModalidad(): TotalesMatriculaPorSectorAmbitoModalidad[]   {
+
+          let result: TotalesMatriculaPorSectorAmbitoModalidad[] = [];
+          MODALIDADES.forEach(modalidad => { 
+             let matricula =   this._es.getMatriculaPorModalidadNivel().filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
+              
+             const totalesMatricula = getTotalesGeneralPorSectorAmbito(matricula);
+
+             result.push({
+                ...totalesMatricula,
+                modalidad
+             });
+          })
+          
+
+             
+          return result;
+             
+
+          }
   
 
 

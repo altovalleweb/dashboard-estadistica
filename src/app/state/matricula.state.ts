@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbito, TotalesMatriculaPorSectorAmbitoSerializado } from '../class/matricula';
+import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbito,TotalesMatriculaPorSectorAmbitoModalidad,TotalesMatriculaPorSectorAmbitoSerializado } from '../class/matricula';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL } from '../const/const';
 
 @Injectable({
@@ -22,6 +22,11 @@ export class MatriculaState {
   private  _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmbito | null>(null);
   private  _matriculaPorSector = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
   private  _matriculaPorAmbito  = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
+
+
+  private  _matriculaPorSectorAmbitoModalidadComun = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+  private  _matriculaPorSectorAmbitoModalidadEspecial = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+  private  _matriculaPorSectorAmbitoModalidadAdultos = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
 
 
   get totalMatricula(): WritableSignal<TotalesMatriculaPorModalidad | null> {
@@ -66,6 +71,17 @@ export class MatriculaState {
   }
 
 
+  get matriculaPorSectorAmbitoModalidadComun(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
+    return this._matriculaPorSectorAmbitoModalidadComun;
+  }
+  get matriculaPorSectorAmbitoModalidadEspecial(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
+    return this._matriculaPorSectorAmbitoModalidadEspecial;
+  }
+  get matriculaPorSectorAmbitoModalidadAdultos(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
+    return this._matriculaPorSectorAmbitoModalidadAdultos;
+  }
+
+
   initTotalesMatricula() {
     const totalMatricula = this._matricula.getTotalMatriculaPorModalidad();
     this._totalMatricula.set(totalMatricula);
@@ -107,5 +123,15 @@ export class MatriculaState {
     const matriculaPorAmbito = this._matricula.getTotalMatriculaPorAmbitoSerializado();    
     this._matriculaPorAmbito.set(matriculaPorAmbito);
   }
-  
-}
+
+  initMatriculaPorSectorAmbitoModalidad() {
+    const matriculaPorSectorAmbitoModalidad = this._matricula.getTotalMatriculaPorSectorAmbitoModalidad();    
+
+    this._matriculaPorSectorAmbitoModalidadComun.set(matriculaPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_COMUN.toLocaleLowerCase()) || null);
+    this._matriculaPorSectorAmbitoModalidadEspecial.set(matriculaPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_ESPECIAL.toLocaleLowerCase()) || null);
+    this._matriculaPorSectorAmbitoModalidadAdultos.set(matriculaPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_ADULTOS.toLocaleLowerCase()) || null);
+
+  }
+ 
+
+ }

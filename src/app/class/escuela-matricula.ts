@@ -3,9 +3,11 @@ import { EscuelaService } from "../service/escuela.service";
 import { MatriculaService } from "../service/matricula.service";
 import { getSerializedValues } from "../utils/function";
 
-export interface EscuelaMatriculaPorSectorAmbitoModalidadNivel {
-  modalidad: string;
+
+
+export interface EscuelaMatriculaPorSectorAmbitoModalidadNivel  {
   nivel: string;
+  modalidad: string;  
   escuelas_estatal: number | null;
   escuelas_porcentajeEstatal: number | null;
   escuelas_privado: number | null;
@@ -24,6 +26,9 @@ export interface EscuelaMatriculaPorSectorAmbitoModalidadNivel {
   matricula_porcentajeUrbano: number | null;
 
 }
+
+
+
 
 export class EscuelaMatricula {
 
@@ -72,6 +77,9 @@ export class EscuelaMatricula {
 
       return dataModalidadNivel;
     }
+
+
+    
 
 
     

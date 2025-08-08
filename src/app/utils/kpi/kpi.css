@@ -2,6 +2,26 @@
             background: linear-gradient(135deg, #1e40af, #3b82f6);
         }
 
+         
+        .bg-gradient-emerald {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+        
+        .bg-gradient-purple {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        }
+        
+        .bg-gradient-indigo {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+        
+       .bg-gradient-teal {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+        }
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+        }
+
 
         .hover-lift {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -10,4 +30,17 @@
         .hover-lift:hover {
             transform: translateY(-8px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Clase para el estado de hover sincronizado */
+        .synced-hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background-color: #f3f4f6 !important;
+        }
+
+        /* Estilos adicionales para el borde de selección */
+        .border-blue-400 {
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
         }

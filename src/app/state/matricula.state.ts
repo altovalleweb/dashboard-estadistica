@@ -1,6 +1,7 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
-import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbito,TotalesMatriculaPorSectorAmbitoModalidad,TotalesMatriculaPorSectorAmbitoSerializado } from '../class/matricula';
-import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL } from '../const/const';
+import { computed, Injectable, signal } from '@angular/core';
+import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbitoModalidad } from '../class/matricula';
+import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,122 +10,76 @@ export class MatriculaState {
 
    private _matricula = new Matricula();
 
-   private _totalMatricula = signal<TotalesMatriculaPorModalidad | null>(null);
+   private readonly _totalMatricula = signal<TotalesMatriculaPorModalidad | null>(null);
 
-   private _matriculaPorAnio = signal<MatriculaTotalPorAnioCategorizados | null>(null);
-
- private  _matriculaPorModalidadNivel = signal<number[]>([]);
-
-  private  _matriculaPorModalidadNivelComun = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
-  private  _matriculaPorModalidadNivelEspecial = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
-  private  _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
-
-  private  _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmbito | null>(null);
-  private  _matriculaPorSector = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
-  private  _matriculaPorAmbito  = signal<TotalesMatriculaPorSectorAmbitoSerializado[] | null>(null);
+   private readonly _matriculaPorAnio = signal<MatriculaTotalPorAnioCategorizados | null>(null);
 
 
-  private  _matriculaPorSectorAmbitoModalidadComun = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
-  private  _matriculaPorSectorAmbitoModalidadEspecial = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
-  private  _matriculaPorSectorAmbitoModalidadAdultos = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+
+  private readonly _matriculaPorModalidadNivelComun = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
+  private readonly _matriculaPorModalidadNivelEspecial = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
+  private readonly _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
+
+    
+  private readonly _matriculaPorSectorAmbitoModalidadComun = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+  private readonly _matriculaPorSectorAmbitoModalidadEspecial = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+  private readonly _matriculaPorSectorAmbitoModalidadAdultos = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
+
+  readonly totalMatricula = computed(() => this._totalMatricula());
+  readonly matriculaPorAnio = computed(() => this._matriculaPorAnio());
+
+  readonly matriculaPorModalidadNivelComun = computed(() => this._matriculaPorModalidadNivelComun());
+  readonly matriculaPorModalidadNivelEspecial = computed(() => this._matriculaPorModalidadNivelEspecial());
+  readonly matriculaPorModalidadNivelAdultos = computed(() => this._matriculaPorModalidadNivelAdultos());
+  
+  
+  readonly matriculaPorSectorAmbitoModalidadComun = computed(() => this._matriculaPorSectorAmbitoModalidadComun());
+  readonly matriculaPorSectorAmbitoModalidadEspecial = computed(() => this._matriculaPorSectorAmbitoModalidadEspecial());
+  readonly matriculaPorSectorAmbitoModalidadAdultos = computed(() => this._matriculaPorSectorAmbitoModalidadAdultos());
 
 
-  get totalMatricula(): WritableSignal<TotalesMatriculaPorModalidad | null> {
-         return this._totalMatricula;
-     }
+  loadData(matriculaData: any[], matriculasPorAnioData: any[]) {
+    this._matricula.setMatriculaData(matriculaData)
+    this._matricula.setTotalMatriculaPorAnioData(matriculasPorAnioData);
 
-  get matriculaPorAnio(): WritableSignal<MatriculaTotalPorAnioCategorizados | null>  {
-      return this._matriculaPorAnio;
-    }
-
-  set matriculaPorModalidadNivel(value: number[]) {
-    this._matriculaPorModalidadNivel.set(value);
-  }
-
-  get matriculaPorModalidadNivel(): WritableSignal<number[]> {
-    return this._matriculaPorModalidadNivel;
-  }
-
-
-  get matriculaPorModalidadNivelComun(): WritableSignal<TotalesMatriculaPorModalidadNivelSerializado | null> {
-      return this._matriculaPorModalidadNivelComun;
-    }
-
-    get matriculaPorModalidadNivelEspecial(): WritableSignal<TotalesMatriculaPorModalidadNivelSerializado | null> {
-      return this._matriculaPorModalidadNivelEspecial;
-    }
-
-    get matriculaPorModalidadNivelAdultos(): WritableSignal<TotalesMatriculaPorModalidadNivelSerializado | null> {
-      return this._matriculaPorModalidadNivelAdultos;
-    }
-
-  get matriculaPorSectorAmbito(): WritableSignal<TotalesMatriculaPorSectorAmbito | null> {
-    return this._matriculaPorSectorAmbito;
-  }
-
-  get matriculaPorSector(): WritableSignal<TotalesMatriculaPorSectorAmbitoSerializado[] | null> {
-    return this._matriculaPorSector;
-  }
-
-  get matriculaPorAmbito(): WritableSignal<TotalesMatriculaPorSectorAmbitoSerializado[] | null> {
-    return this._matriculaPorAmbito;
+    this.loadTotalesMatricula();
+    this.loadMatriculaPorAnio();
+    this.loadMatriculaPorModalidadNivelComun();
+    this.loadMatriculaPorModalidadNivelEspecial();
+    this.loadMatriculaPorModalidadNivelAdultos();
+    this.loadMatriculaPorSectorAmbitoModalidad();
   }
 
 
-  get matriculaPorSectorAmbitoModalidadComun(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
-    return this._matriculaPorSectorAmbitoModalidadComun;
-  }
-  get matriculaPorSectorAmbitoModalidadEspecial(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
-    return this._matriculaPorSectorAmbitoModalidadEspecial;
-  }
-  get matriculaPorSectorAmbitoModalidadAdultos(): WritableSignal<TotalesMatriculaPorSectorAmbitoModalidad | null> {
-    return this._matriculaPorSectorAmbitoModalidadAdultos;
-  }
-
-
-  initTotalesMatricula() {
+  loadTotalesMatricula() {
     const totalMatricula = this._matricula.getTotalMatriculaPorModalidad();
     this._totalMatricula.set(totalMatricula);
   }
 
-  initMatriculaPorAnio() {
+  loadMatriculaPorAnio() {
     const matriculaPorAnio = this._matricula.getTotalMatriculaPorAnio();
     this._matriculaPorAnio.set(matriculaPorAnio);
   }
 
 
 
-  initMatriculaPorModalidadNivelComun(niveles: string[] ) {
-    const matriculaPorModalidadNivelComun = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_COMUN, niveles);         
+  loadMatriculaPorModalidadNivelComun() {
+    const matriculaPorModalidadNivelComun = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_COMUN, NIVELES_COMUN_CON_APERTURA);         
     this._matriculaPorModalidadNivelComun.set(matriculaPorModalidadNivelComun);
   }
 
-  initMatriculaPorModalidadNivelEspecial(niveles: string[] ) {
-    const matriculaPorModalidadNivelEspecial = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ESPECIAL, niveles);
+  loadMatriculaPorModalidadNivelEspecial() {
+    const matriculaPorModalidadNivelEspecial = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ESPECIAL, NIVELES_ESPECIAL);
     this._matriculaPorModalidadNivelEspecial.set(matriculaPorModalidadNivelEspecial);
   }
 
-  initMatriculaPorModalidadNivelAdultos(niveles: string[] ) {
-    const matriculaPorModalidadNivelAdultos = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ADULTOS, niveles);   
+  loadMatriculaPorModalidadNivelAdultos() {
+    const matriculaPorModalidadNivelAdultos = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_ADULTOS, NIVELES_ADULTOS);   
     this._matriculaPorModalidadNivelAdultos.set(matriculaPorModalidadNivelAdultos);
   }
 
-  initMatriculaPorSectorAmbito() {
-    const matriculaPorSectorAmbito = this._matricula.getTotalMatriculaPorSectorAmbito();
-    this._matriculaPorSectorAmbito.set(matriculaPorSectorAmbito);
-  }
   
-  initMatriculaPorSector() {
-    const matriculaPorSector = this._matricula.getTotalMatriculaPorSectorSerializado();    
-    this._matriculaPorSector.set(matriculaPorSector);
-  }
-
-  initMatriculaPorAmbito() {
-    const matriculaPorAmbito = this._matricula.getTotalMatriculaPorAmbitoSerializado();    
-    this._matriculaPorAmbito.set(matriculaPorAmbito);
-  }
-
-  initMatriculaPorSectorAmbitoModalidad() {
+  loadMatriculaPorSectorAmbitoModalidad() {
     const matriculaPorSectorAmbitoModalidad = this._matricula.getTotalMatriculaPorSectorAmbitoModalidad();    
 
     this._matriculaPorSectorAmbitoModalidadComun.set(matriculaPorSectorAmbitoModalidad?.find(e => e.modalidad.toLowerCase() === MODALIDAD_COMUN.toLocaleLowerCase()) || null);

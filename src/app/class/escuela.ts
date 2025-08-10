@@ -55,32 +55,39 @@ export interface TotalesEscuelasPorSectorAmbitoModalidad extends TotalesEscuelas
 
 export class Escuela {
 
-    private _es = inject(EscuelaService);
+  
+    private  escuelasData: any[] =  []
+    private totalEscuelasPorAnioData: any[] =  []
 
+
+    setEscuelasData(escuelas: any[]) {
+        this.escuelasData = escuelas;
+    }
+
+    setTotalEscuelasPorAnioData(totalEscuelasPorAnio: any[]) {        
+        this.totalEscuelasPorAnioData = totalEscuelasPorAnio
+    }
 
     getTotalEscuelasPorAnio():EscuelaTotalPorAnioCategorizados {
 
-        const data = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), CAMPO_TOTAL);
-        const labels = getDataToChartByField(this._es.getTotalEscuelasPorAnio(), CAMPO_ANIO)
+        const data = getDataToChartByField(this.totalEscuelasPorAnioData, CAMPO_TOTAL);
+        const labels = getDataToChartByField(this.totalEscuelasPorAnioData, CAMPO_ANIO)
       return   { data, labels } 
     }
 
-    getTotalEscuelasPorModalidad(): TotalesEscuelasPorModalidad | null {
-
-        const escuelas =   this._es.getEscuelasPorModalidadNivel();
- 
-        return getTotalesGeneralPorModalidad(escuelas);
+    getTotalEscuelasPorModalidad(): TotalesEscuelasPorModalidad | null {       
+        if (this.escuelasData.length === 0) {
+            return null;
+        }
+        return getTotalesGeneralPorModalidad(this.escuelasData);
       
     }
 
     getTotalEscuelasPorSectorAmbito(): TotalesEscuelasPorSectorAmbito | null {
-
-        const escuelas =   this._es.getEscuelasPorModalidadNivel();
- 
-        
-        return getTotalesGeneralPorSectorAmbito(escuelas);
-        
-      
+      if (this.escuelasData.length === 0) {
+            return null;
+        }
+        return getTotalesGeneralPorSectorAmbito(this.escuelasData);
     }
 
      /**
@@ -92,7 +99,7 @@ export class Escuela {
 
               let result: TotalesEscuelasPorSectorAmbitoModalidad[] = [];
               MODALIDADES.forEach(modalidad => { 
-                 let escuelas =   this._es.getEscuelasPorModalidadNivel().filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
+                 let escuelas =   this.escuelasData.filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
                   
                  const totalesEscuelas = getTotalesGeneralPorSectorAmbito(escuelas);
 
@@ -110,20 +117,21 @@ export class Escuela {
               }
 
     getTotalEscuelasPorModalidadNivel(): EscuelaTotalPorModalidadNivelCategorizados {
-     const escuelas =   this._es.getEscuelasPorModalidadNivel();
-
+     if (this.escuelasData.length === 0) {
+            return { serie: [], labels: [] };
+        }
       // 1. Obtener modalidades únicas
-  const modalidades = [...new Set(escuelas.map(item => item.modalidad))];
+  const modalidades = [...new Set(this.escuelasData.map(item => item.modalidad))];
   
   // 2. Obtener niveles de oferta únicos
-  const nivelesOferta = [...new Set(escuelas.map(item => item.nivel_oferta))];
+  const nivelesOferta = [...new Set(this.escuelasData.map(item => item.nivel_oferta))];
   
   // 3. Crear el array de objetos con name y data
   const datosFormateados = nivelesOferta.map(nivel => {
     // Para cada nivel, obtener los totales por modalidad
     const data = modalidades.map(modalidad => {
       // Buscar el registro que coincida con el nivel y modalidad
-      const registro = escuelas.find(item => 
+      const registro = this.escuelasData.find(item => 
         item.nivel_oferta === nivel && item.modalidad === modalidad
       );
       // Si existe el registro, devolver el total, sino 0
@@ -142,7 +150,11 @@ export class Escuela {
     }
 
     getTotalEscuelasPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesEscuelasPorModalidadNivelSerializado{
-      const values = getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
+      if (this.escuelasData.length === 0) {
+            return { modalidad, serie: [] };
+        }
+      
+      const values = getSerializedValues(this.escuelasData, CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
 
       return {
         modalidad,
@@ -158,18 +170,22 @@ export class Escuela {
 
     getTotalEscuelasPorSectorSerializado(   ):TotalesEscuelasPorSectorAmbitoSerializado[]{
 
+      if (this.escuelasData.length === 0) {
+            return [];
+        }
+
       let valuesEstatal: number[] = [];
       let valuesPrivada: number[] = [];
       
           MODALIDADES.forEach(modalidad => {
       
             valuesEstatal = valuesEstatal.concat(
-              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+              getSerializedValues(this.escuelasData, CAMPO_MODALIDAD,
                [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_ESTATAL)
             );
 
             valuesPrivada = valuesPrivada.concat(
-              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+              getSerializedValues(this.escuelasData, CAMPO_MODALIDAD,
                 [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_PRIVADO)
             );
           });
@@ -197,18 +213,22 @@ export class Escuela {
 
     getTotalEscuelasPorAmbitoSerializado(   ):TotalesEscuelasPorSectorAmbitoSerializado[]{
 
+      if (this.escuelasData.length === 0) {
+            return [];
+        }
+
       let valuesUrbano: number[] = [];
       let valuesRural: number[] = [];
       
           MODALIDADES.forEach(modalidad => {
       
             valuesUrbano = valuesUrbano.concat(
-              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+              getSerializedValues(this.escuelasData, CAMPO_MODALIDAD,
                [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_URBANO)
             );
 
             valuesRural = valuesRural.concat(
-              getSerializedValues(this._es.getEscuelasPorModalidadNivel(), CAMPO_MODALIDAD,
+              getSerializedValues(this.escuelasData, CAMPO_MODALIDAD,
                 [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADESCUELAS[modalidad], CAMPO_RURAL)
             );
           });

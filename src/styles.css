@@ -1,6 +1,119 @@
 /* Importar Tailwind CSS */
 @import "tailwindcss";
 
+/* Variables de colores personalizados */
+:root {
+  --blue-custom: #2249b8;
+  --orange-custom: #ff8c42;
+  --lime-custom: #9ed764;
+  --yellow-custom: #ffd447;
+  --neutral-light-custom: #f5f5f5;
+  --neutral-dark-custom: #2e2e2e;
+}
 
+/* Clases de utilidad personalizadas */
+@layer utilities {
+  .bg-blue-custom {
+    background-color: var(--blue-custom);
+  }
+  .bg-orange-custom {
+    background-color: var(--orange-custom);
+  }
+  .bg-lime-custom {
+    background-color: var(--lime-custom);
+  }
+  .bg-yellow-custom {
+    background-color: var(--yellow-custom);
+  }
+  .bg-neutral-light-custom {
+    background-color: var(--neutral-light-custom);
+  }
+  .bg-neutral-dark-custom {
+    background-color: var(--neutral-dark-custom);
+  }
+  
+  .text-blue-custom {
+    color: var(--blue-custom);
+  }
+  .text-orange-custom {
+    color: var(--orange-custom);
+  }
+  .text-lime-custom {
+    color: var(--lime-custom);
+  }
+  .text-yellow-custom {
+    color: var(--yellow-custom);
+  }
+  .text-neutral-light-custom {
+    color: var(--neutral-light-custom);
+  }
+  .text-neutral-dark-custom {
+    color: var(--neutral-dark-custom);
+  }
+  
+  .border-blue-custom {
+    border-color: var(--blue-custom);
+  }
+  .border-orange-custom {
+    border-color: var(--orange-custom);
+  }
+  .border-lime-custom {
+    border-color: var(--lime-custom);
+  }
+  .border-yellow-custom {
+    border-color: var(--yellow-custom);
+  }
+  .border-neutral-light-custom {
+    border-color: var(--neutral-light-custom);
+  }
+  .border-neutral-dark-custom {
+    border-color: var(--neutral-dark-custom);
+  }
+}
 
-      
+/* Gradientes personalizados utilizados principalmente en los headers de las card*/
+.bg-gradient-blue {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+        }
+
+         
+        .bg-gradient-emerald {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+        
+        .bg-gradient-purple {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+        }
+        
+        .bg-gradient-indigo {
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+        
+       .bg-gradient-teal {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+        }
+        .bg-gradient-pink {
+            background: linear-gradient(135deg, #b90b62, #f472b6);
+        }
+
+          .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Clase para el estado de hover sincronizado */
+        .synced-hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background-color: #f3f4f6 !important;
+        }
+
+        /* Estilos adicionales para el borde de selección */
+        .border-blue-400 {
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+        }

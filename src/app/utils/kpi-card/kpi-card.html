@@ -2,14 +2,11 @@
 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
   <!-- Header -->
   <div [class]="data()?.bgColor + ' px-8 py-3 text-white'">
-    <div class="flex items-center justify-center mb-2">
-      <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
-        <path [attr.d]="data()?.iconPath"></path>
-      </svg>
+    <div class="flex items-center justify-center mb-2">    
       <span class="text-lg font-medium">{{ data()?.title }}</span>
     </div>
 
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center py-1.5">
       @if(data()?.dataHeaderValue1){
       <div class="text-center flex-1">
         <div class="text-2xl font-bold">

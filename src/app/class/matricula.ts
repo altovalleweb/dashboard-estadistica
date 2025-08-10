@@ -1,5 +1,4 @@
-import { inject } from '@angular/core';
-import { MatriculaService } from '../service/matricula.service';
+
 import {
   getDataToChartByField,
   getSerializedValues,
@@ -50,15 +49,24 @@ export interface TotalesMatriculaPorSectorAmbitoModalidad extends TotalesMatricu
 }
 
 export class Matricula {
-  private _es = inject(MatriculaService);
+   private  matriculaData: any[] =  []
+    private totalMatriculaPorAnioData: any[] =  []
+
+    setMatriculaData(matricula: any[]) {
+        this.matriculaData = matricula;
+    }
+
+    setTotalMatriculaPorAnioData(totalMatriculaPorAnio: any[]) {        
+        this.totalMatriculaPorAnioData = totalMatriculaPorAnio
+    }
 
   getTotalMatriculaPorAnio(): MatriculaTotalPorAnioCategorizados {
     const data = getDataToChartByField(
-      this._es.getTotalMatriculaPorAnio(),
+      this.totalMatriculaPorAnioData,
       CAMPO_TOTAL
     );
     const labels = getDataToChartByField(
-      this._es.getTotalMatriculaPorAnio(),
+      this.totalMatriculaPorAnioData,
       CAMPO_ANIO
     );
 
@@ -67,9 +75,11 @@ export class Matricula {
   }
 
   getTotalMatriculaPorModalidad(): TotalesMatriculaPorModalidad | null {
-    const matricula = this._es.getMatriculaPorModalidadNivel();
+    if ( this.matriculaData.length === 0) {
+      return null;
+    }
 
-    return getTotalesGeneralPorModalidad(matricula);
+    return getTotalesGeneralPorModalidad(this.matriculaData);
   }
 
   
@@ -78,10 +88,11 @@ export class Matricula {
        * @returns Un objeto TotalesMatriculaPorSectorAmbito.
        */
    getTotalMatriculaPorSectorAmbito(): TotalesMatriculaPorSectorAmbito | null {
-
-          const matricula =   this._es.getMatriculaPorModalidadNivel();
+if ( this.matriculaData.length === 0) {
+      return null;
+    }
             
-          return getTotalesGeneralPorSectorAmbito(matricula);          
+          return getTotalesGeneralPorSectorAmbito(this.matriculaData);          
         
       }
 
@@ -92,9 +103,13 @@ export class Matricula {
 
       getTotalMatriculaPorSectorAmbitoModalidad(): TotalesMatriculaPorSectorAmbitoModalidad[]   {
 
+         if (this.matriculaData.length === 0) {
+            return [];
+        }
+
           let result: TotalesMatriculaPorSectorAmbitoModalidad[] = [];
           MODALIDADES.forEach(modalidad => { 
-             let matricula =   this._es.getMatriculaPorModalidadNivel().filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
+             let matricula =   this.matriculaData.filter(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase());
               
              const totalesMatricula = getTotalesGeneralPorSectorAmbito(matricula);
 
@@ -114,8 +129,12 @@ export class Matricula {
 
 
     getTotalMatriculaPorModalidadSerializado( modalidad:string, niveles:string[]  ):TotalesMatriculaPorModalidadNivelSerializado{
+
+         if (this.matriculaData.length === 0) {
+                  return { modalidad, serie: [] };
+              }
  
-        const values = getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
+        const values = getSerializedValues(this.matriculaData, CAMPO_MODALIDAD, [modalidad], CAMPO_NIVEL_OFERTA, niveles, CAMPO_TOTAL);    
       
         return {
           modalidad,
@@ -132,18 +151,22 @@ export class Matricula {
 
           getTotalMatriculaPorSectorSerializado(   ):TotalesMatriculaPorSectorAmbitoSerializado[]{
 
+               if (this.matriculaData.length === 0) {
+                  return [];
+              }
+
             let valuesEstatal: number[] = [];
             let valuesPrivada: number[] = [];
             
                 MODALIDADES.forEach(modalidad => {
             
                   valuesEstatal = valuesEstatal.concat(
-                    getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD,
+                    getSerializedValues(this.matriculaData, CAMPO_MODALIDAD,
                      [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADMATRICULA[modalidad], CAMPO_ESTATAL)
                   );
       
                   valuesPrivada = valuesPrivada.concat(
-                    getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD,
+                    getSerializedValues(this.matriculaData, CAMPO_MODALIDAD,
                       [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADMATRICULA[modalidad], CAMPO_PRIVADO)
                   );
                 });
@@ -172,18 +195,22 @@ export class Matricula {
 
           getTotalMatriculaPorAmbitoSerializado(   ):TotalesMatriculaPorSectorAmbitoSerializado[]{
 
+            if (this.matriculaData.length === 0) {
+                  return [];
+              }
+
             let valuesRural: number[] = [];
             let valuesUrbano: number[] = [];
             
                 MODALIDADES.forEach(modalidad => {
             
                   valuesRural = valuesRural.concat(
-                    getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD,
+                    getSerializedValues(this.matriculaData, CAMPO_MODALIDAD,
                      [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADMATRICULA[modalidad], CAMPO_RURAL)
                   );
 
                   valuesUrbano = valuesUrbano.concat(
-                    getSerializedValues(this._es.getMatriculaPorModalidadNivel(), CAMPO_MODALIDAD,
+                    getSerializedValues(this.matriculaData, CAMPO_MODALIDAD,
                       [modalidad], CAMPO_NIVEL_OFERTA, NIVELESPORMODALIDADMATRICULA[modalidad], CAMPO_URBANO)
                   );
                 });

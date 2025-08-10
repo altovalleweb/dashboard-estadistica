@@ -1,5 +1,5 @@
-import { Component, signal, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, output, inject, ViewChild, ElementRef } from '@angular/core';
+import { } from '@angular/common';
 import { REGIONES, DEPARTAMENTOS, DISTRITOS } from '../../const/filtros';
 import { 
   MODALIDADES, 
@@ -9,35 +9,28 @@ import {
   NIVELES_COMUN,
   NIVELES_ESPECIAL,
   NIVELES_ADULTOS,
-  ICONOS_NIVELES,
-  ICONOS_COMUN,
-  ICONOS_ESPECIAL,
-  ICONOS_ADULTOS
+  ICONOS_NIVELES  
 } from '../../const/const';
+import { EducationalFilter, FilterState, FiltroState, GeographicFilter, ValueFilter } from '../../state/filtro.state';
 
-export interface GeographicFilter {
-  type: 'region' | 'departamento' | 'distrito' | null;
-  value: string | null;
-}
 
-export interface EducationalFilter {
-  modalidad: string | null;
-  nivel: string | null;
-}
-
-export interface FilterState {
-  geographic: GeographicFilter;
-  educational: EducationalFilter;
-}
 
 @Component({
   selector: 'app-sidebar-filters',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './sidebar-filters.html',
   styleUrl: './sidebar-filters.css'
 })
 export class SidebarFiltersComponent {
+
+   @ViewChild('container', { static: false }) container!: ElementRef;
+   
+  private fs = inject(FiltroState);
+
+  // Estado de los filtros activos
+  activeFilter = this.fs.activeFilter;
+
   // Datos disponibles para los filtros geográficos
   readonly regiones = REGIONES;
   readonly departamentos = DEPARTAMENTOS;
@@ -62,25 +55,7 @@ export class SidebarFiltersComponent {
   modalidadAdultosOpen = signal(false);
 
   // Estado de los filtros activos
-  activeFilter = signal<FilterState>({
-    geographic: {
-      type: null,
-      value: null
-    },
-    educational: {
-      modalidad: null,
-      nivel: null
-    }
-  });
-
-  // Output para comunicar cambios de oferta educativa al componente padre
-  educationalOfferChanged = output<EducationalFilter>();
   
-  // Output para comunicar cambios de filtros geográficos al componente padre
-  geographicFiltersChanged = output<GeographicFilter>();
-
-  // Output para comunicar cambios completos de estado (mantener compatibilidad)
-  filtersChanged = output<FilterState>();
 
   // Métodos para toggle de acordeones (solo uno abierto a la vez dentro de cada sección)
   toggleRegiones() {
@@ -158,42 +133,35 @@ export class SidebarFiltersComponent {
   }
 
   // Métodos para manejar selección de filtros geográficos
-  selectRegion(region: string) {
-    const current = this.activeFilter();
-    if (current.geographic.type === 'region' && current.geographic.value === region) {
+  selectRegion(region: any) {
+    debugger
+    const current = this.activeFilter();    
+    if (current.geographic.type === 'region' && current.geographic.value?.id === region.id) {
       this.clearGeographicFilter();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        geographic: { type: 'region', value: region }
-      }));
-      this.emitGeographicFiltersChanged();
+      
+      this.fs.setRegion(region);    
+    
     }
   }
 
-  selectDepartamento(departamento: string) {
+  selectDepartamento(departamento: any) {
     const current = this.activeFilter();
-    if (current.geographic.type === 'departamento' && current.geographic.value === departamento) {
+    if (current.geographic.type === 'departamento' && current.geographic.value?.id === departamento.id  ) {
       this.clearGeographicFilter();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        geographic: { type: 'departamento', value: departamento }
-      }));
-      this.emitGeographicFiltersChanged();
+      this.fs.setDepartamento(departamento);
+    
     }
   }
 
-  selectDistrito(distrito: string) {
+  selectDistrito(distrito: any) {
     const current = this.activeFilter();
-    if (current.geographic.type === 'distrito' && current.geographic.value === distrito) {
+    if (current.geographic.type === 'distrito' && current.geographic.value?.id === distrito.id) {
       this.clearGeographicFilter();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        geographic: { type: 'distrito', value: distrito }
-      }));
-      this.emitGeographicFiltersChanged();
+      this.fs.setDistrito(distrito);
+    
     }
   }
 
@@ -203,11 +171,8 @@ export class SidebarFiltersComponent {
     if (current.educational.modalidad === MODALIDAD_COMUN && current.educational.nivel === nivel) {
       this.clearEducationalOffer();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        educational: { modalidad: MODALIDAD_COMUN, nivel: nivel }
-      }));
-      this.emitEducationalOfferChanged();
+      this.fs.setNivelComun(nivel);
+    
     }
   }
 
@@ -216,11 +181,8 @@ export class SidebarFiltersComponent {
     if (current.educational.modalidad === MODALIDAD_ESPECIAL && current.educational.nivel === nivel) {
       this.clearEducationalOffer();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        educational: { modalidad: MODALIDAD_ESPECIAL, nivel: nivel }
-      }));
-      this.emitEducationalOfferChanged();
+      this.fs.setNivelEspecial(nivel);
+    
     }
   }
 
@@ -229,60 +191,31 @@ export class SidebarFiltersComponent {
     if (current.educational.modalidad === MODALIDAD_ADULTOS && current.educational.nivel === nivel) {
       this.clearEducationalOffer();
     } else {
-      this.activeFilter.update(filter => ({
-        ...filter,
-        educational: { modalidad: MODALIDAD_ADULTOS, nivel: nivel }
-      }));
-      this.emitEducationalOfferChanged();
+      this.fs.setNivelAdultos(nivel);
+    
     }
   }
 
-  // Métodos para verificar si un item está seleccionado
-  isRegionSelected(region: string): boolean {
-    const current = this.activeFilter();
-    return current.geographic.type === 'region' && current.geographic.value === region;
-  }
-
-  isDepartamentoSelected(departamento: string): boolean {
-    const current = this.activeFilter();
-    return current.geographic.type === 'departamento' && current.geographic.value === departamento;
-  }
-
-  isDistritoSelected(distrito: string): boolean {
-    const current = this.activeFilter();
-    return current.geographic.type === 'distrito' && current.geographic.value === distrito;
-  }
-
-  isNivelComunSelected(nivel: string): boolean {
-    const current = this.activeFilter();
-    return current.educational.modalidad === MODALIDAD_COMUN && current.educational.nivel === nivel;
-  }
-
-  isNivelEspecialSelected(nivel: string): boolean {
-    const current = this.activeFilter();
-    return current.educational.modalidad === MODALIDAD_ESPECIAL && current.educational.nivel === nivel;
-  }
-
-  isNivelAdultosSelected(nivel: string): boolean {
-    const current = this.activeFilter();
-    return current.educational.modalidad === MODALIDAD_ADULTOS && current.educational.nivel === nivel;
-  }
-
+  
   // Métodos para limpiar filtros
   clearGeographicFilter() {
-    this.activeFilter.update(filter => ({
-      ...filter,
-      geographic: { type: null, value: null }
-    }));
-    this.emitGeographicFiltersChanged();
+    this.fs.clearGeographicFilter();
+    
+
+    this.regionesOpen.set(false);
+    this.departamentosOpen.set(false);
+    this.distritosOpen.set(false);
+
+    const inputs = this.container.nativeElement.querySelectorAll('input[name="geographic-filter"]');    
+    // Desmarcar todos
+    inputs.forEach((input: HTMLInputElement) => {
+      input.checked = false;
+    });
+
   }
 
   clearEducationalFilter() {
-    this.activeFilter.update(filter => ({
-      ...filter,
-      educational: { modalidad: null, nivel: null }
-    }));
-    this.emitEducationalOfferChanged();
+    this.fs.clearEducationalFilter();  
   }
 
   // Método específico para limpiar oferta educativa
@@ -291,30 +224,14 @@ export class SidebarFiltersComponent {
   }
 
   clearAllFilters() {
-    this.activeFilter.set({
-      geographic: { type: null, value: null },
-      educational: { modalidad: null, nivel: null }
-    });
-    this.emitFiltersChanged();
+    this.fs.clearAllFilters();  
   }
 
-  // Métodos para emitir cambios específicos
-  private emitEducationalOfferChanged() {
-    const current = this.activeFilter();
-    this.educationalOfferChanged.emit(current.educational);
-    this.emitFiltersChanged(); // También emite el estado completo para compatibilidad
-  }
+  
 
-  private emitGeographicFiltersChanged() {
-    const current = this.activeFilter();
-    this.geographicFiltersChanged.emit(current.geographic);
-    this.emitFiltersChanged(); // También emite el estado completo para compatibilidad
-  }
+  
 
-  // Método para emitir cambios completos
-  private emitFiltersChanged() {
-    this.filtersChanged.emit(this.activeFilter());
-  }
+  
 
   // Métodos para verificar si hay filtros activos
   hasGeographicFilter(): boolean {
@@ -338,11 +255,11 @@ export class SidebarFiltersComponent {
     
     switch (current.geographic.type) {
       case 'region':
-        return `Región: ${current.geographic.value}`;
+        return `Región: ${current.geographic.value.name}`;
       case 'departamento':
-        return `Departamento: ${current.geographic.value}`;
+        return `Departamento: ${current.geographic.value.name}`;
       case 'distrito':
-        return `Distrito: ${current.geographic.value}`;
+        return `Distrito: ${current.geographic.value.name}`;
       default:
         return '';
     }

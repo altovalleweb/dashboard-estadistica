@@ -17,7 +17,7 @@ series: [{
           chart: {
           type: 'area',
           
-          height: 100,
+          height: 80,
           sparkline: {
             enabled: true
           },

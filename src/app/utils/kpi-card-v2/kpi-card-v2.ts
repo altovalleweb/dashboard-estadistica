@@ -11,7 +11,12 @@ export interface KPIDataV2 {
   showChart?: boolean;  
   chartDataOptionsHeader?: any;
   chartDataOptionsBody?: any;
-
+  totales?: {
+    estatal?: number;
+    privado?: number;
+    urbano?: number;
+    rural?: number;
+  };
 }
 
 

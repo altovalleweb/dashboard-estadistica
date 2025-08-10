@@ -1,4 +1,4 @@
-export const escuelasPorModalidadNivel = [
+export const EscuelasPorModalidadNivelProvincia = [
   {
     rural: 0,
     total: 1,
@@ -232,12 +232,12 @@ export const escuelasPorModalidadNivel = [
   },
 ];
 
-const totalEscuelasUltimoAnio = escuelasPorModalidadNivel.reduce(
+const totalEscuelasUltimoAnio = EscuelasPorModalidadNivelProvincia.reduce(
   (acc, val) =>  {  if (val.subgrupo === 0)   return acc + val.total;  return acc; },
   0
 );
 
-export const total_escuelas_por_anio = [
+export const TotalEscuelasPorAnioProvincia = [
   {
     anio: 2020, // valor del relevamiento anual 2020
     total: 1248,

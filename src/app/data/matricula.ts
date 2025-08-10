@@ -1,4 +1,4 @@
-export const matriculaPorModalidadNivel = [
+export const MatriculaPorModalidadNivelProvincia = [
   {
     anio: '2025',
     rural: 0,
@@ -188,12 +188,12 @@ export const matriculaPorModalidadNivel = [
   },
 ];
 
-const totalMatriculaUltimoAnio = matriculaPorModalidadNivel.reduce(
+const totalMatriculaUltimoAnio = MatriculaPorModalidadNivelProvincia.reduce(
   (acc, val) =>  {  if (val.subgrupo === 0)   return acc + val.total;  return acc; },
   0
 );
 
-export const total_matricula_por_anio = [
+export const TotalMatriculaPorAnioProvincia = [
   {
     anio: 2020,
     total: 233530,

@@ -32,22 +32,31 @@ export interface EscuelaMatriculaPorSectorAmbitoModalidadNivel  {
 
 export class EscuelaMatricula {
 
-      private _es = inject(EscuelaService);
-      private _ms = inject(MatriculaService);
+      private  escuelasData: any[] =  []
+      private matriculaData: any[] =  [] 
 
+
+      setEscuelasData(escuelas: any[]) {
+        this.escuelasData = escuelas;
+      }
+
+      setMatriculaData(matricula: any[]) {
+        this.matriculaData = matricula;
+      }
 
     getEscuelasMatriculasPorSectorAmbitoModalidadNivel(modalidad: string, niveles: string[]): EscuelaMatriculaPorSectorAmbitoModalidadNivel[] {
+      if (this.escuelasData.length === 0 || this.matriculaData.length === 0) {
+        return [];
+      }
 
-       
-      const  dataEscuelas = this._es.getEscuelasPorModalidadNivel();
-      const  dataMatricula = this._ms.getMatriculaPorModalidadNivel();
 
+ 
 
       let dataModalidadNivel: EscuelaMatriculaPorSectorAmbitoModalidadNivel[] = []
 
       niveles.forEach(nivel => {
-        const escuela = dataEscuelas.find(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase() && e.nivel_oferta.toLocaleLowerCase() === nivel.toLocaleLowerCase());
-        const matricula = dataMatricula.find(m => m.modalidad.toLowerCase() === modalidad.toLocaleLowerCase() && m.nivel_oferta.toLocaleLowerCase() === nivel.toLocaleLowerCase());
+        const escuela = this.escuelasData.find(e => e.modalidad.toLowerCase() === modalidad.toLocaleLowerCase() && e.nivel_oferta.toLocaleLowerCase() === nivel.toLocaleLowerCase());
+        const matricula = this.matriculaData.find(m => m.modalidad.toLowerCase() === modalidad.toLocaleLowerCase() && m.nivel_oferta.toLocaleLowerCase() === nivel.toLocaleLowerCase());
 
         if (escuela && matricula) {
           dataModalidadNivel.push({

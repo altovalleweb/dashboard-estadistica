@@ -1,41 +1,115 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { EscuelaMatricula, EscuelaMatriculaPorSectorAmbitoModalidadNivel } from '../class/escuela-matricula';
-import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL } from '../const/const';
+import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
+import { FiltroState } from './filtro.state';
+import { EscuelaService } from '../service/escuela.service';
+import { MatriculaService } from '../service/matricula.service';
+import { EscuelaState } from './escuela.state';
+import { MatriculaState } from './matricula.state';
+import { FILTRODISTRITO, FILTRODEPARTAMENTO, FILTROREGION } from '../const/filtros';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EscuelaMatriculaState {
-  private _matricula = new EscuelaMatricula();
 
-private _escuelasMatriculasPorSectorAmbitoModalidadNivelComun = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
-private _escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
-private _escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
+  private _filtroState = inject(FiltroState);
+  private _escuelaService = inject(EscuelaService);
+  private _matriculaService = inject(MatriculaService);
+  private _escuelaMatricula = new EscuelaMatricula();
+  private _escuelasState = inject(EscuelaState);
+  private _matriculaState = inject(MatriculaState);
 
-  get escuelasMatriculasPorSectorAmbitoModalidadNivelComun() {
-    return this._escuelasMatriculasPorSectorAmbitoModalidadNivelComun;
+private readonly _escuelasMatriculasPorSectorAmbitoModalidadNivelComun = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
+private readonly _escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
+private readonly _escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = signal<EscuelaMatriculaPorSectorAmbitoModalidadNivel[] | null>(null);
+ 
+
+readonly escuelasMatriculasPorSectorAmbitoModalidadNivelComun = computed(() => this._escuelasMatriculasPorSectorAmbitoModalidadNivelComun());
+readonly escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial = computed(() => this._escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial());
+readonly escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = computed(() => this._escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos());
+
+//Implemetamos el patron facade para exponer los datos de escuelas y matricula a traves de este estado
+// y asi el componente home, u otros que hagan uso de los datos, solo dependan de este estado y no de los estados de escuela y matricula
+// Ademas este estado se encarga de coordinar la carga de datos cuando cambia el filtro
+
+  // Datos de escuelas
+  readonly totalEscuelas = this._escuelasState.totalEscuelas
+  readonly escuelaPorAnio = this._escuelasState.escuelaPorAnio
+  readonly escuelaPorModalidadNivelComun = this._escuelasState.escuelaPorModalidadNivelComun
+  readonly escuelaPorModalidadNivelEspecial = this._escuelasState.escuelaPorModalidadNivelEspecial
+  readonly escuelaPorModalidadNivelAdultos = this._escuelasState.escuelaPorModalidadNivelAdultos
+  readonly escuelasPorSectorAmbitoComun = this._escuelasState.escuelasPorSectorAmbitoComun
+  readonly escuelasPorSectorAmbitoEspecial = this._escuelasState.escuelasPorSectorAmbitoEspecial
+  readonly escuelasPorSectorAmbitoAdultos = this._escuelasState.escuelasPorSectorAmbitoAdultos
+  // Datos de matricula
+  readonly totalMatricula = this._matriculaState.totalMatricula
+  readonly matriculaPorAnio = this._matriculaState.matriculaPorAnio
+  readonly matriculaPorModalidadNivelComun = this._matriculaState.matriculaPorModalidadNivelComun
+  readonly matriculaPorModalidadNivelEspecial = this._matriculaState.matriculaPorModalidadNivelEspecial
+  readonly matriculaPorModalidadNivelAdultos = this._matriculaState.matriculaPorModalidadNivelAdultos
+  readonly matriculaPorSectorAmbitoModalidadComun = this._matriculaState.matriculaPorSectorAmbitoModalidadComun
+  readonly matriculaPorSectorAmbitoModalidadEspecial = this._matriculaState.matriculaPorSectorAmbitoModalidadEspecial
+  readonly matriculaPorSectorAmbitoModalidadAdultos = this._matriculaState.matriculaPorSectorAmbitoModalidadAdultos
+
+changeFilterState = effect(() => {    
+    const filter = this._filtroState.activeFilter();
+    const tipoFiltro = filter.geographic.type || null;
+    const valueFiltro = filter.geographic.value || null;
+
+    let escuelasData: any[] = [];  
+    let matriculaData: any[] = [];
+
+    if (tipoFiltro === FILTROREGION) {
+     escuelasData = this._escuelaService.getEscuelasPorRegionModalidadNivel(valueFiltro?.id || '');
+      matriculaData = this._matriculaService.getMatriculaPorRegionModalidadNivel(valueFiltro?.id || '');
+      
+    }
+    else if (tipoFiltro === FILTRODEPARTAMENTO) {
+      escuelasData =this._escuelaService.getEscuelasPorDepartamentoModalidadNivel(valueFiltro?.id || '');
+      matriculaData = this._matriculaService.getMatriculaPorDepartamentoModalidadNivel(valueFiltro?.id || '');
+    }
+    else if (tipoFiltro === FILTRODISTRITO) {
+      escuelasData =this._escuelaService.getEscuelasPorDistritoModalidadNivel(valueFiltro?.id || '');
+      matriculaData = this._matriculaService.getMatriculaPorDistritoModalidadNivel(valueFiltro?.id || '');
+    }
+    else {
+      escuelasData =this._escuelaService.getEscuelasPorModalidadNivelProvincia();
+      matriculaData = this._matriculaService.getMatriculaPorModalidadNivelProvincia();
+    }
+
+    
+    this._escuelaMatricula.setEscuelasData(escuelasData)
+    this._escuelaMatricula.setMatriculaData(matriculaData)
+    
+
+    this.loadData();
+
+    this._escuelasState.loadData(escuelasData, this._escuelaService.getTotalEscuelasPorAnioProvincia());
+    this._matriculaState.loadData(matriculaData, this._matriculaService.getTotalMatriculaPorAnioProvincia());
+
+  })
+
+  loadData() {
+   this.loadEscuelasMatriculasPorSectorAmbitoModalidadNivelAdultos();
+   this.loadEscuelasMatriculasPorSectorAmbitoModalidadNivelComun();
+   this.loadEscuelasMatriculasPorSectorAmbitoModalidadNivelEspecial();
   }
+ 
 
-  get escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial() {
-    return this._escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial;
-  }
 
-  get escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos() {
-    return this._escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos;
-  }
-
-  initEscuelasMatriculasPorSectorAmbitoModalidadNivelComun( niveles: string[]) {
-    const data = this._matricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_COMUN, niveles);
+  loadEscuelasMatriculasPorSectorAmbitoModalidadNivelComun( ) {
+    const data = this._escuelaMatricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_COMUN, NIVELES_COMUN_CON_APERTURA);
     this._escuelasMatriculasPorSectorAmbitoModalidadNivelComun.set(data);
   }
 
-  initEscuelasMatriculasPorSectorAmbitoModalidadNivelEspecial(niveles: string[]) {
-    const data = this._matricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_ESPECIAL, niveles);
+  loadEscuelasMatriculasPorSectorAmbitoModalidadNivelEspecial( ) {
+    const data = this._escuelaMatricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_ESPECIAL, NIVELES_ESPECIAL);
     this._escuelasMatriculasPorSectorAmbitoModalidadNivelEspecial.set(data);
   }
 
-  initEscuelasMatriculasPorSectorAmbitoModalidadNivelAdultos(niveles: string[]) {
-    const data = this._matricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_ADULTOS, niveles);
+  loadEscuelasMatriculasPorSectorAmbitoModalidadNivelAdultos( ) {
+    const data = this._escuelaMatricula.getEscuelasMatriculasPorSectorAmbitoModalidadNivel(MODALIDAD_ADULTOS, NIVELES_ADULTOS);
     this._escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos.set(data);
   }
 

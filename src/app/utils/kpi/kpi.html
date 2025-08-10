@@ -12,24 +12,24 @@
         <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base ">🏫 Escuelas</div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesEscuelas()?.estatal | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesEscuelas()?.estatal | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesEscuelas()?.porcentajeEstatal}}%)</span>
                 <span class="">Estatal</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesEscuelas()?.privado | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesEscuelas()?.privado | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesEscuelas()?.porcentajePrivado}}%)</span>
-                <span class="">Privado</span>
+                <span class="text-orange-custom">Privado</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesEscuelas()?.urbano | number : "1.0-2"}}</span>
+                <span class="text-lg font-semibold">{{totalesEscuelas()?.urbano | number : "1.0-2"}}</span>
                  <span class="text-xs">({{totalesEscuelas()?.porcentajeUrbano}}%)</span>
-                <span>Urbano</span>
+                <span class="text-yellow-custom">Urbano</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesEscuelas()?.rural | number : "1.0-2"}}</span>
+                <span class="text-lg font-semibold">{{totalesEscuelas()?.rural | number : "1.0-2"}}</span>
                 <span class="text-xs">({{totalesEscuelas()?.porcentajeRural}}%)</span>
-                <span>Rural</span>
+                <span class="text-lime-custom ">Rural</span>
             </div>
         </div>
         }
@@ -39,24 +39,24 @@
          <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base">👥 Alumnos</div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesMatricula()?.estatal | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesMatricula()?.estatal | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeEstatal}}%)</span>
                 <span>Estatal</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesMatricula()?.privado | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesMatricula()?.privado | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajePrivado}}%)</span>
-                <span>Privado</span>
+                <span class="text-orange-custom">Privado</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesMatricula()?.urbano | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesMatricula()?.urbano | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeUrbano}}%)</span>
-                <span>Urbano</span>
+                <span class="text-yellow-custom">Urbano</span>
             </div>
             <div class="flex flex-col text-center">
-                <span class="text-lg">{{totalesMatricula()?.rural | number : "1.0-2"}}  </span>
+                <span class="text-lg font-semibold">{{totalesMatricula()?.rural | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeRural}}%)</span>
-                <span>Rural</span>
+                <span class="text-lime-custom ">Rural</span>
             </div>
         </div>
         }
@@ -114,7 +114,7 @@
                 <div class="border-t pt-2">                    
                     <div class="grid grid-cols-2 gap-1 text-xs">
                         <div class="p-1 rounded ">
-                            <div class="font-bold text-slate-700 text-center">Urbano</div>
+                            <div class="font-bold text-amber-500 text-center">Urbano</div>
                              <div class="space-y-0.5">
                         <div class="flex items-center justify-between text-gray-700">
                             <span>🏫</span>

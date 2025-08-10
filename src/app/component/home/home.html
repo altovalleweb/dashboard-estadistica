@@ -3,8 +3,7 @@
   
   <!-- Sidebar de filtros -->
   @if(sidebarOpen()) {
-    <app-sidebar-filters 
-      (filtersChanged)="onFiltersChanged($event)"
+    <app-sidebar-filters     
       class="hidden lg:block">
     </app-sidebar-filters>
   }
@@ -14,7 +13,7 @@
     
     <!-- Header con botón de toggle del sidebar -->
     <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center">
+      <div class="flex items-center flex-1">
         <button 
           (click)="toggleSidebar()"
           class="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -27,44 +26,43 @@
           </svg>
         </button>
         <h1 class="ml-4 text-2xl font-bold text-gray-800">
-          Datos generales | Escuelas, alumnos/as
+          Datos generales | Escuelas, alumnos/as  
         </h1>
       </div>
       
-      <!-- Indicador de filtros activos -->
-      @if(activeFilters().geographic.type && activeFilters().geographic.value || activeFilters().educational.modalidad) {
-        <div class="flex items-center space-x-2">
-          @if(activeFilters().geographic.type && activeFilters().geographic.value) {
-            <div class="flex items-center bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"></path>
-              </svg>
-              {{ activeFilters().geographic.type === 'region' ? 'Región' : 
-                  activeFilters().geographic.type === 'departamento' ? 'Departamento' : 'Distrito' }}: 
-              {{ activeFilters().geographic.value }}
-            </div>
-          }
-          @if(activeFilters().educational.modalidad) {
-            <div class="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
-              <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" clip-rule="evenodd"></path>
-              </svg>
-              {{ activeFilters().educational.modalidad }}
-              @if(activeFilters().educational.nivel) {
-                - {{ activeFilters().educational.nivel }}
-              }
-            </div>
-          }
-        </div>
-      }
+      <!-- Título del dashboard centrado (filtro geográfico) -->
+      <div class="flex-1 flex justify-center">
+        @if(activeFilters().geographic.type && activeFilters().geographic.value) {
+          <div class="text-2xl font-semibold text-blue-700 px-4 py-2 bg-blue-50 rounded-lg">
+             {{ activeFilters().geographic.type === 'region' ? '' : 
+                  activeFilters().geographic.type === 'departamento' ? 'Departamento ' : 'Distrito ' }} 
+            {{ activeFilters().geographic.value?.name }}
+          </div>
+        }
+      </div>
+      
+      <!-- Indicador de filtros educativos a la derecha -->
+      <div class="flex items-center space-x-2 flex-1 justify-end">
+        @if(activeFilters().educational.modalidad) {
+          <div class="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" clip-rule="evenodd"></path>
+            </svg>
+            {{ activeFilters().educational.modalidad }}
+            @if(activeFilters().educational.nivel) {
+              - {{ activeFilters().educational.nivel }}
+            }
+          </div>
+        }
+      </div>
     </div>
 
     <!-- Contenido scrolleable -->
     <div class="flex-1 overflow-y-auto">
-      <div class="container mx-auto px-6 py-12">
+      <div class="container mx-auto px-6 py-6">
         
         <!-- Container Principal -->
-        <div class="mx-auto px-4 py-8">
+        <div class="mx-auto px-4">
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
@@ -125,8 +123,7 @@
     </div>
     
     <!-- Sidebar -->
-    <app-sidebar-filters 
-      (filtersChanged)="onFiltersChanged($event)"
+    <app-sidebar-filters   
       class="relative z-10 h-full">
     </app-sidebar-filters>
   </div>

@@ -2,8 +2,8 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { EscuelaMatricula, EscuelaMatriculaPorSectorAmbitoModalidadNivel } from '../class/escuela-matricula';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
 import { FiltroState } from './filtro.state';
-import { EscuelaService } from '../service/escuela.service';
-import { MatriculaService } from '../service/matricula.service';
+import { EscuelaService } from '../services/escuela.service';
+import { MatriculaService } from '../services/matricula.service';
 import { EscuelaState } from './escuela.state';
 import { MatriculaState } from './matricula.state';
 import { FILTRODISTRITO, FILTRODEPARTAMENTO, FILTROREGION } from '../const/filtros';
@@ -40,6 +40,7 @@ readonly escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = computed(() =>
   readonly escuelaPorModalidadNivelComun = this._escuelasState.escuelaPorModalidadNivelComun
   readonly escuelaPorModalidadNivelEspecial = this._escuelasState.escuelaPorModalidadNivelEspecial
   readonly escuelaPorModalidadNivelAdultos = this._escuelasState.escuelaPorModalidadNivelAdultos
+ 
   readonly escuelasPorSectorAmbitoComun = this._escuelasState.escuelasPorSectorAmbitoComun
   readonly escuelasPorSectorAmbitoEspecial = this._escuelasState.escuelasPorSectorAmbitoEspecial
   readonly escuelasPorSectorAmbitoAdultos = this._escuelasState.escuelasPorSectorAmbitoAdultos
@@ -50,6 +51,7 @@ readonly escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = computed(() =>
   readonly matriculaPorModalidadNivelComun = this._matriculaState.matriculaPorModalidadNivelComun
   readonly matriculaPorModalidadNivelEspecial = this._matriculaState.matriculaPorModalidadNivelEspecial
   readonly matriculaPorModalidadNivelAdultos = this._matriculaState.matriculaPorModalidadNivelAdultos
+ 
   readonly matriculaPorSectorAmbitoModalidadComun = this._matriculaState.matriculaPorSectorAmbitoModalidadComun
   readonly matriculaPorSectorAmbitoModalidadEspecial = this._matriculaState.matriculaPorSectorAmbitoModalidadEspecial
   readonly matriculaPorSectorAmbitoModalidadAdultos = this._matriculaState.matriculaPorSectorAmbitoModalidadAdultos

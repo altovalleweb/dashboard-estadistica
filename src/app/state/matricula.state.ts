@@ -20,7 +20,8 @@ private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmb
   private readonly _matriculaPorModalidadNivelEspecial = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
   private readonly _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
 
-    
+ 
+  
   private readonly _matriculaPorSectorAmbitoModalidadComun = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
   private readonly _matriculaPorSectorAmbitoModalidadEspecial = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
   private readonly _matriculaPorSectorAmbitoModalidadAdultos = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
@@ -35,6 +36,7 @@ private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmb
   readonly matriculaPorModalidadNivelAdultos = computed(() => this._matriculaPorModalidadNivelAdultos());
   
   
+ 
   readonly matriculaPorSectorAmbitoModalidadComun = computed(() => this._matriculaPorSectorAmbitoModalidadComun());
   readonly matriculaPorSectorAmbitoModalidadEspecial = computed(() => this._matriculaPorSectorAmbitoModalidadEspecial());
   readonly matriculaPorSectorAmbitoModalidadAdultos = computed(() => this._matriculaPorSectorAmbitoModalidadAdultos());
@@ -50,6 +52,7 @@ private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmb
     this.loadMatriculaPorModalidadNivelComun();
     this.loadMatriculaPorModalidadNivelEspecial();
     this.loadMatriculaPorModalidadNivelAdultos();
+    this.loadMatriculaPorSectorAmbito();
     this.loadMatriculaPorSectorAmbitoModalidad();
   }
 
@@ -64,10 +67,7 @@ private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmb
     this._matriculaPorAnio.set(matriculaPorAnio);
   }
 
-  loadMatriculaPorSectorAmbito() {
-    const matriculaPorSectorAmbito = this._matricula.getTotalMatriculaPorSectorAmbito();
-    this._matriculaPorSectorAmbito.set(matriculaPorSectorAmbito);
-  }
+ 
 
   loadMatriculaPorModalidadNivelComun() {
     const matriculaPorModalidadNivelComun = this._matricula.getTotalMatriculaPorModalidadSerializado(MODALIDAD_COMUN, NIVELES_COMUN_CON_APERTURA);         
@@ -84,7 +84,11 @@ private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmb
     this._matriculaPorModalidadNivelAdultos.set(matriculaPorModalidadNivelAdultos);
   }
 
-  
+  loadMatriculaPorSectorAmbito() {
+    const matriculaPorSectorAmbito = this._matricula.getTotalMatriculaPorSectorAmbito();
+    this._matriculaPorSectorAmbito.set(matriculaPorSectorAmbito);
+  }
+
   loadMatriculaPorSectorAmbitoModalidad() {
     const matriculaPorSectorAmbitoModalidad = this._matricula.getTotalMatriculaPorSectorAmbitoModalidad();    
 

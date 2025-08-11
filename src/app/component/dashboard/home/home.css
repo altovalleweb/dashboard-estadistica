@@ -3,6 +3,41 @@
   display: flex;
 }
 
+/* Estilos específicos para el botón PDF en posición derecha */
+.pdf-export-btn {
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+}
+
+.pdf-export-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.pdf-export-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive adjustments para posición derecha */
+@media (max-width: 640px) {
+  .pdf-export-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .pdf-export-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pdf-export-btn {
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+  }
+}
+
 .h-screen {
   height: 100vh;
 }

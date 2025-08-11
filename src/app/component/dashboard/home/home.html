@@ -13,6 +13,7 @@
     
     <!-- Header con botón de toggle del sidebar -->
     <div class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <!-- Sección izquierda: Controles y título -->
       <div class="flex items-center flex-1">
         <button 
           (click)="toggleSidebar()"
@@ -25,7 +26,8 @@
             }
           </svg>
         </button>
-        <h1 class="ml-4 text-2xl font-bold text-gray-800">
+        
+        <h1 class="ml-4 text-xl sm:text-2xl font-bold text-gray-800">
           Datos generales | Escuelas, alumnos/as  
         </h1>
       </div>
@@ -81,7 +83,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <app-kpi-card-v2 [data]="escuelasPorModalidaNivelKPI()"/>
+            <app-kpi-card-v2 [data]="escuelasPorModalidadNivelKPI()"/>
                       
             <app-kpi-card-v2 [data]="matriculaPorModalidaNivelKPI()"/>
            

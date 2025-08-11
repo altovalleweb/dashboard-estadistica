@@ -1,5 +1,5 @@
 import { inject } from "@angular/core";
-import { EscuelaService } from "../service/escuela.service";
+import { EscuelaService } from "../services/escuela.service";
 import {  getDataToChartByField, getSerializedValues,  getTotalesGeneralPorModalidad, getTotalesGeneralPorSectorAmbito } from "../utils/function";
 import { CAMPO_ANIO, CAMPO_ESTATAL, CAMPO_MODALIDAD, CAMPO_NIVEL_OFERTA, CAMPO_PRIVADO, CAMPO_RURAL, CAMPO_TOTAL, CAMPO_URBANO, MODALIDAD_COMUN, MODALIDADES,  NIVELESPORMODALIDADESCUELAS } from "../const/const";
 

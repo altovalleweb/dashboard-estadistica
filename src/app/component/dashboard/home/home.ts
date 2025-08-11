@@ -36,6 +36,34 @@ export class Home {
     this.sidebarOpen.update(value => !value);
   }
 
+  // Método para exportar el informe a PDF
+  async exportToPDF() {
+    console.log('Iniciando exportación a PDF...');
+    
+    try {
+      // Obtener filtros activos para incluir en el PDF
+      const filtros = this.activeFilters();
+      console.log('Filtros activos:', filtros);
+      
+      // Crear opciones para el PDF
+      const pdfOptions = {
+        includeFilters: true,
+        includeCoverPage: true,
+        format: 'a4' as const,
+        orientation: 'portrait' as const,
+        activeFilters: filtros
+      };
+      
+      // Llamar al servicio de exportación PDF
+    //  await this._pdfService.exportDashboardToPDF(pdfOptions);
+      
+      console.log('PDF exportado exitosamente');
+    } catch (error) {
+      console.error('Error al exportar PDF:', error);
+      alert('Error al generar el PDF. Por favor, inténtelo nuevamente.');
+    }
+  }
+
     
 
   // Escuelas
@@ -61,6 +89,7 @@ export class Home {
   matriculaPorModalidadNivelEspecial = this._emss.matriculaPorModalidadNivelEspecial
   matriculaPorModalidadNivelAdultos = this._emss.matriculaPorModalidadNivelAdultos
 
+
   matriculaPorSectorAmbitoModalidadComun = this._emss.matriculaPorSectorAmbitoModalidadComun
   matriculaPorSectorAmbitoModalidadEspecial = this._emss.matriculaPorSectorAmbitoModalidadEspecial
   matriculaPorSectorAmbitoModalidadAdultos = this._emss.matriculaPorSectorAmbitoModalidadAdultos
@@ -76,7 +105,7 @@ export class Home {
  
   escuelasMatriculaDataOption = new EscuelasMatriculaDataOption();
 
-  escuelasPorModalidaNivelKPI = signal< KPIDataV2 | null>({
+  escuelasPorModalidadNivelKPI = signal< KPIDataV2 | null>({
       number: "-",
       title: "Escuelas",
       subtitle: "(Unidades de Servicio)",
@@ -167,7 +196,7 @@ export class Home {
  totalEscuelasChanged = effect(() => {
  
   const  total = this.totalEscuelas();
-  this.escuelasPorModalidaNivelKPI.update((value) => value ? { ...value, number: `${total?.total }` } : value);
+  this.escuelasPorModalidadNivelKPI.update((value) => value ? { ...value, number: `${total?.total }` } : value);
 
   this.escuelasMatriculaPorModalidadNivelComunKPI.update((value) => value ? { ...value, dataHeaderValue1: { value: total?.comun || 0, description: `Escuelas (${total?.porcentajeComun || 0}%)` } } : value);
 
@@ -179,13 +208,9 @@ export class Home {
 
  escuelaPorAnioChanged = effect(() => {  
   const dataOptions =  this.escuelasMatriculaDataOption.getEvolucion(this.escuelaPorAnio()?.data || [], this.escuelaPorAnio()?.labels || [])
-  this.escuelasPorModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
+  this.escuelasPorModalidadNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
 });
 
-escuelasPorSectorAmbitoChanged = effect(() => {  
-  const totalesSectorAmbito =  this.escuelasPorSectorAmbito()
-  this.escuelasPorModalidaNivelKPI.update((value) => value ? { ...value, totalesSectorAmbito: totalesSectorAmbito } : value);  
-});
 
 
  totalMatriculaChanged = effect(() => {
@@ -237,6 +262,10 @@ escuelaPorModalidadNivelAdultosChanged = effect(() => {
 
 matriculaPorModalidadNivelAdultosChanged = effect(() => {      
   this.escuelasMatriculaPorModalidadNivelAdultosKPI.update((value) => value ? { ...value, infoMatricula: this.matriculaPorModalidadNivelAdultos()?.serie || [] } : value);
+});
+
+escuelasPorSectorAmbitoChanged = effect(() => {
+  this.escuelasPorModalidadNivelKPI.update((value) => value ? { ...value, totalesSectorAmbito: this.escuelasPorSectorAmbito() } : value); 
 });
 
 

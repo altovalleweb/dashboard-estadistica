@@ -23,6 +23,7 @@ export class EscuelaState {
  private readonly _escuelaPorModalidadNivelAdultos = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
 
 
+
  
  private readonly _escuelasPorSectorAmbitoComun = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
  private readonly _escuelasPorSectorAmbitoEspecial = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
@@ -51,10 +52,11 @@ export class EscuelaState {
 
     this.loadTotalesEscuelas();
     this.loadEscuelaPorAnio();
-    this.loadEscuelasPorSectorAmbito();
+
     this.loadEscuelaPorModalidadNivelComun();
     this.loadEscuelaPorModalidadNivelEspecial();
     this.loadEscuelaPorModalidadNivelAdultos();
+    this.loadEscuelasPorSectorAmbito();
     this.loadEscuelasPorSectorAmbitoModalidad();
   }
 
@@ -90,7 +92,6 @@ export class EscuelaState {
     this._escuelaPorModalidadNivelAdultos.set(escuelaPorModalidadNivelAdultos);
   }
 
- 
 
  
  loadEscuelasPorSectorAmbitoModalidad() {

@@ -2,4 +2,4 @@ export const EscuelasPorModalidadNivelProvincia = [{"rural": 0, "total": 1, "urb
 
 
 
-export const TotalEscuelasPorAnioProvincia =[{"anio": "2020", "total": 1248}, {"anio": "2021", "total": 1238}, {"anio": "2022", "total": 1267}, {"anio": "2023", "total": 1268}, {"anio": "2024", "total": 1266}, {"anio": "2025", "total": 1444}]
+export const TotalEscuelasPorAnioProvincia:any[] = [{"anio": "2020", "total": 1248}, {"anio": "2021", "total": 1238}, {"anio": "2022", "total": 1267}, {"anio": "2023", "total": 1268}, {"anio": "2024", "total": 1266}, {"anio": "2025", "total": 1444}];

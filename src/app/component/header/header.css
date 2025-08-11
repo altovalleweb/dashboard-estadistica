@@ -109,7 +109,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .header-content {
     padding: 1rem 0;
   }
@@ -126,5 +126,43 @@
   .logo-icon {
     width: 1.5rem;
     height: 1.5rem;
+  }
+  
+  /* Ocultar texto del botón PDF en móviles */
+  .pdf-text {
+    display: none;
+  }
+  
+  .export-pdf-btn {
+    padding: 0.75rem;
+    min-width: auto;
+  }
+  
+  /* Ajustar brand para móviles */
+  .header-brand {
+    gap: 0.5rem;
+  }
+  
+  .header-actions {
+    margin-right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-titles h1 {
+    font-size: 1rem;
+  }
+  
+  .header-subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .export-pdf-btn {
+    padding: 0.5rem;
+  }
+  
+  .pdf-icon {
+    width: 1rem;
+    height: 1rem;
   }
 }

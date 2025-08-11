@@ -1,6 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, input, computed } from '@angular/core';
-import { HoverSyncService } from '../../service/hover-sync.service';
+import { HoverSyncService } from '../../services/hover-sync.service';
 
 export interface InformationDataHeader {
   value: number;

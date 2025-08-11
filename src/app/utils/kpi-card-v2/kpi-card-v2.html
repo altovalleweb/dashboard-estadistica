@@ -1,3 +1,4 @@
+@let totalesSectorAmbito = data()?.totalesSectorAmbito;
 
 <div class="w-full bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
   @if(data()) {
@@ -61,14 +62,25 @@
             <h4 class="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Sector</h4>
             <div class="grid grid-cols-2 gap-2">
               <div class="text-center">
-                <div class="text-sm font-semibold text-blue-600">
-                  {{ data()?.totales?.estatal ? (data()?.totales?.estatal | number:'1.0-0') : '-' }}
+                <div class="text-sm ">
+                  @if(totalesSectorAmbito?.estatal){
+                    <span class="font-semibold text-blue-600">{{totalesSectorAmbito?.estatal | number:'1.0-0'}} <span class="text-gray-500 text-xs">{{totalesSectorAmbito?.porcentajeEstatal}}%</span></span>
+                  }@else{
+                    <span>-</span>
+                  }                 
+                  
+                  
                 </div>
                 <div class="text-xs text-gray-500">Estatal</div>
               </div>
               <div class="text-center">
                 <div class="text-sm font-semibold text-orange-600">
-                  {{ data()?.totales?.privado ? (data()?.totales?.privado | number:'1.0-0') : '-' }}
+                  @if(totalesSectorAmbito?.privado){
+                    <span class="font-semibold text-orange-600">{{totalesSectorAmbito?.privado | number:'1.0-0'}} <span class="text-gray-500 text-xs">{{totalesSectorAmbito?.porcentajePrivado}}%</span></span>
+                  }@else{
+                    <span>-</span>
+                  }
+                 
                 </div>
                 <div class="text-xs text-gray-500">Privado</div>
               </div>
@@ -81,13 +93,22 @@
             <div class="grid grid-cols-2 gap-2">
               <div class="text-center">
                 <div class="text-sm font-semibold text-green-600">
-                  {{ data()?.totales?.urbano ? (data()?.totales?.urbano | number:'1.0-0') : '-' }}
+                  @if(totalesSectorAmbito?.urbano){
+                    <span class="font-semibold text-green-600">{{totalesSectorAmbito?.urbano | number:'1.0-0'}} <span class="text-gray-500 text-xs">{{totalesSectorAmbito?.porcentajeUrbano}}%</span></span>
+                  }@else{
+                    <span>-</span>
+                  }
                 </div>
                 <div class="text-xs text-gray-500">Urbano</div>
               </div>
               <div class="text-center">
                 <div class="text-sm font-semibold text-yellow-600">
-                  {{ data()?.totales?.rural ? (data()?.totales?.rural | number:'1.0-0') : '-' }}
+                  @if(totalesSectorAmbito?.rural){
+                    <span class="font-semibold text-yellow-600">{{totalesSectorAmbito?.rural | number:'1.0-0'}} <span class="text-gray-500 text-xs">{{totalesSectorAmbito?.porcentajeRural}}%</span></span>
+                  }@else{
+                    <span>-</span>
+                  }
+                 
                 </div>
                 <div class="text-xs text-gray-500">Rural</div>
               </div>

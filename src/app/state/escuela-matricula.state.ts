@@ -2,8 +2,8 @@ import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { EscuelaMatricula, EscuelaMatriculaPorSectorAmbitoModalidadNivel } from '../class/escuela-matricula';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
 import { FiltroState } from './filtro.state';
-import { EscuelaService } from '../service/escuela.service';
-import { MatriculaService } from '../service/matricula.service';
+import { EscuelaService } from '../services/escuela.service';
+import { MatriculaService } from '../services/matricula.service';
 import { EscuelaState } from './escuela.state';
 import { MatriculaState } from './matricula.state';
 import { FILTRODISTRITO, FILTRODEPARTAMENTO, FILTROREGION } from '../const/filtros';
@@ -39,6 +39,7 @@ readonly escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = computed(() =>
   readonly escuelaPorModalidadNivelComun = this._escuelasState.escuelaPorModalidadNivelComun
   readonly escuelaPorModalidadNivelEspecial = this._escuelasState.escuelaPorModalidadNivelEspecial
   readonly escuelaPorModalidadNivelAdultos = this._escuelasState.escuelaPorModalidadNivelAdultos
+  readonly escuelasPorSectorAmbito = this._escuelasState.escuelasPorSectorAmbito
   readonly escuelasPorSectorAmbitoComun = this._escuelasState.escuelasPorSectorAmbitoComun
   readonly escuelasPorSectorAmbitoEspecial = this._escuelasState.escuelasPorSectorAmbitoEspecial
   readonly escuelasPorSectorAmbitoAdultos = this._escuelasState.escuelasPorSectorAmbitoAdultos
@@ -48,6 +49,7 @@ readonly escuelasMatriculasPorSectorAmbitoModalidadNivelAdultos = computed(() =>
   readonly matriculaPorModalidadNivelComun = this._matriculaState.matriculaPorModalidadNivelComun
   readonly matriculaPorModalidadNivelEspecial = this._matriculaState.matriculaPorModalidadNivelEspecial
   readonly matriculaPorModalidadNivelAdultos = this._matriculaState.matriculaPorModalidadNivelAdultos
+  readonly matriculaPorSectorAmbito = this._matriculaState.matriculaPorSectorAmbito
   readonly matriculaPorSectorAmbitoModalidadComun = this._matriculaState.matriculaPorSectorAmbitoModalidadComun
   readonly matriculaPorSectorAmbitoModalidadEspecial = this._matriculaState.matriculaPorSectorAmbitoModalidadEspecial
   readonly matriculaPorSectorAmbitoModalidadAdultos = this._matriculaState.matriculaPorSectorAmbitoModalidadAdultos
@@ -58,24 +60,37 @@ changeFilterState = effect(() => {
     const valueFiltro = filter.geographic.value || null;
 
     let escuelasData: any[] = [];  
+    let escuelasPorAnioData: any[] = [];
     let matriculaData: any[] = [];
+    let matriculasPorAnioData: any[] = [];
+    
 
     if (tipoFiltro === FILTROREGION) {
      escuelasData = this._escuelaService.getEscuelasPorRegionModalidadNivel(valueFiltro?.id || '');
       matriculaData = this._matriculaService.getMatriculaPorRegionModalidadNivel(valueFiltro?.id || '');
-      
+      escuelasPorAnioData = this._escuelaService.getTotalEscuelasPorAnioRegion(valueFiltro?.id || '');
+      matriculasPorAnioData = this._matriculaService.getTotalMatriculaPorAnioRegion(valueFiltro?.id || '');
+
     }
     else if (tipoFiltro === FILTRODEPARTAMENTO) {
       escuelasData =this._escuelaService.getEscuelasPorDepartamentoModalidadNivel(valueFiltro?.id || '');
       matriculaData = this._matriculaService.getMatriculaPorDepartamentoModalidadNivel(valueFiltro?.id || '');
+      escuelasPorAnioData = this._escuelaService.getTotalEscuelasPorAnioDepartamento(valueFiltro?.id || '');
+      matriculasPorAnioData = this._matriculaService.getTotalMatriculaPorAnioDepartamento(valueFiltro?.id || '');
+
     }
     else if (tipoFiltro === FILTRODISTRITO) {
       escuelasData =this._escuelaService.getEscuelasPorDistritoModalidadNivel(valueFiltro?.id || '');
       matriculaData = this._matriculaService.getMatriculaPorDistritoModalidadNivel(valueFiltro?.id || '');
+      escuelasPorAnioData = this._escuelaService.getTotalEscuelasPorAnioDistrito(valueFiltro?.id || '');
+      matriculasPorAnioData = this._matriculaService.getTotalMatriculaPorAnioDistrito(valueFiltro?.id || '');
+
     }
     else {
       escuelasData =this._escuelaService.getEscuelasPorModalidadNivelProvincia();
       matriculaData = this._matriculaService.getMatriculaPorModalidadNivelProvincia();
+      escuelasPorAnioData = this._escuelaService.getTotalEscuelasPorAnioProvincia();
+      matriculasPorAnioData = this._matriculaService.getTotalMatriculaPorAnioProvincia();
     }
 
     
@@ -85,8 +100,8 @@ changeFilterState = effect(() => {
 
     this.loadData();
 
-    this._escuelasState.loadData(escuelasData, this._escuelaService.getTotalEscuelasPorAnioProvincia());
-    this._matriculaState.loadData(matriculaData, this._matriculaService.getTotalMatriculaPorAnioProvincia());
+    this._escuelasState.loadData(escuelasData, escuelasPorAnioData);
+    this._matriculaState.loadData(matriculaData, matriculasPorAnioData);
 
   })
 

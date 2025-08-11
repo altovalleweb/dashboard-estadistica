@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Escuela, EscuelaTotalPorAnioCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado,  TotalesEscuelasPorSectorAmbitoModalidad } from '../class/escuela';
+import { Escuela, EscuelaTotalPorAnioCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado,  TotalesEscuelasPorSectorAmbito,  TotalesEscuelasPorSectorAmbitoModalidad } from '../class/escuela';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
 
 
@@ -22,6 +22,7 @@ export class EscuelaState {
  private readonly _escuelaPorModalidadNivelAdultos = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
 
 
+ private readonly _escuelasPorSectorAmbito = signal<TotalesEscuelasPorSectorAmbito | null>(null);
  
  private readonly _escuelasPorSectorAmbitoComun = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
  private readonly _escuelasPorSectorAmbitoEspecial = signal<TotalesEscuelasPorSectorAmbitoModalidad | null>(null);
@@ -36,7 +37,7 @@ export class EscuelaState {
   readonly escuelaPorModalidadNivelAdultos = computed(() => this._escuelaPorModalidadNivelAdultos());
   
   
-  
+  readonly escuelasPorSectorAmbito = computed(() => this._escuelasPorSectorAmbito());
   readonly escuelasPorSectorAmbitoComun = computed(() => this._escuelasPorSectorAmbitoComun());
   readonly escuelasPorSectorAmbitoEspecial = computed(() => this._escuelasPorSectorAmbitoEspecial());
   readonly escuelasPorSectorAmbitoAdultos = computed(() => this._escuelasPorSectorAmbitoAdultos());
@@ -52,6 +53,7 @@ export class EscuelaState {
     this.loadEscuelaPorModalidadNivelComun();
     this.loadEscuelaPorModalidadNivelEspecial();
     this.loadEscuelaPorModalidadNivelAdultos();
+    this.loadEscuelasPorSectorAmbito();
     this.loadEscuelasPorSectorAmbitoModalidad();
   }
 
@@ -81,7 +83,10 @@ export class EscuelaState {
     this._escuelaPorModalidadNivelAdultos.set(escuelaPorModalidadNivelAdultos);
   }
 
- 
+loadEscuelasPorSectorAmbito(){
+  const escuelasPorSectorAmbito = this._escuela.getTotalEscuelasPorSectorAmbito();
+  this._escuelasPorSectorAmbito.set(escuelasPorSectorAmbito);
+}
 
  
  loadEscuelasPorSectorAmbitoModalidad() {

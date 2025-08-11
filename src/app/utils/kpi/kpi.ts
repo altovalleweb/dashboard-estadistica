@@ -4,7 +4,7 @@ import { ICONOS_NIVELES } from '../../const/const';
 import { TotalesEscuelasPorSectorAmbitoModalidad } from '../../class/escuela';
 import { TotalesMatriculaPorSectorAmbitoModalidad } from '../../class/matricula';
 import { DecimalPipe } from '@angular/common';
-import { HoverSyncService } from '../../service/hover-sync.service';
+import { HoverSyncService } from '../../services/hover-sync.service';
 
 @Component({
   selector: 'app-kpi',

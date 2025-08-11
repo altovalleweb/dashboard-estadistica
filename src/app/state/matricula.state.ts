@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbitoModalidad } from '../class/matricula';
+import { Matricula, MatriculaTotalPorAnioCategorizados, TotalesMatriculaPorModalidad, TotalesMatriculaPorModalidadNivelSerializado, TotalesMatriculaPorSectorAmbito, TotalesMatriculaPorSectorAmbitoModalidad } from '../class/matricula';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
 
 
@@ -20,7 +20,8 @@ export class MatriculaState {
   private readonly _matriculaPorModalidadNivelEspecial = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
   private readonly _matriculaPorModalidadNivelAdultos = signal<TotalesMatriculaPorModalidadNivelSerializado | null>(null);
 
-    
+  private readonly _matriculaPorSectorAmbito = signal<TotalesMatriculaPorSectorAmbito | null>(null);
+  
   private readonly _matriculaPorSectorAmbitoModalidadComun = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
   private readonly _matriculaPorSectorAmbitoModalidadEspecial = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
   private readonly _matriculaPorSectorAmbitoModalidadAdultos = signal<TotalesMatriculaPorSectorAmbitoModalidad | null>(null);
@@ -33,6 +34,7 @@ export class MatriculaState {
   readonly matriculaPorModalidadNivelAdultos = computed(() => this._matriculaPorModalidadNivelAdultos());
   
   
+  readonly matriculaPorSectorAmbito = computed(() => this._matriculaPorSectorAmbito());
   readonly matriculaPorSectorAmbitoModalidadComun = computed(() => this._matriculaPorSectorAmbitoModalidadComun());
   readonly matriculaPorSectorAmbitoModalidadEspecial = computed(() => this._matriculaPorSectorAmbitoModalidadEspecial());
   readonly matriculaPorSectorAmbitoModalidadAdultos = computed(() => this._matriculaPorSectorAmbitoModalidadAdultos());
@@ -47,6 +49,7 @@ export class MatriculaState {
     this.loadMatriculaPorModalidadNivelComun();
     this.loadMatriculaPorModalidadNivelEspecial();
     this.loadMatriculaPorModalidadNivelAdultos();
+    this.loadMatriculaPorSectorAmbito();
     this.loadMatriculaPorSectorAmbitoModalidad();
   }
 
@@ -78,7 +81,11 @@ export class MatriculaState {
     this._matriculaPorModalidadNivelAdultos.set(matriculaPorModalidadNivelAdultos);
   }
 
-  
+  loadMatriculaPorSectorAmbito() {
+    const matriculaPorSectorAmbito = this._matricula.getTotalMatriculaPorSectorAmbito();
+    this._matriculaPorSectorAmbito.set(matriculaPorSectorAmbito);
+  }
+
   loadMatriculaPorSectorAmbitoModalidad() {
     const matriculaPorSectorAmbitoModalidad = this._matricula.getTotalMatriculaPorSectorAmbitoModalidad();    
 

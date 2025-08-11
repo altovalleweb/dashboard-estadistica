@@ -1,0 +1,150 @@
+<div class="p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Padrón de Escuelas</h1>
+  
+  @if (padronEscuelas() && padronEscuelas()!.length > 0) {
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <!-- Header con estadísticas rápidas -->
+      <div class="bg-gray-50 px-6 py-4 border-b">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="text-center">
+            <p class="text-2xl font-bold text-blue-600">{{ padronEscuelas()!.length }}</p>
+            <p class="text-sm text-gray-600">Total Escuelas</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-bold text-green-600">{{ getTotalEstatales() }}</p>
+            <p class="text-sm text-gray-600">Estatales</p>
+          </div>
+          <div class="text-center">
+            <p class="text-2xl font-bold text-purple-600">{{ getTotalPrivadas() }}</p>
+            <p class="text-sm text-gray-600">Privadas</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenedor de tabla con altura fija y scroll -->
+      <div class="h-[480px] overflow-hidden border-t">
+        <div class="h-full overflow-y-auto">
+          <table class="min-w-full table-auto table-compact">
+            <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
+              <tr class="border-b border-gray-200">
+                <th class="px-3 py-2 text-left text-xs font-semibold">CUEAnexo</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Escuela</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Ofertas Educativas</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Sector</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Ámbito</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Localidad</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Departamento</th>                
+                <th class="px-3 py-2 text-left text-xs font-semibold">Distrito</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Estado</th>
+                <th class="px-3 py-2 text-left text-xs font-semibold">Contacto</th>
+                <th class="px-3 py-2 text-center text-xs font-semibold">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+            @for (escuela of padronEscuelas()!; track $index) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-3 py-1.5 text-xs font-medium text-gray-900">
+                  {{ escuela.cue_anexo }}
+                </td>
+                <td class="px-3 py-1.5 text-xs text-gray-700">
+                  {{ escuela.localizacion || 'No especificado' }}
+                </td>
+                <td class="px-3 py-1.5 text-xs text-gray-700">
+                  <div class="ofertas-container">
+                    <div class="text-2xs text-gray-600" [title]="getOfertasFormateadas(escuela).join(' | ')">
+                      {{ getOfertasResumen(escuela) }}
+                    </div>
+                  </div>
+                </td>
+                <td class="px-3 py-1.5 text-xs">
+                  <span class="badge-compact"
+                        [class]="escuela.sector === 'Estatal' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'">
+                    {{ escuela.sector }}
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-xs">
+                  <span class="badge-compact"
+                        [class]="escuela.ambito === 'Urbano' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800'">
+                    {{ escuela.ambito }}
+                  </span>
+                </td>
+                <td class="px-3 py-1.5 text-xs text-gray-700">
+                  {{ escuela.localidad }}
+                </td>
+                <td class="px-3 py-1.5 text-xs text-gray-700">
+                  {{ escuela.departamento }}
+                </td>                
+                 <td class="px-3 py-1.5 text-xs text-gray-700">
+                  {{ escuela.distrito }}
+                </td>
+                <td class="px-3 py-1.5 text-xs">
+                  <span class="badge-compact"
+                        [class]="escuela.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                    {{ escuela.estado }}
+                  </span>
+                </td>
+                <td class="px-2 py-1.5 text-xs text-gray-700">
+                  <div class="contact-info">
+                    @if (escuela.telefono) {
+                      <div title="{{ escuela.telefono }}">📞 {{ escuela.telefono }}</div>
+                    }
+                    @if (escuela.email) {
+                      <div title="{{ escuela.email }}">✉️ {{ escuela.email }}</div>
+                    }
+                    @if (!escuela.telefono && !escuela.email) {
+                      <div class="text-gray-400">Sin contacto</div>
+                    }
+                  </div>
+                </td>
+                <td class="px-2 py-1.5 text-center">
+                  <button 
+                    class="btn-informe-matricular"
+                    (click)="verInformeMatricular(escuela)"
+                    [title]="'Ver informe matricular de ' + escuela.localizacion">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <span class="text-2xs">Ver informe</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Espacio reservado para información adicional -->
+    <div class="h-32 bg-gray-50 border-t border-gray-100 reserved-space">
+      <div class="h-full flex items-center justify-center text-gray-400">
+        <!-- Aquí se puede agregar información adicional en el futuro -->
+        <p class="text-sm italic">Espacio reservado para información adicional</p>
+      </div>
+    </div>
+    
+    </div>
+  } @else if (padronEscuelas() === null) {
+    <!-- Estado de carga -->
+    <div class="flex justify-center items-center py-12">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p class="text-gray-600">Cargando padrón de escuelas...</p>
+      </div>
+    </div>
+  } @else {
+    <!-- Sin datos -->
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-yellow-800">No hay datos disponibles</h3>
+          <p class="text-sm text-yellow-700 mt-1">No se encontraron escuelas en el padrón.</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

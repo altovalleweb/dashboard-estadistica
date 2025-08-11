@@ -1,6 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BarComponent } from '../bar-component/bar-component';
 import { DecimalPipe } from '@angular/common';
+import { TotalesPorSectorAmbito } from '../../interfaces/common.interface';
 
 export interface KPIDataV2 {
   number: string;
@@ -11,12 +12,7 @@ export interface KPIDataV2 {
   showChart?: boolean;  
   chartDataOptionsHeader?: any;
   chartDataOptionsBody?: any;
-  totales?: {
-    estatal?: number;
-    privado?: number;
-    urbano?: number;
-    rural?: number;
-  };
+  totalesSectorAmbito: TotalesPorSectorAmbito | null
 }
 
 

@@ -1,6 +1,6 @@
 import { inject } from "@angular/core";
-import { EscuelaService } from "../service/escuela.service";
-import { MatriculaService } from "../service/matricula.service";
+import { EscuelaService } from "../services/escuela.service";
+import { MatriculaService } from "../services/matricula.service";
 import { getSerializedValues } from "../utils/function";
 
 

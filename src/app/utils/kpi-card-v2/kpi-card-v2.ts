@@ -1,24 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BarComponent } from '../bar-component/bar-component';
 import { DecimalPipe } from '@angular/common';
-
-export interface KPIDataV2 {
-  number: string;
-  title: string;
-  subtitle?: string;
-  bgColor: string;
-  iconPath: string;
-  showChart?: boolean;  
-  chartDataOptionsHeader?: any;
-  chartDataOptionsBody?: any;
-  totales?: {
-    estatal?: number;
-    privado?: number;
-    urbano?: number;
-    rural?: number;
-  };
-}
-
+import { KPIDataV2 } from '../../interfaces/kpi.interface';
 
 @Component({
   selector: 'app-kpi-card-v2',

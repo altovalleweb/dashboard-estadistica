@@ -12,23 +12,43 @@
         <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base ">🏫 Escuelas</div>
             <div class="flex flex-col text-center">
+                @if(totalesEscuelas()?.estatal) {
                 <span class="text-lg font-semibold">{{totalesEscuelas()?.estatal | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesEscuelas()?.porcentajeEstatal}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }                
                 <span class="">Estatal</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesEscuelas()?.privado) {
                 <span class="text-lg font-semibold">{{totalesEscuelas()?.privado | number : "1.0-2"}}  </span>
-                <span class="text-xs">({{totalesEscuelas()?.porcentajePrivado}}%)</span>
+                <span class="text-xs">({{totalesEscuelas()?.porcentajePrivado}}%)</span>                
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-orange-custom">Privado</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesEscuelas()?.urbano) {
                 <span class="text-lg font-semibold">{{totalesEscuelas()?.urbano | number : "1.0-2"}}</span>
                  <span class="text-xs">({{totalesEscuelas()?.porcentajeUrbano}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-yellow-custom">Urbano</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesEscuelas()?.rural) {
                 <span class="text-lg font-semibold">{{totalesEscuelas()?.rural | number : "1.0-2"}}</span>
                 <span class="text-xs">({{totalesEscuelas()?.porcentajeRural}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-lime-custom ">Rural</span>
             </div>
         </div>
@@ -39,23 +59,43 @@
          <div class="grid grid-cols-4 gap-y-1 gap-x-8 text-sm opacity-90">
             <div class="col-span-4 text-base">👥 Alumnos</div>
             <div class="flex flex-col text-center">
+                @if(totalesMatricula()?.estatal) {
                 <span class="text-lg font-semibold">{{totalesMatricula()?.estatal | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeEstatal}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span>Estatal</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesMatricula()?.privado) {
                 <span class="text-lg font-semibold">{{totalesMatricula()?.privado | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajePrivado}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-orange-custom">Privado</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesMatricula()?.urbano) {
                 <span class="text-lg font-semibold">{{totalesMatricula()?.urbano | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeUrbano}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-yellow-custom">Urbano</span>
             </div>
             <div class="flex flex-col text-center">
+                @if(totalesMatricula()?.rural) {
                 <span class="text-lg font-semibold">{{totalesMatricula()?.rural | number : "1.0-2"}}  </span>
                 <span class="text-xs">({{totalesMatricula()?.porcentajeRural}}%)</span>
+                } @else {
+                  <span class="text-lg font-semibold">-</span>
+                  <span class="text-xs">-</span>
+                }
                 <span class="text-lime-custom ">Rural</span>
             </div>
         </div>
@@ -88,11 +128,21 @@
                          <div class="space-y-0.5">
                         <div class="flex items-center justify-between text-gray-700">
                             <span>🏫</span>
-                            <span class="font-medium"> {{item.escuelas_estatal | number : "1.0-2"}} ({{item.escuelas_porcentajeEstatal}}%) </span>
+                            @if(item.escuelas_estatal) {
+<span class="font-semibold "> {{item.escuelas_estatal | number : "1.0-2"}} <span class="text-xs font-normal text-blue-700">({{item.escuelas_porcentajeEstatal}}%)</span> </span>                            
+                            }@else{
+<span class="font-medium">-</span>
+                            }
+                            
                         </div>
                         <div class="flex items-center justify-between text-gray-700">
                             <span>👥</span>
-                            <span class="font-medium"> {{item.matricula_estatal | number : "1.0-2"}} ({{item.matricula_porcentajeEstatal}}%) </span>
+                            @if(item.matricula_estatal) {
+<span class="font-semibold"> {{item.matricula_estatal | number : "1.0-2"}} <span class="text-xs font-normal text-blue-700">({{item.matricula_porcentajeEstatal}}%)</span> </span>
+                            }@else{
+<span class="font-medium">-</span>
+                            }
+                            
                         </div>
                     </div>
                     </div>
@@ -100,12 +150,19 @@
                         <div class="font-bold text-orange-700  text-center" >Privado</div>
                         <div class="space-y-0.5">
                         <div class="flex items-center justify-center text-gray-700">
-
-                            <span class="font-medium"> {{item.escuelas_privado | number : "1.0-2"}} ({{item.escuelas_porcentajePrivado}}%) </span>
+                            @if(item.escuelas_privado) {
+                            <span class="font-semibold"> {{item.escuelas_privado | number : "1.0-2"}} <span class="text-xs font-normal text-orange-700">({{item.escuelas_porcentajePrivado}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                         <div class="flex items-center justify-center text-gray-700">
 
-                            <span class="font-medium"> {{item.matricula_privado | number : "1.0-2"}} ({{item.matricula_porcentajePrivado}}%) </span>
+                            @if(item.matricula_privado) {
+                            <span class="font-semibold"> {{item.matricula_privado | number : "1.0-2"}} <span class="text-xs font-normal text-orange-700">({{item.matricula_porcentajePrivado}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                     </div>
                     </div>
@@ -118,11 +175,19 @@
                              <div class="space-y-0.5">
                         <div class="flex items-center justify-between text-gray-700">
                             <span>🏫</span>
-                            <span class="font-medium"> {{item.escuelas_urbano | number : "1.0-2"}} ({{item.escuelas_porcentajeUrbano}}%) </span>
+                            @if(item.escuelas_urbano) {
+                            <span class="font-semibold"> {{item.escuelas_urbano | number : "1.0-2"}} <span class="text-xs font-normal text-amber-500">({{item.escuelas_porcentajeUrbano}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                         <div class="flex items-center justify-between text-gray-700">
                             <span>👥</span>
-                            <span class="font-medium"> {{item.matricula_urbano | number : "1.0-2"}} ({{item.matricula_porcentajeUrbano}}%) </span>
+                            @if(item.matricula_urbano) {
+                            <span class="font-semibold"> {{item.matricula_urbano | number : "1.0-2"}} <span class="text-xs font-normal text-amber-500">({{item.matricula_porcentajeUrbano}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                     </div>
                         </div>
@@ -130,12 +195,19 @@
                             <div class="font-bold text-green-700 text-center">Rural</div>
                              <div class="space-y-0.5">
                         <div class="flex items-center justify-center text-gray-700">
-
-                            <span class="font-medium"> {{item.escuelas_rural | number : "1.0-2"}} ({{item.escuelas_porcentajeRural}}%) </span>
+                            @if(item.escuelas_rural) {
+                            <span class="font-semibold"> {{item.escuelas_rural | number : "1.0-2"}} <span class="text-xs font-normal text-green-700">({{item.escuelas_porcentajeRural}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                         <div class="flex items-center justify-center text-gray-700">
 
-                            <span class="font-medium"> {{item.matricula_rural | number : "1.0-2"}} ({{item.matricula_porcentajeRural}}%) </span>
+                            @if(item.matricula_rural) {
+                            <span class="font-semibold"> {{item.matricula_rural | number : "1.0-2"}} <span class="text-xs font-normal text-green-700">({{item.matricula_porcentajeRural}}%)</span> </span>
+                            }@else{
+                            <span class="font-medium">-</span>
+                            }
                         </div>
                     </div>
                         </div>

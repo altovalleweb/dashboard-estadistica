@@ -42,7 +42,7 @@
     <!-- Número principal grande -->
     <div class="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-l-4 border-l-blue-500">
       <div class="text-4xl font-black text-gray-900 leading-none tracking-tight drop-shadow-sm">
-        {{ data()?.number | number:'1.0-2' }}
+        {{ data()?.number ? (data()?.number | number:'1.0-2') : '-' }}
       </div>     
     </div>
     
@@ -62,14 +62,24 @@
             <div class="grid grid-cols-2 gap-2">
               <div class="text-center">
                 <div class="text-sm font-semibold text-blue-600">
-                  {{ data()?.totales?.estatal ? (data()?.totales?.estatal | number:'1.0-0') : '-' }}
-                </div>
+                  @if(data()?.totalesSectorAmbito?.estatal) {
+                    {{ data()?.totalesSectorAmbito?.estatal | number:'1.0-0' }}
+                    <span class="text-[10px] text-gray-500">{{ data()?.totalesSectorAmbito?.porcentajeEstatal }}%</span>
+                  } @else {
+                    -
+                  }                 
+                  </div>
                 <div class="text-xs text-gray-500">Estatal</div>
               </div>
               <div class="text-center">
                 <div class="text-sm font-semibold text-orange-600">
-                  {{ data()?.totales?.privado ? (data()?.totales?.privado | number:'1.0-0') : '-' }}
-                </div>
+                  @if(data()?.totalesSectorAmbito?.privado) {
+                    {{ data()?.totalesSectorAmbito?.privado | number:'1.0-0' }}
+                    <span class="text-[10px] text-gray-500">{{ data()?.totalesSectorAmbito?.porcentajePrivado }}%</span>
+                  } @else {
+                    -
+                  }
+                  </div>
                 <div class="text-xs text-gray-500">Privado</div>
               </div>
             </div>
@@ -81,13 +91,23 @@
             <div class="grid grid-cols-2 gap-2">
               <div class="text-center">
                 <div class="text-sm font-semibold text-green-600">
-                  {{ data()?.totales?.urbano ? (data()?.totales?.urbano | number:'1.0-0') : '-' }}
+                  @if(data()?.totalesSectorAmbito?.urbano) {
+                    {{ data()?.totalesSectorAmbito?.urbano | number:'1.0-0' }}
+                  } @else {
+                    -
+                  }
+                  <span class="text-[10px] text-gray-500">{{ data()?.totalesSectorAmbito?.porcentajeUrbano }}%</span>
                 </div>
                 <div class="text-xs text-gray-500">Urbano</div>
               </div>
               <div class="text-center">
                 <div class="text-sm font-semibold text-yellow-600">
-                  {{ data()?.totales?.rural ? (data()?.totales?.rural | number:'1.0-0') : '-' }}
+                  @if(data()?.totalesSectorAmbito?.rural) {
+                    {{ data()?.totalesSectorAmbito?.rural | number:'1.0-0' }}
+                  } @else {
+                    -
+                  }
+                  <span class="text-[10px] text-gray-500">{{ data()?.totalesSectorAmbito?.porcentajeRural }}%</span>
                 </div>
                 <div class="text-xs text-gray-500">Rural</div>
               </div>

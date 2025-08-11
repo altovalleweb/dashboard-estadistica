@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Escuela, EscuelaTotalPorAnioCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado,  TotalesEscuelasPorSectorAmbitoModalidad } from '../class/escuela';
+import { Escuela, EscuelaTotalPorAnioCategorizados, TotalesEscuelasPorModalidad, TotalesEscuelasPorModalidadNivelSerializado,  TotalesEscuelasPorSectorAmbito,  TotalesEscuelasPorSectorAmbitoModalidad } from '../class/escuela';
 import { MODALIDAD_ADULTOS, MODALIDAD_COMUN, MODALIDAD_ESPECIAL, NIVELES_ADULTOS, NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../const/const';
 
 
@@ -14,8 +14,9 @@ export class EscuelaState {
 
  
   private readonly _totalEscuelas = signal<TotalesEscuelasPorModalidad | null>(null);
- 
- private readonly _escuelaPorAnio = signal<EscuelaTotalPorAnioCategorizados | null>(null);
+  private readonly _escuelaPorAnio = signal<EscuelaTotalPorAnioCategorizados | null>(null);
+
+  private readonly _escuelasPorSectorAmbito = signal<TotalesEscuelasPorSectorAmbito | null>(null);
  
  private readonly _escuelaPorModalidadNivelComun = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
  private readonly _escuelaPorModalidadNivelEspecial = signal<TotalesEscuelasPorModalidadNivelSerializado | null>(null);
@@ -30,6 +31,7 @@ export class EscuelaState {
 
   readonly totalEscuelas = computed(() => this._totalEscuelas());
   readonly escuelaPorAnio = computed(() => this._escuelaPorAnio());
+  readonly escuelasPorSectorAmbito = computed(() => this._escuelasPorSectorAmbito());
   
   readonly escuelaPorModalidadNivelComun = computed(() => this._escuelaPorModalidadNivelComun());
   readonly escuelaPorModalidadNivelEspecial = computed(() => this._escuelaPorModalidadNivelEspecial());
@@ -49,6 +51,7 @@ export class EscuelaState {
 
     this.loadTotalesEscuelas();
     this.loadEscuelaPorAnio();
+    this.loadEscuelasPorSectorAmbito();
     this.loadEscuelaPorModalidadNivelComun();
     this.loadEscuelaPorModalidadNivelEspecial();
     this.loadEscuelaPorModalidadNivelAdultos();
@@ -57,6 +60,7 @@ export class EscuelaState {
 
   loadTotalesEscuelas() {
     const totalEscuelas = this._escuela.getTotalEscuelasPorModalidad();   
+
     this._totalEscuelas.set(totalEscuelas);
   }
 
@@ -64,6 +68,11 @@ export class EscuelaState {
     const escuelaPorAnio = this._escuela.getTotalEscuelasPorAnio();
     this._escuelaPorAnio.set( escuelaPorAnio );    
    
+  }
+
+  loadEscuelasPorSectorAmbito() {
+    const escuelasPorSectorAmbito = this._escuela.getTotalEscuelasPorSectorAmbito();       
+    this._escuelasPorSectorAmbito.set(escuelasPorSectorAmbito);
   }
 
   loadEscuelaPorModalidadNivelComun() {

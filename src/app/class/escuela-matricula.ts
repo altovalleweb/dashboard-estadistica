@@ -1,10 +1,3 @@
-import { inject } from "@angular/core";
-import { EscuelaService } from "../service/escuela.service";
-import { MatriculaService } from "../service/matricula.service";
-import { getSerializedValues } from "../utils/function";
-
-
-
 export interface EscuelaMatriculaPorSectorAmbitoModalidadNivel  {
   nivel: string;
   modalidad: string;  

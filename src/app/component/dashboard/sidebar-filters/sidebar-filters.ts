@@ -1,6 +1,6 @@
 import { Component, signal, output, inject, ViewChild, ElementRef } from '@angular/core';
 import { } from '@angular/common';
-import { REGIONES, DEPARTAMENTOS, DISTRITOS } from '../../const/filtros';
+import { REGIONES, DEPARTAMENTOS, DISTRITOS } from '../../../const/filtros';
 import { 
   MODALIDADES, 
   MODALIDAD_COMUN, 
@@ -10,8 +10,8 @@ import {
   NIVELES_ESPECIAL,
   NIVELES_ADULTOS,
   ICONOS_NIVELES  
-} from '../../const/const';
-import { EducationalFilter, FilterState, FiltroState, GeographicFilter, ValueFilter } from '../../state/filtro.state';
+} from '../../../const/const';
+import { EducationalFilter, FilterState, FiltroState, GeographicFilter, ValueFilter } from '../../../state/filtro.state';
 
 
 

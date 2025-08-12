@@ -24,6 +24,23 @@ export interface PDFReportData {
     };
     escuelasPorSectorAmbito?: any;
     matriculaPorSectorAmbito?: any;
+    // Nuevos datos por nivel para cada modalidad
+    nivelComun?: {
+      inicial: { escuelas: number; matricula: number; };
+      primario: { escuelas: number; matricula: number; };
+      secundario5: { escuelas: number; matricula: number; };
+      secundario6: { escuelas: number; matricula: number; };
+      snu: { escuelas: number; matricula: number; };
+    };
+    nivelEspecial?: {
+      inicial: { escuelas: number; matricula: number; };
+      primario: { escuelas: number; matricula: number; };
+    };
+    nivelAdultos?: {
+      primario: { escuelas: number; matricula: number; };
+      secundario: { escuelas: number; matricula: number; };
+      formacionProfesional: { escuelas: number; matricula: number; };
+    };
   };
 }
 
@@ -55,6 +72,21 @@ export class PDFGeneratorService {
     
     // DESGLOSE POR MODALIDAD
     yPosition = this.addModalityBreakdown(pdf, data, yPosition, pageWidth);
+    
+    // DESGLOSE POR NIVEL - MODALIDAD COMÚN
+    if (data.datos.nivelComun) {
+      yPosition = this.addLevelBreakdown(pdf, data, yPosition, pageWidth, 'Común', data.datos.nivelComun);
+    }
+    
+    // DESGLOSE POR NIVEL - MODALIDAD ESPECIAL  
+    if (data.datos.nivelEspecial) {
+      yPosition = this.addLevelBreakdown(pdf, data, yPosition, pageWidth, 'Especial', data.datos.nivelEspecial);
+    }
+    
+    // DESGLOSE POR NIVEL - MODALIDAD ADULTOS
+    if (data.datos.nivelAdultos) {
+      yPosition = this.addLevelBreakdown(pdf, data, yPosition, pageWidth, 'Adultos', data.datos.nivelAdultos);
+    }
     
     // FOOTER
     this.addFooter(pdf, pageHeight, pageWidth);
@@ -191,6 +223,62 @@ export class PDFGeneratorService {
     this.createSimpleTable(pdf, modalityData, yPosition, 20, pageWidth - 40, true);
     
     return yPosition + 60;
+  }
+
+  private addLevelBreakdown(pdf: jsPDF, data: PDFReportData, yPosition: number, pageWidth: number, 
+                           modalidad: string, nivelData: any): number {
+    // Verificar si necesitamos una nueva página
+    if (yPosition > 220) {
+      pdf.addPage();
+      yPosition = 20;
+    }
+    
+    pdf.setFontSize(14);
+    pdf.setTextColor(40, 40, 40);
+    pdf.text(`Desglose por Nivel - Modalidad ${modalidad}`, 20, yPosition);
+    
+    yPosition += 15;
+    
+    // Crear tabla según la modalidad
+    let levelData: string[][] = [];
+    
+    if (modalidad === 'Común') {
+      levelData = [
+        ['Nivel', 'Escuelas', 'Matrícula'],
+        ['Inicial', nivelData.inicial?.escuelas?.toLocaleString() || '0', 
+                   nivelData.inicial?.matricula?.toLocaleString() || '0'],
+        ['Primario', nivelData.primario?.escuelas?.toLocaleString() || '0', 
+                     nivelData.primario?.matricula?.toLocaleString() || '0'],
+        ['Secundario 5 años', nivelData.secundario5?.escuelas?.toLocaleString() || '0', 
+                              nivelData.secundario5?.matricula?.toLocaleString() || '0'],
+        ['Secundario 6 años', nivelData.secundario6?.escuelas?.toLocaleString() || '0', 
+                              nivelData.secundario6?.matricula?.toLocaleString() || '0'],
+        ['SNU', nivelData.snu?.escuelas?.toLocaleString() || '0', 
+                nivelData.snu?.matricula?.toLocaleString() || '0']
+      ];
+    } else if (modalidad === 'Especial') {
+      levelData = [
+        ['Nivel', 'Escuelas', 'Matrícula'],
+        ['Inicial', nivelData.inicial?.escuelas?.toLocaleString() || '0', 
+                   nivelData.inicial?.matricula?.toLocaleString() || '0'],
+        ['Primario', nivelData.primario?.escuelas?.toLocaleString() || '0', 
+                     nivelData.primario?.matricula?.toLocaleString() || '0']
+      ];
+    } else if (modalidad === 'Adultos') {
+      levelData = [
+        ['Nivel', 'Escuelas', 'Matrícula'],
+        ['Primario', nivelData.primario?.escuelas?.toLocaleString() || '0', 
+                     nivelData.primario?.matricula?.toLocaleString() || '0'],
+        ['Secundario', nivelData.secundario?.escuelas?.toLocaleString() || '0', 
+                       nivelData.secundario?.matricula?.toLocaleString() || '0'],
+        ['Formación Profesional', nivelData.formacionProfesional?.escuelas?.toLocaleString() || '0', 
+                                  nivelData.formacionProfesional?.matricula?.toLocaleString() || '0']
+      ];
+    }
+    
+    this.createSimpleTable(pdf, levelData, yPosition, 20, pageWidth - 40, true);
+    
+    return yPosition + (levelData.length * 8) + 20;
   }
 
   private addFooter(pdf: jsPDF, pageHeight: number, pageWidth: number): void {

@@ -8,9 +8,57 @@ export class EscuelasMatriculaDataOption {
 
 
 
-  getEvolucion(data:number[], categories:string[]){
+  getEvolucion(data:number[], nameData:string, categories:string[]){
 
-    return {
+    return  {
+          series: [          
+       {
+          data: data,
+          name: nameData
+        }
+        ],
+          chart: {
+          height: 150,
+          type: 'line',
+          dropShadow: {
+            enabled: true,
+            color: '#000',
+            top: 18,
+            left: 7,
+            blur: 10,
+            opacity: 0.5
+          },
+          zoom: {
+            enabled: false
+          },
+          toolbar: {
+            show: false
+          }
+        },
+        colors: ['#77B6EA', '#545454'],
+        dataLabels: {
+          enabled: false,
+        },
+        stroke: {
+          curve: 'smooth'
+        },      
+            
+        xaxis: {
+          categories: categories,     
+        },
+         yaxis: {
+           labels: {
+      show: false
+    },
+        }
+   
+        
+        }
+
+    
+    
+    
+    /*{
 series: [{
           data: data
         }],
@@ -42,7 +90,7 @@ series: [{
             }
           }   
         }
-}
+} */
 
   }
 

@@ -39,6 +39,8 @@ export class BarComponent {
   //@ViewChild("chart") chart!: ChartComponent;
 
  dataOptions  = input<any>(null)
+
+ 
  
 
   

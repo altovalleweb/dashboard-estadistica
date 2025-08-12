@@ -1,5 +1,5 @@
 <!-- Sidebar de Filtros -->
-<div class="w-80 sidebar-full-height bg-white shadow-lg border-r border-gray-200 flex flex-col">
+<div class="w-60 sidebar-full-height bg-white shadow-lg border-r border-gray-200 flex flex-col">
   <!-- SECCIÓN: OFERTA EDUCATIVA -->
   <div class="p-4 border-b border-gray-200">
     <h2 class="text-lg font-semibold text-gray-900 mb-4">Oferta Educativa</h2>
@@ -93,7 +93,7 @@
       <div class="accordion-content" [class.open]="modalidadAdultosOpen()">
         <div class="accordion-inner max-h-60 overflow-y-auto">
           @for (nivel of nivelesAdultos; track nivel) {
-            <label class="flex items-center p-2 rounded cursor-pointer 
+            <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer 
                          transition-colors duration-200">
               <input 
                 type="radio" 
@@ -173,9 +173,9 @@
         </button>
         
         <div class="accordion-content" [class.open]="regionesOpen()">
-          <div class="accordion-inner max-h-60 overflow-y-auto">
+          <div class="relative z-10 max-h-60 overflow-y-auto bg-white rounded-b-lg border border-gray-200 border-t-0 shadow-sm">
             @for (region of regiones; track region) {
-              <label class="flex items-center p-2 rounded cursor-pointer 
+              <label class="flex items-center p-2 rounded hover:bg-gray-50  cursor-pointer 
                            transition-colors duration-200">
                 <input 
                   type="radio" 
@@ -206,9 +206,9 @@
         </button>
         
         <div class="accordion-content" [class.open]="departamentosOpen()">
-          <div class="accordion-inner max-h-60 overflow-y-auto">
+          <div class="relative z-10 max-h-60 overflow-y-auto bg-white rounded-b-lg border border-gray-200 border-t-0 shadow-sm">
             @for (departamento of departamentos; track departamento) {
-              <label class="flex items-center p-2 rounded cursor-pointer 
+              <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer 
                            transition-colors duration-200">
                 <input 
                   type="radio" 
@@ -239,9 +239,9 @@
         </button>
         
         <div class="accordion-content" [class.open]="distritosOpen()">
-          <div class="accordion-inner max-h-60 overflow-y-auto">
+          <div class="relative z-10 max-h-60 overflow-y-auto bg-white rounded-b-lg border border-gray-200 border-t-0 shadow-sm">
             @for (distrito of distritos; track distrito) {
-              <label class="flex items-center p-2 rounded cursor-pointer 
+              <label class="flex items-center p-2 rounded hover:bg-gray-50 cursor-pointer 
                            transition-colors duration-200">
                 <input 
                   type="radio" 
@@ -256,6 +256,12 @@
           </div>
         </div>
       </div>
+
+
+
+
     </div>
   </div>
+
+
 </div>

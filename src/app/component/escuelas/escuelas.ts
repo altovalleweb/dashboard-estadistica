@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { PadronEscuelaState } from '../../state/padron-escuela-state';
+import { PadronEscuelaState } from '../../states/padron-escuela-state';
 import { Escuela, Oferta } from '../../interfaces/common.interface';
 
 @Component({

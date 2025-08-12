@@ -5,11 +5,11 @@ import {EscuelasMatriculaDataOption} from '../../../class/escuelas-matricula-dat
 import { KpiCard, KPIData } from '../../../utils/kpi-card/kpi-card';
 import { ICONOS_ADULTOS, ICONOS_COMUN, ICONOS_ESPECIAL,  NIVELES_ADULTOS,  NIVELES_COMUN_CON_APERTURA, NIVELES_ESPECIAL } from '../../../const/const';
 import { Kpi } from '../../../utils/kpi/kpi';
-import { EscuelaMatriculaState } from '../../../state/escuela-matricula.state';
+import { EscuelaMatriculaState } from '../../../states/escuela-matricula.state';
 import { SidebarFiltersComponent  } from '../sidebar-filters/sidebar-filters';
-import {  FiltroState } from '../../../state/filtro.state';
+import {  FiltroState } from '../../../states/filtro.state';
 import { KPIDataV2 } from '../../../interfaces/kpi.interface';
-import { PDFGeneratorService, PDFReportData } from '../../../service/pdf-generator.service';
+import { PDFGeneratorService, PDFReportData } from '../../../services/pdf-generator.service';
 
 
 @Component({
@@ -36,35 +36,7 @@ export class Home {
     this.sidebarOpen.update(value => !value);
   }
 
-  // Método para exportar el informe a PDF
-  async exportToPDF() {
-    console.log('Iniciando exportación a PDF...');
-    
-    try {
-      // Obtener filtros activos para incluir en el PDF
-      const filtros = this.activeFilters();
-      console.log('Filtros activos:', filtros);
       
-      // Crear opciones para el PDF
-      const pdfOptions = {
-        includeFilters: true,
-        includeCoverPage: true,
-        format: 'a4' as const,
-        orientation: 'portrait' as const,
-        activeFilters: filtros
-      };
-      
-      // Llamar al servicio de exportación PDF
-    //  await this._pdfService.exportDashboardToPDF(pdfOptions);
-      
-      console.log('PDF exportado exitosamente');
-    } catch (error) {
-      console.error('Error al exportar PDF:', error);
-      alert('Error al generar el PDF. Por favor, inténtelo nuevamente.');
-    }
-  }
-
-    
 
   // Escuelas
   totalEscuelas = this._emss.totalEscuelas
@@ -121,6 +93,7 @@ export class Home {
   matriculaPorModalidaNivelKPI= signal< KPIDataV2 | null>({
       number: "-",
       title: "Alumnos/as",
+       subtitle: "(Matrícula)",
       bgColor: "#475569",
       iconPath: "M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z",
        showChart: true,
@@ -207,7 +180,7 @@ export class Home {
 });
 
  escuelaPorAnioChanged = effect(() => {  
-  const dataOptions =  this.escuelasMatriculaDataOption.getEvolucion(this.escuelaPorAnio()?.data || [], this.escuelaPorAnio()?.labels || [])
+  const dataOptions =  this.escuelasMatriculaDataOption.getEvolucion(this.escuelaPorAnio()?.data || [],"Escuelas", this.escuelaPorAnio()?.labels || [])
   this.escuelasPorModalidadNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
 });
 
@@ -227,7 +200,7 @@ export class Home {
 });
 
  matriculaPorAnioChanged = effect(() => {  
-  const dataOptions =  this.escuelasMatriculaDataOption.getEvolucion(this.matriculaPorAnio()?.data || [], this.matriculaPorAnio()?.labels || [])
+  const dataOptions =  this.escuelasMatriculaDataOption.getEvolucion(this.matriculaPorAnio()?.data || [], "Alumnos", this.matriculaPorAnio()?.labels || [])
   this.matriculaPorModalidaNivelKPI.update((value) => value ? { ...value, chartDataOptionsHeader: dataOptions } : value);  
 });
 
@@ -277,6 +250,74 @@ ngOnInit() {
 }
 
 /**
+ * Calcula los datos por nivel para cada modalidad para incluir en el PDF
+ */
+private calculateNivelData() {
+  // Datos por modalidad Común
+  const escuelasComun = this.escuelaPorModalidadNivelComun()?.serie || [];
+  const matriculaComun = this.matriculaPorModalidadNivelComun()?.serie || [];
+  
+  const nivelComun = {
+    inicial: { 
+      escuelas: escuelasComun[0] || 0, 
+      matricula: matriculaComun[0] || 0 
+    },
+    primario: { 
+      escuelas: escuelasComun[1] || 0, 
+      matricula: matriculaComun[1] || 0 
+    },
+    secundario5: { 
+      escuelas: escuelasComun[2] || 0, 
+      matricula: matriculaComun[2] || 0 
+    },
+    secundario6: { 
+      escuelas: escuelasComun[3] || 0, 
+      matricula: matriculaComun[3] || 0 
+    },
+    snu: { 
+      escuelas: escuelasComun[4] || 0, 
+      matricula: matriculaComun[4] || 0 
+    }
+  };
+
+  // Datos por modalidad Especial
+  const escuelasEspecial = this.escuelaPorModalidadNivelEspecial()?.serie || [];
+  const matriculaEspecial = this.matriculaPorModalidadNivelEspecial()?.serie || [];
+  
+  const nivelEspecial = {
+    inicial: { 
+      escuelas: escuelasEspecial[0] || 0, 
+      matricula: matriculaEspecial[0] || 0 
+    },
+    primario: { 
+      escuelas: escuelasEspecial[1] || 0, 
+      matricula: matriculaEspecial[1] || 0 
+    }
+  };
+
+  // Datos por modalidad Adultos
+  const escuelasAdultos = this.escuelaPorModalidadNivelAdultos()?.serie || [];
+  const matriculaAdultos = this.matriculaPorModalidadNivelAdultos()?.serie || [];
+  
+  const nivelAdultos = {
+    primario: { 
+      escuelas: escuelasAdultos[0] || 0, 
+      matricula: matriculaAdultos[0] || 0 
+    },
+    secundario: { 
+      escuelas: escuelasAdultos[1] || 0, 
+      matricula: matriculaAdultos[1] || 0 
+    },
+    formacionProfesional: { 
+      escuelas: escuelasAdultos[2] || 0, 
+      matricula: matriculaAdultos[2] || 0 
+    }
+  };
+
+  return { nivelComun, nivelEspecial, nivelAdultos };
+}
+
+/**
  * Genera y descarga un informe en PDF con la información del dashboard
  */
 async generatePDFReport() {
@@ -289,6 +330,9 @@ async generatePDFReport() {
     const totalMatricula = this.totalMatricula();
     const escuelasSectorAmbito = this.escuelasPorSectorAmbito();
     const matriculaSectorAmbito = this.matriculaPorSectorAmbito();
+    
+    // Calcular datos por nivel para cada modalidad
+    const { nivelComun, nivelEspecial, nivelAdultos } = this.calculateNivelData();
     
     // Preparar datos para el PDF
     const reportData: PDFReportData = {
@@ -320,7 +364,11 @@ async generatePDFReport() {
           adultos: totalMatricula?.adultos || 0
         },
         escuelasPorSectorAmbito: escuelasSectorAmbito,
-        matriculaPorSectorAmbito: matriculaSectorAmbito
+        matriculaPorSectorAmbito: matriculaSectorAmbito,
+        // Agregar los nuevos datos por nivel
+        nivelComun,
+        nivelEspecial,
+        nivelAdultos
       }
     };
     

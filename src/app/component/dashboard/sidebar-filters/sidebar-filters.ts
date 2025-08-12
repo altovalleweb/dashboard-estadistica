@@ -11,7 +11,7 @@ import {
   NIVELES_ADULTOS,
   ICONOS_NIVELES  
 } from '../../../const/const';
-import { EducationalFilter, FilterState, FiltroState, GeographicFilter, ValueFilter } from '../../../state/filtro.state';
+import { EducationalFilter, FilterState, FiltroState, GeographicFilter, ValueFilter } from '../../../states/filtro.state';
 
 
 

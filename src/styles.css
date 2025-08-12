@@ -1,6 +1,9 @@
 /* Importar Tailwind CSS */
 @import "tailwindcss";
 
+/* Importar CSS de Leaflet */
+@import "leaflet/dist/leaflet.css";
+
 /* Variables de colores personalizados */
 :root {
   --blue-custom: #2249b8;

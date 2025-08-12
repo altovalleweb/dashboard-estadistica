@@ -10,6 +10,50 @@
   line-height: 0.875rem; /* 14px */
 }
 
+/* Estilos para separación sutil entre escuelas - solo horizontal */
+.escuela-divider {
+  border-bottom: 2px solid #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.escuela-header-cell {
+  background-color: #fafafa !important;
+  /* Fondo sutil y uniforme */
+}
+
+.oferta-row {
+  background-color: #fafafa !important;
+  /* Fondo sutil y uniforme */
+  transition: all 0.2s ease;
+}
+
+.oferta-row:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.oferta-cell {
+  background-color: transparent;
+  /* Sin fondo especial para las ofertas */
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 2px 6px;
+  display: inline-block;
+  font-size: 0.75rem;
+}
+
+/* Estilos para números de matrícula */
+.matricula-numero {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+}
+
 /* Contenedor de ofertas educativas */
 .ofertas-container {
   max-width: 200px;

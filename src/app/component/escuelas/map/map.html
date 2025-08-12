@@ -1,0 +1,48 @@
+<div class="map-container">
+  <div #mapContainer id="mapContainer"></div>
+  
+  <!-- Leyenda de colores desplegable -->
+  <div class="map-legend" [class.expanded]="legendExpanded">
+    <div class="legend-header" (click)="toggleLegend()">
+      <h4 class="legend-title">Ofertas Educativas</h4>
+      <button class="legend-toggle" [class.rotated]="legendExpanded">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="legend-content" [class.visible]="legendExpanded">
+      <div class="legend-items">
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #FF6B6B;"></span>
+          <span class="legend-text">Nivel Inicial</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #4ECDC4;"></span>
+          <span class="legend-text">Nivel Primario</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #45B7D1;"></span>
+          <span class="legend-text">Nivel Secundario</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #9C88FF;"></span>
+          <span class="legend-text">Nivel Superior</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #FFD93D;"></span>
+          <span class="legend-text">Educación Especial</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #FF8C42;"></span>
+          <span class="legend-text">Educación de Adultos</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" style="background-color: #6BCF7F;"></span>
+          <span class="legend-text">Múltiples Ofertas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

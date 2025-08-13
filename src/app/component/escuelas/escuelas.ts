@@ -1,26 +1,39 @@
-import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, ViewChild, AfterViewInit, Inject, PLATFORM_ID, effect } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PadronEscuelaState } from '../../states/padron-escuela-state';
 import { Escuela, Oferta } from '../../interfaces/common.interface';
 import { Map } from './map/map';
 import { EscuelasDetalle } from './escuelas-detalle/escuelas-detalle';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+
+
+// Register all Community features
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
+import type { ColDef } from 'ag-grid-community';
+
+
 
 @Component({
   selector: 'app-escuelas',
   standalone: true,
-  imports: [CommonModule, FormsModule, Map, EscuelasDetalle],
+  imports: [CommonModule, FormsModule, Map, EscuelasDetalle, AgGridAngular],
   templateUrl: './escuelas.html',
   styleUrl: './escuelas.css'
 })
 export class Escuelas implements AfterViewInit {
   
   @ViewChild(Map, { static: false }) mapComponent?: Map;
-  
+  @ViewChild('agGridPadron', { static: true }) agGridPadron: any;
+
+  isBrowser: boolean;
+
   private _padronEscuelaState = inject(PadronEscuelaState);
 
   padronEscuelas = this._padronEscuelaState.padronEscuelas;
-
+  
   // Propiedad para el término de búsqueda
   searchTerm: string = '';
 
@@ -31,7 +44,41 @@ export class Escuelas implements AfterViewInit {
   private _escuelasExpandidasCache: any[] = [];
   private _lastDataLength = 0;
 
-    
+  rowData: any[] = [] 
+    // Column Definitions: Defines the columns to be displayed.
+    colDefs: ColDef[] = [
+        { field: "cue_anexo", headerName: "CUEAnexo",spanRows: true, width: 110,},
+        { field: "localizacion", headerName:"Establecimiento",spanRows: true, width: 200 },
+        { field: "localidad", headerName: "Localidad",spanRows: true, width: 150 },
+        { field: "estado", headerName: "Estado", width: 100 },
+        { field: "modalidad", headerName: "Modalidad", width: 100 },
+        { field: "nivel", headerName: "Nivel", width: 200 },
+        { field: "estado_oferta", headerName: "Estado Oferta", width: 100 },      
+        { field: "matricula", headerName: "Matricula", width: 100 },
+    ];
+
+      constructor(@Inject(PLATFORM_ID) platformId: Object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  InitRowData = effect( () => {
+    let data: any[] = []
+    this.padronEscuelas()?.forEach(escuela => {
+      escuela.ofertas?.forEach(oferta => {
+        data.push({
+          cue_anexo: escuela.cue_anexo,
+          localizacion: escuela.localizacion,
+          localidad: escuela.localidad,
+          estado: escuela.estado,
+          modalidad:oferta.modalidad,
+          nivel : oferta.nivel,
+          estado_oferta: oferta.estado_oferta,
+          matricula: 1000
+      });
+    });
+    this.rowData = data;
+  }); 
+})
 
  getTotalEstatales(): number {
    const escuelas = this.padronEscuelas();
@@ -334,5 +381,12 @@ export class Escuelas implements AfterViewInit {
  isEscuelaSeleccionada(escuela: Escuela): boolean {
    return this.escuelaSeleccionada?.cue_anexo === escuela.cue_anexo;
  }
+
+
+ onSelectionChanged(event:Event){  
+ // this.seleccionarEscuela(this.agGridPadron.api.getSelectedRows()[0]);
+  console.log(this.agGridPadron.api.getSelectedRows()[0]);
+   
+  }
 
 }

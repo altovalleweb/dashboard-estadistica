@@ -126,3 +126,25 @@
             border-color: #60a5fa !important;
             box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
         }
+
+
+
+ .ag-header{
+    background-color: #f8f9fa !important;
+    color: #141414 !important;
+    font-weight: bold;
+  }
+
+
+ :host ::ng-deep .ag-theme-compact {
+      --ag-row-height: 28px;
+      --ag-header-height: 32px;
+      --ag-cell-horizontal-padding: 8px;
+      --ag-font-size: 12px;
+    }
+    
+    :host ::ng-deep .ag-theme-compact .ag-cell {
+      padding: 0 8px !important;
+      line-height: 28px !important;
+      font-size: 12px !important;
+    }

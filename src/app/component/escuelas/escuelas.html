@@ -61,132 +61,19 @@
 
           <!-- Contenedor de tabla con altura fija y scroll -->
           <div class="h-[560px] overflow-hidden border-t">
-            <div class="h-full overflow-y-auto">
-              <table class="min-w-full table-auto table-compact">
-                <thead class="bg-gray-100 text-gray-700 sticky top-0 z-10">
-                  <tr class="border-b border-gray-200">
-                    <th class="px-3 py-2 text-left text-xs font-semibold">CUEAnexo</th>
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Escuela</th>                
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Localidad</th>                
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Domicilio</th>
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Estado</th>  
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Ofertas Educativas</th>
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Estado Oferta</th>
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Matrícula</th>   
-                    <th class="px-3 py-2 text-left text-xs font-semibold">Informe</th>                                                       
-                  </tr>
-                </thead>
-                <tbody class="bg-gray-50">
-                  @for (item of getEscuelasExpandidas(); track $index) {
-                    <tr 
-                      class="hover:bg-gray-100 transition-colors border-b border-gray-200 oferta-row cursor-pointer"
-                      [class.escuela-divider]="item.isLast"
-                      [class.bg-blue-50]="isEscuelaSeleccionada(item.escuela)"
-                      [class.border-blue-200]="isEscuelaSeleccionada(item.escuela)"
-                      (click)="seleccionarEscuela(item.escuela)"
-                      title="Clic para ver detalles completos">
-                      <!-- CUE Anexo - Solo en la primera fila de cada escuela -->
-                      @if (item.isFirst) {
-                        <td class="px-3 py-2 text-xs font-medium text-gray-900 escuela-header-cell" [attr.rowspan]="item.rowspan">
-                          <div class="flex items-center gap-2">
-                            <span class="font-bold text-gray-800">{{ item.escuela.cue_anexo }}</span>
-                            @if (item.escuela.latitud && item.escuela.longitud) {
-                              <button 
-                                (click)="zoomToSchoolOnMap(item.escuela.cue_anexo)"
-                                class="text-blue-600 hover:text-blue-800 transition-colors p-1 rounded hover:bg-blue-50"
-                                title="Ver en mapa">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                </svg>
-                              </button>
-                            }
-                          </div>
-                        </td>
-                      }
-                      
-                      <!-- Nombre de la escuela - Solo en la primera fila de cada escuela -->
-                      @if (item.isFirst) {
-                        <td class="px-3 py-2 text-xs text-gray-700 escuela-header-cell" [attr.rowspan]="item.rowspan">
-                          <div class="font-semibold text-gray-900">{{ item.escuela.localizacion || 'No especificado' }}</div>
-                        </td>
-                      }
-                      
-                      <!-- Localidad - Solo en la primera fila de cada escuela -->
-                      @if (item.isFirst) {
-                        <td class="px-3 py-2 text-xs text-gray-700 escuela-header-cell" [attr.rowspan]="item.rowspan">
-                          <div class="text-gray-700">{{ item.escuela.localidad }}</div>
-                        </td>
-                      }
-
-                      @if (item.isFirst) {
-                        <td class="px-3 py-2 text-xs text-gray-700 escuela-header-cell" [attr.rowspan]="item.rowspan">
-                          <div class="text-gray-700">{{ item.escuela.domicilio_principal }}</div>
-                        </td>
-                      }
-                      
-                      
-                      <!-- Estado - Solo en la primera fila de cada escuela -->
-                      @if (item.isFirst) {
-                        <td class="px-3 py-2 text-xs escuela-header-cell" [attr.rowspan]="item.rowspan">
-                          <span class="badge-compact"
-                                [class]="item.escuela.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                            {{ item.escuela.estado }}
-                          </span>
-                        </td>
-                      }
-                      
-                      <!-- Oferta específica - Una por fila -->
-                      <td class="px-3 py-2 text-xs text-gray-700">
-                        @if (item.oferta) {
-                          <span class="oferta-cell text-purple-700 font-medium">
-                            {{ item.oferta.modalidad }} - {{ item.oferta.nivel }}
-                          </span>
-                        } @else {
-                          <span class="text-gray-400 italic">Sin ofertas activas</span>
-                        }
-                      </td>
-                       <!-- Estado Oferta -->
-                      <td class="px-3 py-2 text-xs text-center">
-                        @if (item.oferta) {                         
-                          <span class="badge-compact"
-                                [class]="item.oferta.estado_oferta === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                            {{ item.oferta.estado_oferta }}
-                          </span>
-                        } @else {
-                          <span class="text-gray-400">-</span>
-                        }
-                      </td>
-                      
-                      <!-- Matrícula - Número de alumnos por oferta -->
-                      <td class="px-3 py-2 text-xs text-center">
-                        @if (item.oferta) {
-                          <span class="matricula-numero">
-                            {{ item.matricula }}
-                          </span>
-                        } @else {
-                          <span class="text-gray-400">-</span>
-                        }
-                      </td>
-
-                      <!-- Informe - Botón para descargar PDF -->
-                      <td class="px-3 py-2 text-xs text-center">
-                        <button 
-                          (click)="verInformeMatricular(item.escuela)"
-                          class="inline-flex items-center justify-center w-8 h-8 bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700 transition-all duration-200 rounded-md border border-red-200 hover:border-red-300 shadow-sm hover:shadow-md"
-                          title="Descargar informe matricular PDF">
-                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                            <path d="M12,11L16,15H13V19H11V15H8L12,11Z"/>
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+             <!-- The AG Grid component -->
+               @if (isBrowser) {
+<ag-grid-angular
+class="h-full w-full ag-theme-balham"
+[rowHeight]="25"
+  [headerHeight]="25"
+    [enableCellSpan]="true"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    (selectionChanged)="onSelectionChanged($event)" />
+               }@else{
+                <p>no hay datos</p>
+               }
           </div>
           
           <!-- Caption con totales debajo de la tabla -->
@@ -197,6 +84,7 @@
                 <p class="text-sm text-gray-600">Total de Alumnos</p>
               
             
+    
               
             </div>
             

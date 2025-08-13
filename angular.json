@@ -28,7 +28,11 @@
             "outputMode": "server",
             "ssr": {
               "entry": "src/server.ts"
-            }
+            },
+             "allowedCommonJsDependencies": [
+              "ag-grid-community",
+              "ag-grid-angular"
+            ]
           },
           "configurations": {
             "production": {
@@ -64,7 +68,9 @@
               "buildTarget": "estadistica-dashboard:build:development"
             }
           },
+         
           "defaultConfiguration": "development"
+          
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"

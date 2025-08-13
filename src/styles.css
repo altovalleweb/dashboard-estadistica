@@ -16,6 +16,12 @@
 
 /* Clases de utilidad personalizadas */
 @layer utilities {
+  /* Tamaño de texto extra pequeño */
+  .text-2xs {
+    font-size: 0.625rem; /* 10px */
+    line-height: 0.875rem; /* 14px */
+  }
+  
   .bg-blue-custom {
     background-color: var(--blue-custom);
   }

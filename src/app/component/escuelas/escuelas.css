@@ -16,6 +16,10 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+.escuela-divider:hover {
+  border-bottom: 2px solid #d1d5db !important;
+}
+
 .escuela-header-cell {
   background-color: #fafafa !important;
   /* Fondo sutil y uniforme */
@@ -25,14 +29,51 @@
   background-color: #fafafa !important;
   /* Fondo sutil y uniforme */
   transition: all 0.2s ease;
+  border-top: 1px solid #e5e7eb !important;
+  border-bottom: 1px solid #e5e7eb !important;
 }
 
 .oferta-row:hover {
   background-color: #f5f5f5 !important;
+  border-top: 1px solid #d1d5db !important;
+  border-bottom: 1px solid #d1d5db !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Estilos para filas seleccionadas */
+.oferta-row.bg-blue-50 {
+  background-color: #eff6ff !important;
+  border-top: 1px solid #bfdbfe !important;
+  border-bottom: 1px solid #bfdbfe !important;
+}
+
+.oferta-row.bg-blue-50:hover {
+  background-color: #dbeafe !important;
+  border-top: 1px solid #93c5fd !important;
+  border-bottom: 1px solid #93c5fd !important;
+  position: relative;
+  z-index: 1;
+}
+
+.oferta-row.bg-blue-50 .escuela-header-cell {
+  background-color: #dbeafe !important;
+}
+
+/* Cursor pointer para filas clickeables */
+.oferta-row.cursor-pointer {
+  cursor: pointer;
+}
+
+.oferta-row.cursor-pointer:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
 }
 
 .oferta-cell {
-  background-color: transparent;
+  background-color: transparent !important;
   /* Sin fondo especial para las ofertas */
   border: 1px solid #e5e7eb;
   border-radius: 4px;
@@ -41,17 +82,40 @@
   font-size: 0.75rem;
 }
 
+/* Hover state para celdas de oferta */
+.oferta-row:hover .oferta-cell {
+  background-color: transparent !important;
+  border-color: #d1d5db;
+}
+
+.oferta-row.bg-blue-50:hover .oferta-cell {
+  background-color: transparent !important;
+  border-color: #93c5fd;
+}
+
 /* Estilos para números de matrícula */
 .matricula-numero {
-  background-color: #eff6ff;
+  background-color: transparent !important;
   color: #1d4ed8;
   padding: 4px 8px;
+  border: 1px solid #e0e7ff;
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.75rem;
   display: inline-block;
   min-width: 40px;
   text-align: center;
+}
+
+/* Hover state para números de matrícula */
+.oferta-row:hover .matricula-numero {
+  background-color: transparent !important;
+  border-color: #c7d2fe;
+}
+
+.oferta-row.bg-blue-50:hover .matricula-numero {
+  background-color: transparent !important;
+  border-color: #93c5fd;
 }
 
 /* Contenedor de ofertas educativas */
@@ -70,7 +134,7 @@
 .ofertas-container:hover .text-2xs {
   white-space: normal;
   overflow: visible;
-  background-color: #f8fafc;
+  background-color: transparent !important;
   padding: 2px 4px;
   border-radius: 3px;
   border: 1px solid #e2e8f0;
@@ -127,6 +191,31 @@
   line-height: 1rem;
 }
 
+/* Filas ultra compactas */
+.table-ultra-compact td {
+  padding: 0.25rem 0.5rem; /* py-1 px-2 */
+  font-size: 0.625rem; /* text-2xs */
+  line-height: 0.875rem;
+}
+
+.table-ultra-compact th {
+  padding: 0.25rem 0.5rem; /* py-1 px-2 */
+  font-size: 0.625rem; /* text-2xs */
+  line-height: 0.875rem;
+  font-weight: 600;
+}
+
+/* Filas ultra compactas para ofertas */
+.oferta-row-compact {
+  background-color: #fafafa !important;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.oferta-row-compact:hover {
+  background-color: #f1f5f9 !important;
+}
+
 /* Badges más pequeños */
 .badge-compact {
   padding: 0.125rem 0.375rem; /* py-0.5 px-1.5 */
@@ -137,6 +226,41 @@
   text-transform: capitalize;
 }
 
+/* Badges ultra compactos */
+.badge-ultra-compact {
+  padding: 0.125rem 0.25rem; /* py-0.5 px-1 */
+  font-size: 0.5rem; /* 8px */
+  line-height: 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Ofertas compactas */
+.oferta-cell-compact {
+  background-color: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 3px;
+  padding: 1px 4px;
+  display: inline-block;
+  font-size: 0.625rem;
+  line-height: 0.875rem;
+}
+
+/* Números de matrícula compactos */
+.matricula-numero-compact {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.625rem;
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+  line-height: 0.875rem;
+}
+
 /* Espacio reservado para información adicional */
 .reserved-space {
   min-height: 128px; /* h-32 equivale a 8rem o 128px */
@@ -144,6 +268,16 @@
 }
 
 .reserved-space:hover {
+  background-color: #f8fafc;
+}
+
+/* Espacio reservado compacto */
+.reserved-space-compact {
+  min-height: 64px; /* h-16 equivale a 4rem o 64px */
+  transition: all 0.3s ease-in-out;
+}
+
+.reserved-space-compact:hover {
   background-color: #f8fafc;
 }
 

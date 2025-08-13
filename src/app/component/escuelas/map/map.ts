@@ -4,6 +4,7 @@ import { Escuela } from '../../../interfaces/common.interface';
 
 @Component({
   selector: 'app-map',
+  standalone: true,
   imports: [],
   templateUrl: './map.html',
   styleUrl: './map.css'
@@ -21,7 +22,7 @@ export class Map implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public legendExpanded = false; // Estado de la leyenda (retraída por defecto)
 
   // Coordenadas de Neuquén Capital
-  private neuquenCoords: [number, number] = [-38.9516, -68.0591];
+  private neuquenCoords: [number, number] = [-37.9516, -70.0591];
 
   ngOnInit() {
     this.isClient = isPlatformBrowser(this.platformId);
@@ -186,7 +187,7 @@ export class Map implements OnInit, AfterViewInit, OnDestroy, OnChanges {
       // Inicializar el mapa centrado en Neuquén
       this.map = this.L.map(this.mapContainer.nativeElement, {
         center: this.neuquenCoords,
-        zoom: 10,
+        zoom: 6,
         zoomControl: true,
         attributionControl: true
       });
@@ -200,11 +201,7 @@ export class Map implements OnInit, AfterViewInit, OnDestroy, OnChanges {
       
       osmLayer.addTo(this.map);
 
-      // Agregar marcador en Neuquén Capital
-      const neuquenMarker = this.L.marker(this.neuquenCoords)
-        .addTo(this.map)
-        .bindPopup('<b>Neuquén Capital</b><br>Capital de la provincia de Neuquén')
-        .openPopup();
+        
 
       // Definir límites aproximados de la provincia de Neuquén (comentado para permitir navegación libre)
       // const neuquenBounds = [
@@ -245,6 +242,15 @@ export class Map implements OnInit, AfterViewInit, OnDestroy, OnChanges {
           const marker = this.L.marker([escuela.latitud, escuela.longitud], { icon })
             .addTo(this.map)
             .bindPopup(popupContent);
+          
+          // Agregar evento de click para hacer zoom en la escuela
+          marker.on('click', (e: any) => {
+            // Prevenir que el popup se abra inmediatamente
+            e.originalEvent?.stopPropagation();
+            
+            // Hacer zoom y luego abrir popup
+            this.zoomToSchool(escuela.latitud, escuela.longitud, escuela.localizacion, marker);
+          });
           
           // Almacenar marcador para poder limpiarlo después
           this.schoolMarkers.push(marker);
@@ -397,6 +403,67 @@ export class Map implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public centerOnLocation(lat: number, lng: number, zoom: number = 12): void {
     if (this.map && this.isClient) {
       this.map.setView([lat, lng], zoom);
+    }
+  }
+
+  // Método público para hacer zoom en una escuela desde fuera del componente
+  public zoomToSchoolByCue(cueAnexo: string): void {
+    const escuela = this.escuelas.find(e => e.cue_anexo === cueAnexo);
+    if (escuela && escuela.latitud && escuela.longitud) {
+      // Encontrar el marcador correspondiente
+      const marker = this.schoolMarkers.find(m => {
+        const markerLatLng = m.getLatLng();
+        return Math.abs(markerLatLng.lat - escuela.latitud) < 0.0001 && 
+               Math.abs(markerLatLng.lng - escuela.longitud) < 0.0001;
+      });
+      
+      this.zoomToSchool(escuela.latitud, escuela.longitud, escuela.localizacion || 'Escuela', marker);
+    }
+  }
+
+  // Método para hacer zoom en una escuela específica
+  private zoomToSchool(lat: number, lng: number, schoolName: string, marker?: any): void {
+    if (this.map && this.isClient) {
+      // Crear un icono destacado temporalmente
+      if (marker && this.L) {
+        const originalIcon = marker.getIcon();
+        
+        // Crear icono destacado (más grande y diferente color)
+        const highlightIcon = this.L.icon({
+          iconSize: [40, 65], // Más grande que el original
+          iconAnchor: [20, 65],
+          popupAnchor: [1, -58],
+          tooltipAnchor: [22, -40],
+          shadowSize: [65, 65],
+          shadowUrl: '/assets/marker-shadow.png',
+          iconUrl: this.createColoredMarkerIcon('#FF0000'), // Rojo brillante para destacar
+          iconRetinaUrl: this.createColoredMarkerIcon('#FF0000', true)
+        });
+        
+        // Cambiar temporalmente al icono destacado
+        marker.setIcon(highlightIcon);
+        
+        // Restaurar el icono original después de 3 segundos
+        setTimeout(() => {
+          marker.setIcon(originalIcon);
+        }, 3000);
+      }
+      
+      // Hacer zoom con animación suave
+      this.map.flyTo([lat, lng], 16, {
+        animate: true,
+        duration: 1.5 // Duración de la animación en segundos
+      });
+      
+      // Abrir popup después de un pequeño delay para que termine la animación
+      if (marker) {
+        setTimeout(() => {
+          marker.openPopup();
+        }, 1000);
+      }
+      
+      // Opcional: Mostrar mensaje temporal
+      console.log(`Haciendo zoom en: ${schoolName}`);
     }
   }
 

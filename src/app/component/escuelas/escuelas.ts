@@ -1,21 +1,31 @@
-import { Component,  inject} from '@angular/core';
+import { Component, inject, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PadronEscuelaState } from '../../states/padron-escuela-state';
 import { Escuela, Oferta } from '../../interfaces/common.interface';
 import { Map } from './map/map';
-
+import { EscuelasDetalle } from './escuelas-detalle/escuelas-detalle';
 
 @Component({
   selector: 'app-escuelas',
-  imports: [CommonModule, Map],
+  standalone: true,
+  imports: [CommonModule, FormsModule, Map, EscuelasDetalle],
   templateUrl: './escuelas.html',
   styleUrl: './escuelas.css'
 })
-export class Escuelas  {
+export class Escuelas implements AfterViewInit {
+  
+  @ViewChild(Map, { static: false }) mapComponent?: Map;
   
   private _padronEscuelaState = inject(PadronEscuelaState);
 
   padronEscuelas = this._padronEscuelaState.padronEscuelas;
+
+  // Propiedad para el término de búsqueda
+  searchTerm: string = '';
+
+  // Escuela seleccionada para mostrar detalles
+  escuelaSeleccionada: Escuela | null = null;
 
   // Cache para evitar regeneración constante de números aleatorios
   private _escuelasExpandidasCache: any[] = [];
@@ -74,17 +84,22 @@ export class Escuelas  {
   * Cada escuela se expande en tantas filas como ofertas activas tenga
   */
  getEscuelasExpandidas() {
-   const escuelas = this.padronEscuelas();
+   let escuelas = this.padronEscuelas();
    if (!escuelas) return [];
 
-   // Usar cache si los datos no han cambiado
-   if (escuelas.length === this._lastDataLength && this._escuelasExpandidasCache.length > 0) {
+   // Aplicar filtro de búsqueda si existe
+   if (this.searchTerm && this.searchTerm.trim()) {
+     escuelas = this.filterEscuelas(escuelas);
+   }
+
+   // Usar cache si los datos no han cambiado y no hay filtro activo
+   if (!this.searchTerm && escuelas && escuelas.length === this._lastDataLength && this._escuelasExpandidasCache.length > 0) {
      return this._escuelasExpandidasCache;
    }
 
    const expandidas: any[] = [];
 
-   for (const escuela of escuelas) {
+   for (const escuela of escuelas || []) {
      const ofertasActivas = escuela.ofertas?.filter(
        oferta => oferta.estado_oferta === 'Activo' || oferta.estado_oferta === 'ACTIVO'
      ) || [];
@@ -114,9 +129,11 @@ export class Escuelas  {
      }
    }
 
-   // Actualizar cache
-   this._escuelasExpandidasCache = expandidas;
-   this._lastDataLength = escuelas.length;
+   // Actualizar cache solo si no hay filtro activo
+   if (!this.searchTerm && escuelas) {
+     this._escuelasExpandidasCache = expandidas;
+     this._lastDataLength = escuelas.length;
+   }
 
    return expandidas;
  }
@@ -176,20 +193,146 @@ export class Escuelas  {
  }
 
  /**
-  * Navega al informe matricular de una escuela específica
+  * Descarga el informe matricular en PDF de una escuela específica
   */
  verInformeMatricular(escuela: Escuela): void {
-   console.log('Ver informe matricular para:', escuela.localizacion, 'CUE:', escuela.cue_anexo);
+   console.log('Descargando informe matricular PDF para:', escuela.localizacion, 'CUE:', escuela.cue_anexo);
    
-   // Aquí puedes implementar la lógica de navegación
+   // Aquí se implementará la lógica de generación y descarga del PDF
    // Por ejemplo:
-   // this.router.navigate(['/informe-matricular', escuela.cue_anexo]);
+   // this.pdfService.generarInformeMatricular(escuela);
    
-   // O abrir un modal con el informe:
-   // this.modalService.openInformeMatricular(escuela);
+   // O usar el servicio de PDF existente:
+   // this.pdfGeneratorService.downloadSchoolReport(escuela);
    
    // Por ahora, solo mostramos un alert con la información
-   alert(`Informe matricular para:\n${escuela.localizacion}\nCUE: ${escuela.cue_anexo}\n\nEsta funcionalidad se implementará próximamente.`);
+   alert(`📄 Descargando informe matricular PDF para:\n\n🏫 ${escuela.localizacion}\n🆔 CUE: ${escuela.cue_anexo}\n📍 ${escuela.domicilio_principal}, ${escuela.localidad}\n\n⚠️ Esta funcionalidad se implementará próximamente.`);
+ }
+
+ /**
+  * Lifecycle hook que se ejecuta después de inicializar la vista
+  */
+ ngAfterViewInit(): void {
+   // Aquí se puede realizar configuración adicional después de que el mapa esté listo
+ }
+
+ /**
+  * Hace zoom a una escuela específica en el mapa
+  */
+ zoomToSchoolOnMap(cueAnexo: string): void {
+   if (this.mapComponent) {
+     this.mapComponent.zoomToSchoolByCue(cueAnexo);
+     
+     // También seleccionar la escuela para mostrar detalles
+     const escuelas = this.padronEscuelas();
+     if (escuelas) {
+       const escuela = escuelas.find(e => e.cue_anexo === cueAnexo);
+       if (escuela) {
+         this.seleccionarEscuela(escuela);
+       }
+     }
+   } else {
+     console.warn('El componente de mapa no está disponible aún');
+   }
+ }
+
+ /**
+  * Filtra las escuelas basado en el término de búsqueda
+  */
+ private filterEscuelas(escuelas: Escuela[]): Escuela[] {
+   const searchTermLower = this.searchTerm.toLowerCase().trim();
+   
+   return escuelas.filter(escuela => {
+     // Buscar en CUE Anexo
+     if (escuela.cue_anexo.toLowerCase().includes(searchTermLower)) {
+       return true;
+     }
+     
+     // Buscar en nombre de la escuela
+     if (escuela.localizacion.toLowerCase().includes(searchTermLower)) {
+       return true;
+     }
+     
+     // Buscar en localidad
+     if (escuela.localidad.toLowerCase().includes(searchTermLower)) {
+       return true;
+     }
+     
+     // Buscar en ofertas educativas
+     if (escuela.ofertas && escuela.ofertas.some(oferta => 
+       oferta.modalidad.toLowerCase().includes(searchTermLower) ||
+       oferta.nivel.toLowerCase().includes(searchTermLower) ||
+       `${oferta.modalidad} - ${oferta.nivel}`.toLowerCase().includes(searchTermLower)
+     )) {
+       return true;
+     }
+     
+     // Buscar en domicilio
+     if (escuela.domicilio_principal.toLowerCase().includes(searchTermLower)) {
+       return true;
+     }
+     
+     return false;
+   });
+ }
+
+ /**
+  * Maneja el evento de cambio en el input de búsqueda
+  */
+ onSearchChange(event: any): void {
+   // El valor ya se actualiza automáticamente por ngModel
+   // Este método puede usarse para agregar lógica adicional si es necesario
+   console.log('Búsqueda:', this.searchTerm);
+ }
+
+ /**
+  * Limpia el término de búsqueda
+  */
+ clearSearch(): void {
+   this.searchTerm = '';
+ }
+
+ /**
+  * Obtiene los resultados filtrados para mostrar estadísticas
+  */
+ getFilteredResults(): any[] {
+   return this.getEscuelasExpandidas();
+ }
+
+ /**
+  * Obtiene el total de escuelas visibles (considerando filtros)
+  */
+ getTotalEscuelasVisibles(): number {
+   if (!this.searchTerm) {
+     return this.padronEscuelas()?.length || 0;
+   }
+   
+   const escuelas = this.padronEscuelas();
+   if (!escuelas) return 0;
+   
+   return this.filterEscuelas(escuelas).length;
+ }
+
+ /**
+  * Selecciona una escuela para mostrar sus detalles
+  */
+ seleccionarEscuela(escuela: Escuela): void {
+   this.escuelaSeleccionada = escuela;
+   console.log('Escuela seleccionada:', escuela.localizacion);
+ }
+
+ /**
+  * Deselecciona la escuela actual
+  */
+ deseleccionarEscuela(): void {
+   this.escuelaSeleccionada = null;
+ }
+
+ /**
+  * Verifica si una escuela está seleccionada
+  */
+ isEscuelaSeleccionada(escuela: Escuela): boolean {
+   return this.escuelaSeleccionada?.cue_anexo === escuela.cue_anexo;
  }
 
 }
